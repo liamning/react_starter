@@ -55,7 +55,7 @@ export class InlineTextField extends React.Component {
       console.log(this.state.value);
       var values = { 'value': this.state.value };
 
-      return (<DateTimeField values={values} name='value'
+      return (<TextField values={values} name='value'
         autoFocus={true}
         onBlur={(event) => {
 
