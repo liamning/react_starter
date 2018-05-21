@@ -29,7 +29,7 @@ import {
   InputGroupAddon,
   InputGroupText
 } from 'reactstrap';
-import { InlineNumberField, InlineTextField, InlineAsyncSelectField } from "../Base/Forms/InlineControl";
+import { InlineNumberField, InlineTextField, InlineAsyncSelectField } from "../../components/InlineControl";
 
 class TableTest extends React.Component {
   constructor() {

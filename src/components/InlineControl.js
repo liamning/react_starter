@@ -1,8 +1,7 @@
 import React from "react";
 import { render } from "react-dom";
 
-import { AsyncSelectField, DateTimeField, TextField, NumberField } from "../../../components/FormControl";
-
+import { AsyncSelectField, DateTimeField, TextField, NumberField } from "./FormControl";
 
 export class InlineNumberField extends React.Component {
 
