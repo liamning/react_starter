@@ -86,7 +86,7 @@ class TableTest extends React.Component {
             data={data}
             // className="-striped -highlight"
             className="-striped" 
-            showPagination={false} 
+            showPagination={data.length>10} 
             defaultPageSize={10}
             
             columns={[
