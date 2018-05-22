@@ -1,6 +1,7 @@
 import React from "react";
 
 import DateTime from 'react-datetime'
+import moment from 'moment';
 import 'react-datetime/css/react-datetime.css';
 
 import Select, { Async } from 'react-select';
@@ -24,7 +25,7 @@ const selectDict = {};
 
 const getGeneralMaster = (input, table, createAble, descField) => {
 
-  return fetch(`http://localhost:806/HttpHandler/JsonHandler.ashx?Table=${table}&input=${input}`)
+  return fetch(`http://localhost/HttpHandler/JsonHandler.ashx?Table=${table}&input=${input}`)
     .then((response) => {
       return response.json();
     }).then((json) => {
@@ -94,12 +95,12 @@ export class AsyncSelectField extends React.Component {
       this.state = {};
       this.props.getFormData({ Code: value.value });
     } else {
-      if (this.props.setFieldValue) { 
+      if (this.props.setFieldValue) {
         this.props.setFieldValue(this.props.name, value.value);
       }
       console.log('handleChange');
       console.log(value);
-      this.setState({ 
+      this.setState({
         ...value
       });
 
@@ -107,7 +108,7 @@ export class AsyncSelectField extends React.Component {
   };
 
   handleBlur = (event) => {
-   
+
     if (this.props.onBlur) {
       this.props.onBlur({
         value: this.state.value,
@@ -204,31 +205,105 @@ export class SelectField extends React.Component {
 
 export class DateTimeField extends React.Component {
 
-  handleChange = value => {
-    this.props.setFieldValue(this.props.name, value);
+  constructor(props) {
+    super(props);
+
+    var name = this.props.name;
+    this.state.value = this.props.values[name];
+  }
+
+  state = {
   };
 
-
   shouldComponentUpdate(nextProps, nextState) {
-    if (nextProps.value == this.props.value) return false;
+    let name = nextProps.name;
+    console.log(`shouldComponentUpdate ${name}`);
+
+    if (nextProps.isGetFormData) {
+      if (nextProps.values[name] && nextProps.values[name].length >= 10)
+        this.state.value = moment(nextProps.values[name].substring(0, 10), "DD/MM/YYYY")._d;
+
+      else if(!nextProps.values[name]){
+        this.state.value = "";
+      }
+
+      return true;
+    }
+
+    if (nextProps.values[name] == this.props.values[name] && nextState.value == this.state.value) return false;
+
     return true;
   }
 
-  handleBlur = (value) => {
+  componentDidMount() {
+    if (this.props.autoFocus)
+      this.nameInput.focus();
+  }
+
+
+  handleChange = event => {
+    console.log("handleChange");
+    if (!event._isValid) return;
+    var text = event;
+    this.setState({
+      value: text
+    });
+
   };
 
+  handleBlur = event => {
+
+    var name = this.props.name;
+    var text = "";
+    if (event) {
+      if (!event._isValid) return;
+      var text = event.format("DD/MM/YYYY HH:mm:ss");
+    }
+
+    if (this.props.values[name] !== text && this.props.setFieldValue)
+      this.props.setFieldValue(name, text);
+
+    if (this.props.onBlur) {
+      this.props.onBlur(event);
+    }
+
+  };
+
+  inputOnBlur = event => {
+    var date_moment = moment(event.currentTarget.value, "DD/MM/YYYY");
+
+    //invalid date input
+    if(event.currentTarget.value.length == 0 && !date_moment._isValid){
+      date_moment = '';
+    }
+    else if (event.currentTarget.value.length != 10 || !date_moment._isValid) {
+      date_moment = moment(this.state.value);
+      this.setState({ value: date_moment._d });
+      return;
+    }
+
+    this.handleBlur(date_moment);
+  }
+
+
   render() {
-    //console.log(`MyDateTime  ${this.props.name}`);
+
+    console.log(`render ${this.props.name} ${this.state.value}`);
+
+    const { setFieldValue, setFieldTouched, autoFocus, onChange, onBlur, isGetFormData, ...props } = this.props
+    var value = this.state.value || '';
+
     return (
-
-      <DateTime input={true} closeOnSelect={true}
-
+      <DateTime input={true} closeOnSelect={true} dateFormat="DD/MM/YYYY" timeFormat={false}
+        ref={(input) => { this.nameInput = input; }} 
+        value={value}
         onChange={this.handleChange}
         onBlur={this.handleBlur}
-        value={this.props.value || ''}
-
+        inputProps={{
+          onBlur: this.inputOnBlur,
+          ...props
+        }}
       />
-
     );
   }
 }
@@ -239,10 +314,7 @@ export class TextField extends React.Component {
     super(props);
 
     var name = this.props.name;
-    console.log(name);
-    console.log(this.props.values[name]);
     this.state.value = this.props.values[name];
-
   }
 
   state = {
@@ -290,7 +362,7 @@ export class TextField extends React.Component {
 
   render() {
 
-    console.log(`render ${this.state.value}`);
+    //console.log(`render ${this.state.value}`);
 
     const { setFieldValue, setFieldTouched, autoFocus, onChange, onBlur, isGetFormData, ...props } = this.props
     var value = this.state.value || '';

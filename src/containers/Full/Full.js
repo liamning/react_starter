@@ -31,8 +31,8 @@ class Full extends Component {
               <Switch>
                 {routes.map((route, idx) => {
                   //console.log(route);
-                    // return  <AuthenRoute key={idx} path={route.path} exact={route.exact} name={route.name} component={route.component} />
-                    return  <Route key={idx} path={route.path} exact={route.exact} name={route.name} component={route.component} />
+                    return  <AuthenRoute key={idx} path={route.path} exact={route.exact} name={route.name} component={route.component} />
+                    // return  <Route key={idx} path={route.path} exact={route.exact} name={route.name} component={route.component} />
                   },
                 )}
                 <Route path="/login" name="Login" component={LoginCtrl} />

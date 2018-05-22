@@ -34,11 +34,11 @@ class Header extends Component {
       <header className="app-header navbar">
         <NavbarToggler className="d-lg-none" onClick={this.mobileSidebarToggle}>
           {/* <span className="navbar-toggler-icon"></span> */}
-          <i class="fa fa-bars"></i>
+          <i className="fa fa-bars"></i>
         </NavbarToggler>
         <NavbarToggler className="d-md-down-none" onClick={this.sidebarToggle}>
           {/* <span className="navbar-toggler-icon"></span> */}
-          <i class="fa fa-bars"></i>
+          <i className="fa fa-bars"></i>
         </NavbarToggler>
         {/* <NavbarBrand href="#"></NavbarBrand> */}
         <h5 className="mr-auto mb-0">Web Template</h5>

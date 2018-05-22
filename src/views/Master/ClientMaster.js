@@ -42,18 +42,18 @@ export default class ClientMaster extends React.Component {
                 <form>
 
                   <FormGroup>
-                    <AsyncSelectField 
+                    <AsyncSelectField
                       multi={false}
                       createAble={true}
                       name="Code"
                       {...standardProps}
 
                       Desc="Code"
-                      tableName="Client" 
-                      label={values.Code} 
-                      getFormData={getFormData} 
+                      tableName="Client"
+                      label={values.Code}
+                      getFormData={getFormData}
                       afterSave={afterSave}
-                      
+
                     />
                   </FormGroup>
 
@@ -61,7 +61,7 @@ export default class ClientMaster extends React.Component {
                     <TextField
                       name="Name"
                       placeholder="Name"
-                      {...standardProps} 
+                      {...standardProps}
                     />
                   </FormGroup>
 
@@ -95,6 +95,22 @@ export default class ClientMaster extends React.Component {
                       placeholder="ContactPerson"
                       {...standardProps}
                     />
+                  </FormGroup>
+                  <FormGroup>
+                    <InputGroup >
+
+                      <DateTimeField
+                        name="RegistrationDate"
+                        placeholder="RegistrationDate"
+                        {...standardProps}
+                      />
+
+                      <InputGroupAddon addonType="append">
+                        <InputGroupText><i className="fa fa-calendar"></i></InputGroupText>
+                      </InputGroupAddon>
+                    </InputGroup>
+
+
                   </FormGroup>
 
 

@@ -1,5 +1,4 @@
 // Here you can add other styles
-
 .sidebar .sidebar-nav {
     position: relative;
     flex: 1;
@@ -200,4 +199,8 @@
 .ReactTable .-pagination .-btn:not([disabled]):hover {
     background: $blue;
     color: #fff;
+}
+
+.rdtPicker td, .rdtPicker th { 
+    height: 30px;
 }

@@ -24,7 +24,7 @@ const selectDict = {};
 
 const getGeneralMaster = (input, table, createAble) => {
 
-  return fetch(`http://localhost:806/HttpHandler/JsonHandler.ashx?Table=${table}&input=${input}`)
+  return fetch(`http://localhost/HttpHandler/JsonHandler.ashx?Table=${table}&input=${input}`)
     .then((response) => {
       return response.json();
     }).then((json) => {
