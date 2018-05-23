@@ -204,3 +204,31 @@
 .rdtPicker td, .rdtPicker th { 
     height: 30px;
 }
+.rdtPicker {
+    display: none;
+    position: absolute;
+    width: 250px;
+    padding: 4px;
+    margin-top: 1px;
+    z-index: 99999 !important;
+    background: #fff;
+    box-shadow: 0 1px 2px rgba(0,0,0,.2);
+    // border: 1px solid $blue;
+}
+.app-header.navbar .navbar-toggler {
+    color:$blue;
+    }
+      .rdtBtn {
+        
+        color:#428bca;
+        }
+
+    .rdtPicker th {
+        border-bottom: 0px solid $gray-200;
+    }
+    .rdtPicker tfoot {
+        border-top: 0px solid #f9f9f9;
+    }
+    // .rdtSwitch{
+    //     height:50px!important;
+    // }

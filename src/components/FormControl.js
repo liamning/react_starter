@@ -210,9 +210,14 @@ export class DateTimeField extends React.Component {
 
     var name = this.props.name;
     this.state.value = this.props.values[name];
+    
+    this.format = "DD/MM/YYYY"; 
+    this.timeFormat = "hh:mm A"; 
+    this.dateTimeLengh = 19;
   }
 
   state = {
+    value: ''
   };
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -220,8 +225,8 @@ export class DateTimeField extends React.Component {
     console.log(`shouldComponentUpdate ${name}`);
 
     if (nextProps.isGetFormData) {
-      if (nextProps.values[name] && nextProps.values[name].length >= 10)
-        this.state.value = moment(nextProps.values[name].substring(0, 10), "DD/MM/YYYY")._d;
+      if (nextProps.values[name] && nextProps.values[name].length == 19)
+        this.state.value = moment(nextProps.values[name], this.format + " HH:mm:ss")._d;
 
       else if(!nextProps.values[name]){
         this.state.value = "";
@@ -229,6 +234,7 @@ export class DateTimeField extends React.Component {
 
       return true;
     }
+
 
     if (nextProps.values[name] == this.props.values[name] && nextState.value == this.state.value) return false;
 
@@ -270,21 +276,29 @@ export class DateTimeField extends React.Component {
   };
 
   inputOnBlur = event => {
-    var date_moment = moment(event.currentTarget.value, "DD/MM/YYYY");
+    var date_moment = moment(event.currentTarget.value, `${this.format} ${this.timeFormat}`);
 
     //invalid date input
     if(event.currentTarget.value.length == 0 && !date_moment._isValid){
       date_moment = '';
     }
-    else if (event.currentTarget.value.length != 10 || !date_moment._isValid) {
-      date_moment = moment(this.state.value);
-      this.setState({ value: date_moment._d });
-      return;
+    else if (event.currentTarget.value.length != this.dateTimeLengh || !date_moment._isValid) {
+      if(this.state.value){
+
+        date_moment = moment(this.state.value);
+        this.setState({ value: date_moment._d });
+        return;
+
+      }else{ 
+        date_moment = moment();
+        this.setState({ value: date_moment._d });
+      }
+
     }
 
     this.handleBlur(date_moment);
   }
-
+ 
 
   render() {
 
@@ -294,7 +308,7 @@ export class DateTimeField extends React.Component {
     var value = this.state.value || '';
 
     return (
-      <DateTime input={true} closeOnSelect={true} dateFormat="DD/MM/YYYY" timeFormat={false}
+      <DateTime input={true} dateFormat={this.format} timeFormat={this.timeFormat}
         ref={(input) => { this.nameInput = input; }} 
         value={value}
         onChange={this.handleChange}
@@ -308,6 +322,122 @@ export class DateTimeField extends React.Component {
   }
 }
 
+export class DateField extends React.Component {
+
+  constructor(props) {
+    super(props);
+
+    var name = this.props.name;
+    this.state.value = this.props.values[name];
+    
+    this.format = "DD/MM/YYYY"; 
+  }
+
+  state = {
+    value: ''
+  };
+
+  shouldComponentUpdate(nextProps, nextState) {
+    let name = nextProps.name;
+    console.log(`shouldComponentUpdate ${name}`);
+
+    if (nextProps.isGetFormData) {
+      if (nextProps.values[name] && nextProps.values[name].length >= 10)
+        this.state.value = moment(nextProps.values[name].substring(0, 10), this.format)._d;
+
+      else if(!nextProps.values[name]){
+        this.state.value = "";
+      }
+
+      return true;
+    }
+
+
+    if (nextProps.values[name] == this.props.values[name] && nextState.value == this.state.value) return false;
+
+    return true;
+  }
+
+  componentDidMount() {
+    if (this.props.autoFocus)
+      this.nameInput.focus();
+  }
+
+
+  handleChange = event => {
+    console.log("handleChange");
+    if (!event._isValid) return;
+    var text = event;
+    this.setState({
+      value: text
+    });
+
+  };
+
+  handleBlur = event => {
+
+    var name = this.props.name;
+    var text = "";
+    if (event) {
+      if (!event._isValid) return;
+      var text = event.format("DD/MM/YYYY HH:mm:ss");
+    }
+
+    if (this.props.values[name] !== text && this.props.setFieldValue)
+      this.props.setFieldValue(name, text);
+
+    if (this.props.onBlur) {
+      this.props.onBlur(event);
+    }
+
+  };
+
+  inputOnBlur = event => {
+    var date_moment = moment(event.currentTarget.value, this.format);
+
+    //invalid date input
+    if(event.currentTarget.value.length == 0 && !date_moment._isValid){
+      date_moment = '';
+    }
+    else if (event.currentTarget.value.length != 10 || !date_moment._isValid) {
+      if(this.state.value){
+
+        date_moment = moment(this.state.value);
+        this.setState({ value: date_moment._d });
+        return;
+
+      }else{ 
+        date_moment = moment();
+        this.setState({ value: date_moment._d });
+      }
+
+    }
+
+    this.handleBlur(date_moment);
+  }
+ 
+
+  render() {
+
+    console.log(`render ${this.props.name} ${this.state.value}`);
+
+    const { setFieldValue, setFieldTouched, autoFocus, onChange, onBlur, isGetFormData, ...props } = this.props
+    var value = this.state.value || '';
+
+    return (
+      <DateTime input={true} closeOnSelect={true} dateFormat={this.format} timeFormat={false}
+        ref={(input) => { this.nameInput = input; }} 
+        value={value}
+        onChange={this.handleChange}
+        onBlur={this.handleBlur}
+        inputProps={{
+          onBlur: this.inputOnBlur,
+          ...props
+        }}
+      />
+    );
+  }
+}
 export class TextField extends React.Component {
 
   constructor(props) {

@@ -1,5 +1,5 @@
 import React from "react";
-import { AsyncSelectField, DateTimeField, TextField, NumberField } from "../../components/FormControl";
+import { AsyncSelectField, DateTimeField, DateField, TextField, NumberField } from "../../components/FormControl";
 import {
   Row,
   Col,

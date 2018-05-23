@@ -5,15 +5,15 @@ export default {
       url: '/',
       icon: 'icon-home',
     },
-    {
-      name: 'Dashboard',
-      url: '/dashboard',
-      icon: 'icon-speedometer',
-      badge: {
-        variant: 'info',
-        text: 'NEW'
-      }
-    },
+    // {
+    //   name: 'Dashboard',
+    //   url: '/dashboard',
+    //   icon: 'icon-speedometer',
+    //   badge: {
+    //     variant: 'info',
+    //     text: 'NEW'
+    //   }
+    // },
     {
       name: 'Client Master',
       url: '/home/masterClient',
