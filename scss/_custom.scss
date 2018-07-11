@@ -1,3 +1,7 @@
+body{
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
 // Here you can add other styles
 .sidebar .sidebar-nav {
     position: relative;
@@ -204,6 +208,11 @@
 .rdtPicker td, .rdtPicker th { 
     height: 30px;
 }
+
+.rdtCounterSeparator{
+    width: 1px;
+}
+
 .rdtPicker {
     display: none;
     position: absolute;
@@ -218,17 +227,76 @@
 .app-header.navbar .navbar-toggler {
     color:$blue;
     }
-      .rdtBtn {
+   .rdtTimeToggle, .rdtTime th,   .rdtBtn {
         
-        color:#428bca;
-        }
+        color:#337ab7;
+    }
+    .rdtCounter .rdtCount {
+        font-size: 14px;
+    }
 
     .rdtPicker th {
         border-bottom: 0px solid $gray-200;
     }
     .rdtPicker tfoot {
-        border-top: 0px solid #f9f9f9;
+        border-top: 3px solid #fff; 
     }
     // .rdtSwitch{
     //     height:50px!important;
     // }
+
+    .rdtPicker {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        z-index: 1000;
+        display: none;
+        float: left;
+        min-width: 160px;
+        padding: 5px;
+        margin: 2px 0 0;
+        font-size: 14px;
+        text-align: left;
+        list-style: none;
+        background-color: #fff;
+        -webkit-background-clip: padding-box;
+        background-clip: padding-box;
+        border: 1px solid #ccc;
+        border: 1px solid rgba(0,0,0,.15);
+        border-radius: 4px;
+        -webkit-box-shadow: 0 6px 12px rgba(0,0,0,.175);
+        box-shadow: 0 6px 12px rgba(0,0,0,.175);
+    }
+
+    .rdtPicker:before{
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        
+        content: '';
+        display: inline-block;
+        position: absolute;
+
+        border-left: 7px solid transparent;
+        border-right: 7px solid transparent;
+        border-bottom: 7px solid #ccc;
+        border-bottom-color: rgba(0,0,0,0.2);
+        top: -7px;
+        left: 7px;
+    }
+
+    .rdtPicker:after{
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        
+        content: '';
+        display: inline-block;
+        position: absolute;
+
+        border-left: 6px solid transparent;
+        border-right: 6px solid transparent;
+        border-bottom: 6px solid white;
+        top: -6px;
+        left: 8px;
+    }
