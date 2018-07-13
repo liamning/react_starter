@@ -9,7 +9,7 @@ import 'react-select/dist/react-select.css';
 // import { Field } from "formik";
 
 var debounce = require('debounce-promise')
-
+import { loginInfo } from '../global';
 
 const options = [
   { value: 'Food', label: 'Food' },
@@ -25,17 +25,20 @@ const selectDict = {};
 
 const getGeneralMaster = (input, table, createAble, descField) => {
 
-  return fetch(`http://localhost/HttpHandler/JsonHandler.ashx?Table=${table}&input=${input}`)
+  return fetch(`${loginInfo.host}/HttpHandler/JsonHandler.ashx?Table=${table}&input=${input}`)
     .then((response) => {
       return response.json();
     }).then((json) => {
 
       console.log(json);
 
+      //selectDict[table] = {};
+      if(!selectDict[table])
       selectDict[table] = {};
+      
       json.forEach(element => {
         element.value = element.Code;
-        element.label = element[(descField || 'Desc')];
+        element.label = element.Desc || element.Code;
         selectDict[table][element.value] = element;
       });
       if (createAble && input && !json.length)
@@ -51,9 +54,10 @@ export class AsyncSelectField extends React.Component {
     super(props);
 
     var name = props.name;
+    var label = props.label;
     this.state = {
       value: props.values[name],
-      label: props.label || props.values[name],
+      label: this.getLabel(props.values[name]) || props.values[label],
     };
   }
 
@@ -73,13 +77,14 @@ export class AsyncSelectField extends React.Component {
 
     console.log(nextProps);
     var name = nextProps.name;
+    //var label = nextProps.label;
 
     if (nextProps.afterSave) {
       this.purgeCache();
     }
 
     if (nextProps.isGetFormData) {
-      this.state.value = nextProps.values[name];
+      this.state.value = nextProps.value;
       return true;
     }
 
@@ -89,7 +94,10 @@ export class AsyncSelectField extends React.Component {
 
   handleChange = (value, par1, par2) => {
 
-    value = value || {};
+    value = value || {
+      value: undefined,
+      label: undefined,
+    };
 
     if (this.props.getFormData) {
       this.state = {};
@@ -100,9 +108,7 @@ export class AsyncSelectField extends React.Component {
       }
       console.log('handleChange');
       console.log(value);
-      this.setState({
-        ...value
-      });
+      this.setState(value);
 
     }
   };
@@ -119,7 +125,18 @@ export class AsyncSelectField extends React.Component {
 
   getOptions = (input) => {
     console.log("getOptions");
-    return getGeneralMaster(input, this.props.tableName, this.props.createAble, this.props.Desc);
+    return getGeneralMaster(input, this.props.tableName, this.props.createAble, this.props.label);
+  }
+
+  getLabel = (value) => {
+    var label = undefined;
+    var tableName = this.props.tableName;
+    if (value
+      && selectDict[tableName]
+      && selectDict[tableName][value]) {
+        label = selectDict[tableName][value].label;
+    }
+    return label;
   }
 
 
@@ -142,18 +159,16 @@ export class AsyncSelectField extends React.Component {
       getFormData
     } = this.props;
 
-    var value = values[name];
+    var value = this.state.value || values[name];
+    var labelValue = this.getLabel(value) || values[label];
 
     var selectedValue = {
-      value: this.state.value || value || '',
-      label: this.state.label || label || 'Please Select'
+      value: value || '',
+      label: labelValue || 'Please Select'
     };
+ 
+    this.state.label = selectedValue.label;
 
-    if (value
-      && selectDict[tableName]
-      && selectDict[tableName][value]) {
-      selectedValue = value;
-    }
 
     return (
       <Async
@@ -242,8 +257,9 @@ export class DateTimeField extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.autoFocus)
+    if (this.props.autoFocus &&  this.nameInput)
       this.nameInput.focus();
+      //this.nameInput.openCalendar();
   }
 
 
@@ -269,10 +285,14 @@ export class DateTimeField extends React.Component {
     if (this.props.values[name] !== text && this.props.setFieldValue)
       this.props.setFieldValue(name, text);
 
-    if (this.props.onBlur) {
-      this.props.onBlur(event);
-    }
 
+      if (text && this.props.values[name] !== text && this.props.onBlur) {
+        
+      }
+
+      console.log('handleBlur======================================');
+
+      this.props.onBlur(text);
   };
 
   inputOnBlur = event => {
@@ -296,21 +316,33 @@ export class DateTimeField extends React.Component {
 
     }
 
-    this.handleBlur(date_moment);
+    //this.handleBlur(date_moment);
   }
  
+  renderInput = props=>{ 
+    return (
+        <div>
+            <input ref={(input) => {  
+              this.nameInput = input; 
+        
+              }}  {...props} /> 
+        </div>
+    );
+}
 
   render() {
 
     console.log(`render ${this.props.name} ${this.state.value}`);
 
-    const { setFieldValue, setFieldTouched, autoFocus, onChange, onBlur, isGetFormData, ...props } = this.props
+    const { setFieldValue, setFieldTouched, autoFocus, closeOnTab, onChange, onBlur, isGetFormData, ...props } = this.props
     var value = this.state.value || '';
 
     return (
       <DateTime input={true} dateFormat={this.format} timeFormat={this.timeFormat}
-        ref={(input) => { this.nameInput = input; }} 
+        
+        renderInput={this.renderInput}
         value={value}
+        closeOnTab={closeOnTab || true}
         onChange={this.handleChange}
         onBlur={this.handleBlur}
         inputProps={{
@@ -475,14 +507,15 @@ export class TextField extends React.Component {
     var text = event.currentTarget.value;
 
 
+    if (this.props.onBlur) {
+      this.props.onBlur(event);
+    }
+
     if (!this.props.values[name] && !text) return;
 
     if (this.props.values[name] !== text && this.props.setFieldValue)
       this.props.setFieldValue(name, text);
 
-    if (this.props.onBlur) {
-      this.props.onBlur(event);
-    }
   };
 
   componentDidMount() {
@@ -492,7 +525,7 @@ export class TextField extends React.Component {
 
   render() {
 
-    //console.log(`render ${this.state.value}`);
+    console.log(`render TextField ${this.state.value}`);
 
     const { setFieldValue, setFieldTouched, autoFocus, onChange, onBlur, isGetFormData, ...props } = this.props
     var value = this.state.value || '';
@@ -585,3 +618,18 @@ export class NumberField extends React.Component {
     );
   }
 }
+
+export const DisplayJson = props =>
+  <div className="mt-1">
+    <h3 style={{ fontFamily: 'monospace' }} />
+    <pre
+      style={{
+        background: '#f6f8fa', 
+        padding: '.5rem',
+      }}
+    > 
+    //For debug only <br/>
+    //Current Form Data <br/>
+      {JSON.stringify(props, null, 2)}
+    </pre>
+  </div>;

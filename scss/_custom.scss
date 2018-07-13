@@ -1,5 +1,5 @@
 body{
-    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-family: sans-serif,'Noto CJK Light', Arial;
 }
 
 // Here you can add other styles
@@ -82,11 +82,18 @@ body{
 }
 
 .inlineEdit .ReactTable .rt-td .form-control{
-    line-height: 22px;
+    line-height: 22px;  
 }
 .inlineEdit .ReactTable .rt-td div.form-control{
     border-color: transparent;
     background-color: transparent;
+    min-height: 36px; 
+}
+.inlineEdit .ReactTable .rt-td {
+    min-height: 36px; 
+}
+.rt-noData{
+    display: none!important;
 }
 
 .sidebar .nav-dropdown-items {
@@ -257,15 +264,27 @@ body{
         margin: 2px 0 0;
         font-size: 14px;
         text-align: left;
-        list-style: none;
+        // list-style: none;
         background-color: #fff;
         -webkit-background-clip: padding-box;
         background-clip: padding-box;
         border: 1px solid #ccc;
         border: 1px solid rgba(0,0,0,.15);
-        border-radius: 4px;
+        // border-radius: 4px;
         -webkit-box-shadow: 0 6px 12px rgba(0,0,0,.175);
-        box-shadow: 0 6px 12px rgba(0,0,0,.175);
+        // box-shadow: 0 6px 12px rgba(0,0,0,.175);
+
+        border: medium none;
+        border-radius: 3px;
+        box-shadow: 0 0 3px rgba(86, 96, 117, 0.7);
+        // display: none;
+        // float: left;
+        // left: 0;
+        list-style: none outside none;
+        // position: absolute;
+        text-shadow: none;
+        // top: 100%;
+        // z-index: 1000;
     }
 
     .rdtPicker:before{
@@ -299,4 +318,19 @@ body{
         border-bottom: 6px solid white;
         top: -6px;
         left: 8px;
+    }
+
+    .Select-clear {
+        display: inline-block;
+        font-size: 18px;
+        line-height: 1.2;
+    }
+    .rdtPicker th.rdtNext, .rdtPicker th.rdtPrev {
+        font-size: 12px;
+        vertical-align: middle;
+    }
+
+    .lineButton{
+        line-height: 2.5; 
+        cursor: pointer;
     }

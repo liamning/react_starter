@@ -20,6 +20,11 @@ export default {
       icon: 'icon-puzzle'
     },
     {
+      name: 'Header Body',
+      url: '/HeaderBody',
+      icon: 'icon-puzzle'
+    },
+    {
       name: 'DataTable',
       url: '/home/DataTable',
       icon: 'fa fa-save'

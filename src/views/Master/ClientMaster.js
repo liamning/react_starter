@@ -52,14 +52,13 @@ export default class ClientMaster extends React.Component {
                       </Col>
                         <Col xs="12" md="8">
                           <AsyncSelectField
-                            multi={false}
-                            createAble={true}
                             name="Code"
                             {...standardProps}
 
-                            Desc="Code"
+                            multi={false}
+                            createAble={true}
                             tableName="Client"
-                            label={values.Code}
+                            label="Code"
                             getFormData={getFormData}
                             afterSave={afterSave}
                           />
@@ -92,15 +91,21 @@ export default class ClientMaster extends React.Component {
                       <Row className="form-group">
 
                         <Col xs="12" md="4" className="col-form-label">
-                          Phone
+                        Relationship
                       </Col>
                         <Col xs="12" md="8">
-
-                          <TextField
+ 
+                          <AsyncSelectField
                             name="Phone"
-                            placeholder="Phone"
                             {...standardProps}
+ 
+                            multi={false}
+                            createAble={false}
+                            tableName="Relationship"
+                            label="Phone"
+
                           />
+
                         </Col>
                       </Row>
 
@@ -131,15 +136,21 @@ export default class ClientMaster extends React.Component {
                       <Row className="form-group">
 
                         <Col xs="12" md="4" className="col-form-label">
-                          Fax
+                        Gender
                         </Col>
                         <Col xs="12" md="8">
-
-                          <TextField
+ 
+                          <AsyncSelectField
                             name="Fax"
-                            placeholder="Fax"
                             {...standardProps}
+ 
+                            multi={false}
+                            createAble={false}
+                            tableName="Gender"
+                            label="Fax"
+
                           />
+
                         </Col>
                       </Row>
 
