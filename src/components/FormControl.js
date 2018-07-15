@@ -10,6 +10,7 @@ import 'react-select/dist/react-select.css';
 
 var debounce = require('debounce-promise')
 import { loginInfo } from '../global';
+import { FastField } from "../../node_modules/formik";
 
 const options = [
   { value: 'Food', label: 'Food' },
@@ -53,11 +54,11 @@ export class AsyncSelectField extends React.Component {
   constructor(props) {
     super(props);
 
-    var name = props.name;
-    var label = props.label;
+    // var name = props.name;
+    // var label = props.label;
     this.state = {
-      value: props.values[name],
-      label: this.getLabel(props.values[name]) || props.values[label],
+      //value: props.values[name],
+      //label: this.getLabel(props.values[name]) || props.values[label],
     };
   }
 
@@ -77,19 +78,28 @@ export class AsyncSelectField extends React.Component {
 
     console.log(nextProps);
     var name = nextProps.name;
-    //var label = nextProps.label;
+    var shoudUpdate = false;
 
     if (nextProps.afterSave) {
       this.purgeCache();
     }
 
     if (nextProps.isGetFormData) {
-      this.state.value = nextProps.value;
-      return true;
+      shoudUpdate = true;
     }
+    else if (nextProps.values[name] == this.props.values[name] && nextState.value == this.state.value) { 
+      shoudUpdate = false;
+    } else{
+      shoudUpdate = true;
+    };
 
-    if (nextProps.values[name] == this.props.values[name] && nextState.value == this.state.value) return false;
-    return true;
+    
+    console.log("=============shoudUpdate " + shoudUpdate);
+
+    if(shoudUpdate)
+      this.state.value = undefined;//nextProps.values[name];
+
+    return shoudUpdate;
   }
 
   handleChange = (value, par1, par2) => {
@@ -131,7 +141,10 @@ export class AsyncSelectField extends React.Component {
   getLabel = (value) => {
     var label = undefined;
     var tableName = this.props.tableName;
-    if (value
+    if(!value){
+      label = "Please select";
+    }
+    else if (value
       && selectDict[tableName]
       && selectDict[tableName][value]) {
         label = selectDict[tableName][value].label;
@@ -159,7 +172,7 @@ export class AsyncSelectField extends React.Component {
       getFormData
     } = this.props;
 
-    var value = this.state.value || values[name];
+    var value = this.state.value = this.state.value || values[name];
     var labelValue = this.getLabel(value) || values[label];
 
     var selectedValue = {
@@ -222,17 +235,34 @@ export class DateTimeField extends React.Component {
 
   constructor(props) {
     super(props);
-
-    var name = this.props.name;
-    this.state.value = this.props.values[name];
-    
+ 
     this.format = "DD/MM/YYYY"; 
     this.timeFormat = "hh:mm A"; 
     this.dateTimeLengh = 19;
+
+    var name = this.props.name;
+    
+    if (this.props.values[name] && this.props.values[name].length == 19)
+      this.state.value = moment(this.props.values[name], this.format + " HH:mm:ss")._d;
+
+    
   }
 
   state = {
-    value: ''
+    value: '',
+    blurCount: 0,
+  };
+
+  blurControl = (count)=>{
+    this.state.blurCount+=count;
+    console.log(`==================this.state.blurCount: ${this.state.blurCount}`);
+    if(this.state.blurCount <= 0){ 
+      if(this.props.onBlur)
+        this.props.onBlur(this.state.outputValue);
+    }
+  };
+  blurReset = ()=>{ 
+    this.state.blurCount = 2;
   };
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -285,14 +315,8 @@ export class DateTimeField extends React.Component {
     if (this.props.values[name] !== text && this.props.setFieldValue)
       this.props.setFieldValue(name, text);
 
+    this.state.outputValue = text;
 
-      if (text && this.props.values[name] !== text && this.props.onBlur) {
-        
-      }
-
-      console.log('handleBlur======================================');
-
-      this.props.onBlur(text);
   };
 
   inputOnBlur = event => {
@@ -316,7 +340,7 @@ export class DateTimeField extends React.Component {
 
     }
 
-    //this.handleBlur(date_moment);
+    this.handleBlur(date_moment);
   }
  
   renderInput = props=>{ 
@@ -343,10 +367,34 @@ export class DateTimeField extends React.Component {
         renderInput={this.renderInput}
         value={value}
         closeOnTab={closeOnTab || true}
-        onChange={this.handleChange}
-        onBlur={this.handleBlur}
+        onChange={(e)=>{
+          this.handleChange(e);
+        }}
+        onBlur={(e)=>{
+          this.handleBlur(e);
+          this.blurControl(-1);
+        }} 
+        onFocus={(e)=>{ 
+          this.blurReset();
+        }} 
+
+        // onChange={()=>{ 
+        //   console.log("=====================handleChange===================");
+        // }}
+        // onBlur={()=>{ 
+        //   console.log("=====================onBlur===================");
+        // }}
+        // onFocus={()=>{
+        //   console.log("=====================onFocus===================");
+        // }} 
         inputProps={{
-          onBlur: this.inputOnBlur,
+          onBlur: (e)=>{
+            this.inputOnBlur(e);
+            this.blurControl(-1);
+          },
+          // onBlur: ()=>{ 
+          //   console.log("=====================inputOnBlur===================");
+          // },
           ...props
         }}
       />
@@ -470,6 +518,7 @@ export class DateField extends React.Component {
     );
   }
 }
+
 export class TextField extends React.Component {
 
   constructor(props) {
@@ -619,17 +668,21 @@ export class NumberField extends React.Component {
   }
 }
 
-export const DisplayJson = props =>
+export const DisplayJson = props => {
+  return (
+    
   <div className="mt-1">
-    <h3 style={{ fontFamily: 'monospace' }} />
-    <pre
-      style={{
-        background: '#f6f8fa', 
-        padding: '.5rem',
-      }}
-    > 
-    //For debug only <br/>
-    //Current Form Data <br/>
-      {JSON.stringify(props, null, 2)}
-    </pre>
-  </div>;
+  <h3 style={{ fontFamily: 'monospace' }} />
+  <pre
+    style={{
+      background: '#f6f8fa', 
+      padding: '.5rem',
+    }}
+  > 
+  //For debug only <br/>
+  //Current Form Data <br/>
+    {JSON.stringify(props, null, 2)}
+  </pre>
+</div>
+  );
+}

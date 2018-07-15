@@ -1,5 +1,6 @@
 import React from "react";
 import { render } from "react-dom";
+import moment from 'moment';
 
 import { AsyncSelectField, DateTimeField, TextField, NumberField } from "./FormControl";
 
@@ -81,15 +82,30 @@ export class InlineDateTimeField extends React.Component {
     value: ''
   }
 
+  
+  shouldComponentUpdate(nextProps, nextState) {
+ 
+
+    this.state.value = undefined;
+
+    return true;
+  }
+
   render() {  
 
     this.state.value = this.state.value || this.props.value;
-    if (this.state.readonly)
+    if (this.state.readonly) {
+
+      var tmpVal = "";
+      if(this.state.value)
+        tmpVal = moment(this.state.value,  "DD/MM/YYYY HH:mm:ss").format("DD/MM/YYYY hh:mm A");
+
       return (
         <div className="form-control" onClick={() => this.setState({ readonly: false })}>
-          {this.state.value}
+          {tmpVal}
         </div>
       );
+    }
     else {
 
       console.log(this.state.value);
@@ -119,6 +135,16 @@ export class InlineAsyncSelectField extends React.Component {
     readonly: true,
     value: '',
     label: ''
+  }
+
+
+  
+  shouldComponentUpdate(nextProps, nextState) {
+
+    this.state.value = '';
+    this.state.label = '';
+
+    return true;
   }
 
   render() {
@@ -156,7 +182,7 @@ export class InlineAsyncSelectField extends React.Component {
             ...value
           });
 
-          this.props.onBlur(value.value);
+          this.props.onBlur(value);
         }
         } />);
     }

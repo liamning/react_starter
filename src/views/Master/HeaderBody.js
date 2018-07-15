@@ -24,8 +24,7 @@ import {
 
 
 // Import React Table
-import ReactTable from "react-table";
-import "react-table/react-table.css";
+import BodyTable from "./HeaderBody.Body"; 
 import { InlineNumberField, InlineTextField, InlineDateTimeField, InlineAsyncSelectField } from "../../components/InlineControl";
 
 export default class ClientMaster extends React.Component {
@@ -173,78 +172,7 @@ export default class ClientMaster extends React.Component {
 
                   </Row>
 
-
-                  <div className="inlineEdit my-3">
-
-                    <ReactTable
-                      data={values.BodyList}
-                      className="-striped"
-                      // showPagination={values.BodyList.length > 10}
-                      // defaultPageSize={10}
-                      pageSize={values.BodyList.length || 1}
-                      showPagination={false}
-
-                      columns={[
-                        {
-                          Header: "#",
-                          width: 40,
-                          Cell: cellInfo => {
-                            return <div className='form-control'>
-                            {cellInfo.index + 1}
-                            </div>
-                          }
-                        },
-                        {
-                          Header: "Body DateTime",
-                          accessor: "BodyDateTime",
-                          Cell: cellInfo => {
-                            return <InlineDateTimeField value={cellInfo.value}
-                              onBlur={value => {
-                                values.BodyList[cellInfo.index][cellInfo.column.id] = value;
-
-                              }} />
-                          }
-                        },
-                        {
-                          Header: "Combo1",
-                          accessor: "Combo1",
-                          Cell: cellInfo => {
-                            return <InlineAsyncSelectField 
-                            value={cellInfo.value}
-                            label={values.BodyList[cellInfo.index]["Combo1Desc"]}
-                            tableName="Gender"
-                            onBlur= { value => {
-                              values.BodyList[cellInfo.index][cellInfo.column.id] = value;
-                    
-                            }} />
-                          }
-                        },
-                        {
-                          width: 40,
-                          Cell: cellInfo => {
-                            return (
-                              <div className="text-center text-danger lineButton" role="button" onClick={e=>{
-                               
-                                values.BodyList.splice(cellInfo.index, 1);
-                                this.setState({});
-
-                              }}>
-                                <span className="fa fa-minus "></span>
-                              </div>
-                            )
-                          }
-                        }
-                      ]}
-                    />
-
-                    <Button color="primary" className="mt-2" onClick={e=>{
-                                values.BodyList.push({
-                                  HeaderCode: values.Code,
-                                });
-                                this.setState({});
-                              }}><i className="fa fa-plus"></i></Button>
-
-                  </div>
+                  <BodyTable values={values} data={values.BodyList || []}></BodyTable>
 
                   <div className="text-right">
                     <Button color="success" onClick={onSubmit} type="button" ><i className="fa fa-save"></i>  Submit</Button>
