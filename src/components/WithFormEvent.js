@@ -24,13 +24,13 @@ import { Route, Redirect } from 'react-router-dom';
 
         this.setState({
           values: data,
-          isGetFormData: true
+          // isGetFormData: true
         });
 
-        this.setState({
-          values: data,
-          isGetFormData: false
-        });
+        // this.setState({
+        //   values: data,
+        //   isGetFormData: false
+        // });
       }); 
     }
 

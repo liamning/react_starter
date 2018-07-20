@@ -10,7 +10,7 @@ import 'react-select/dist/react-select.css';
 
 var debounce = require('debounce-promise')
 import { loginInfo } from '../global';
-import { FastField } from "../../node_modules/formik";
+//import { FastField } from "../../node_modules/formik";
 
 const options = [
   { value: 'Food', label: 'Food' },
@@ -51,17 +51,9 @@ const getGeneralMaster = (input, table, createAble, descField) => {
 
 export class AsyncSelectField extends React.Component {
 
-  constructor(props) {
-    super(props);
-
-    // var name = props.name;
-    // var label = props.label;
-    this.state = {
-      //value: props.values[name],
-      //label: this.getLabel(props.values[name]) || props.values[label],
-    };
+  state = { 
   }
-
+  
 
   //Code to clear the cache==== Start
   cache = {}
@@ -75,31 +67,19 @@ export class AsyncSelectField extends React.Component {
   //==== End
 
   shouldComponentUpdate(nextProps, nextState) {
+ 
+    var name = nextProps.name; 
 
-    console.log(nextProps);
-    var name = nextProps.name;
-    var shoudUpdate = false;
-
+    //clear cache
     if (nextProps.afterSave) {
       this.purgeCache();
     }
-
-    if (nextProps.isGetFormData) {
-      shoudUpdate = true;
-    }
-    else if (nextProps.values[name] == this.props.values[name] && nextState.value == this.state.value) { 
-      shoudUpdate = false;
-    } else{
-      shoudUpdate = true;
-    };
-
     
-    console.log("=============shoudUpdate " + shoudUpdate);
-
-    if(shoudUpdate)
-      this.state.value = undefined;//nextProps.values[name];
-
-    return shoudUpdate;
+    if (nextProps.values[name] == this.props.values[name] && nextState.value == this.state.value) return false;
+        
+    //clear state
+    this.state.value = undefined;
+    return true;
   }
 
   handleChange = (value, par1, par2) => {
@@ -172,16 +152,17 @@ export class AsyncSelectField extends React.Component {
       getFormData
     } = this.props;
 
-    var value = this.state.value = this.state.value || values[name];
-    var labelValue = this.getLabel(value) || values[label];
+    //update value
+    var value = this.state.value = this.state.value || values[name]  || '';
+    
+    //update label 
+    var labelValue = this.state.label = this.getLabel(value) || values[label] || 'Please Select';
 
     var selectedValue = {
-      value: value || '',
-      label: labelValue || 'Please Select'
+      value: value ,
+      label: labelValue 
     };
  
-    this.state.label = selectedValue.label;
-
 
     return (
       <Async
@@ -239,12 +220,6 @@ export class DateTimeField extends React.Component {
     this.format = "DD/MM/YYYY"; 
     this.timeFormat = "hh:mm A"; 
     this.dateTimeLengh = 19;
-
-    var name = this.props.name;
-    
-    if (this.props.values[name] && this.props.values[name].length == 19)
-      this.state.value = moment(this.props.values[name], this.format + " HH:mm:ss")._d;
-
     
   }
 
@@ -269,20 +244,9 @@ export class DateTimeField extends React.Component {
     let name = nextProps.name;
     console.log(`shouldComponentUpdate ${name}`);
 
-    if (nextProps.isGetFormData) {
-      if (nextProps.values[name] && nextProps.values[name].length == 19)
-        this.state.value = moment(nextProps.values[name], this.format + " HH:mm:ss")._d;
-
-      else if(!nextProps.values[name]){
-        this.state.value = "";
-      }
-
-      return true;
-    }
-
-
     if (nextProps.values[name] == this.props.values[name] && nextState.value == this.state.value) return false;
 
+    this.state.value = undefined;
     return true;
   }
 
@@ -358,8 +322,13 @@ export class DateTimeField extends React.Component {
 
     console.log(`render ${this.props.name} ${this.state.value}`);
 
-    const { setFieldValue, setFieldTouched, autoFocus, closeOnTab, onChange, onBlur, isGetFormData, ...props } = this.props
-    var value = this.state.value || '';
+    const { setFieldValue, setFieldTouched, autoFocus, closeOnTab, onChange, onBlur, isGetFormData, ...props } = this.props;
+    
+    var name = this.props.name; 
+    if (!this.state.value && this.props.values[name] && this.props.values[name].length == 19)
+      this.state.value = moment(this.props.values[name], this.format + " HH:mm:ss")._d;
+
+    var value = this.state.value = this.state.value || '';
 
     return (
       <DateTime input={true} dateFormat={this.format} timeFormat={this.timeFormat}
@@ -407,9 +376,6 @@ export class DateField extends React.Component {
   constructor(props) {
     super(props);
 
-    var name = this.props.name;
-    this.state.value = this.props.values[name];
-    
     this.format = "DD/MM/YYYY"; 
   }
 
@@ -421,21 +387,11 @@ export class DateField extends React.Component {
     let name = nextProps.name;
     console.log(`shouldComponentUpdate ${name}`);
 
-    if (nextProps.isGetFormData) {
-      if (nextProps.values[name] && nextProps.values[name].length >= 10)
-        this.state.value = moment(nextProps.values[name].substring(0, 10), this.format)._d;
-
-      else if(!nextProps.values[name]){
-        this.state.value = "";
-      }
-
-      return true;
-    }
-
-
     if (nextProps.values[name] == this.props.values[name] && nextState.value == this.state.value) return false;
 
+    this.state.value = undefined;
     return true;
+    
   }
 
   componentDidMount() {
@@ -501,8 +457,14 @@ export class DateField extends React.Component {
 
     console.log(`render ${this.props.name} ${this.state.value}`);
 
-    const { setFieldValue, setFieldTouched, autoFocus, onChange, onBlur, isGetFormData, ...props } = this.props
-    var value = this.state.value || '';
+    const { setFieldValue, setFieldTouched, autoFocus, onChange, onBlur, isGetFormData, values, ...props } = this.props
+ 
+    var name = this.props.name;
+    
+    if (!this.state.value && values[name] && values[name].length >= 10)
+      this.state.value = moment(values[name].substring(0, 10), this.format)._d;
+ 
+    var value =this.state.value = this.state.value || '';
 
     return (
       <DateTime input={true} closeOnSelect={true} dateFormat={this.format} timeFormat={false}
@@ -521,13 +483,6 @@ export class DateField extends React.Component {
 
 export class TextField extends React.Component {
 
-  constructor(props) {
-    super(props);
-
-    var name = this.props.name;
-    this.state.value = this.props.values[name];
-  }
-
   state = {
   };
 
@@ -541,13 +496,9 @@ export class TextField extends React.Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     let name = nextProps.name;
-    if (nextProps.isGetFormData) {
-      this.state.value = nextProps.values[name];
-      return true;
-    }
-
     if (nextProps.values[name] == this.props.values[name] && nextState.value == this.state.value) return false;
 
+    this.state.value = undefined;
     return true;
   }
 
@@ -575,9 +526,11 @@ export class TextField extends React.Component {
   render() {
 
     console.log(`render TextField ${this.state.value}`);
+    const { setFieldValue, setFieldTouched, autoFocus, onChange, onBlur, isGetFormData, values, ...props } = this.props
 
-    const { setFieldValue, setFieldTouched, autoFocus, onChange, onBlur, isGetFormData, ...props } = this.props
-    var value = this.state.value || '';
+    var name = this.props.name;
+    var value = this.state.value = this.state.value || values[name] || '';
+    
     return (
 
       <input
