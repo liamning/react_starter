@@ -12,7 +12,6 @@ import { Route, Redirect } from 'react-router-dom';
         values: { ...eventHanlders.values }
       };
 
-
     }
 
     setFieldValue = (field, value) => {
@@ -23,29 +22,29 @@ import { Route, Redirect } from 'react-router-dom';
       eventHanlders.getFormData(params, data => {
 
         this.setState({
-          values: data,
-          // isGetFormData: true
+          values: data
         });
 
-        // this.setState({
-        //   values: data,
-        //   isGetFormData: false
-        // });
       }); 
+    }
+
+    //return the flag to child component without trigger the render function
+    isAfterSave = () => {
+      return this.state.afterSave;
     }
 
     onSubmit = () => {
       console.log(this.state.values);
       eventHanlders.onSubmit(this.state.values, data => {
 
+        //update the flag to force the asyn select control to clear the cache
         this.setState({
           afterSave: true
         });
    
-        this.setState({
-          afterSave: false
-        });
-    
+        //reset the flag
+        this.state.afterSave = false; 
+
       });
 
        
@@ -57,7 +56,6 @@ import { Route, Redirect } from 'react-router-dom';
     componentWillUnmount() {
     }
 
-
     render() {
 
       var { values, onSubmit, getFormData, ...passEventHanlders } = eventHanlders;
@@ -65,8 +63,8 @@ import { Route, Redirect } from 'react-router-dom';
       return (
         <TargetForm {...this.props} {...passEventHanlders}
           values={this.state.values}
-          isGetFormData={this.state.isGetFormData}
-          afterSave={this.state.afterSave}
+          isGetFormData={this.state.isGetFormData} 
+          isAfterSave={this.isAfterSave}
           setFieldValue={this.setFieldValue}
           onSubmit={this.onSubmit}
           getFormData={this.getFormData}

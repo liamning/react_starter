@@ -71,7 +71,7 @@ export class AsyncSelectField extends React.Component {
     var name = nextProps.name; 
 
     //clear cache
-    if (nextProps.afterSave) {
+    if (nextProps.isAfterSave && nextProps.isAfterSave()) {
       this.purgeCache();
     }
     
@@ -149,7 +149,8 @@ export class AsyncSelectField extends React.Component {
       label,
       setFieldValue,
       setFieldTouched,
-      getFormData
+      getFormData,
+      disabled
     } = this.props;
 
     //update value
@@ -165,7 +166,7 @@ export class AsyncSelectField extends React.Component {
  
 
     return (
-      <Async
+      <Async disabled={disabled}
         cache={this.cache}
         ignoreCase={false}
         ref={(input) => {

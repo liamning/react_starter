@@ -1,5 +1,5 @@
 import React from "react";
-import { AsyncSelectField, DateTimeField, DateField, TextField, NumberField } from "../../components/FormControl";
+import { AsyncSelectField, DateTimeField, DateField, TextField, NumberField, DisplayJson } from "../../components/FormControl";
 import {
   Row,
   Col,
@@ -26,7 +26,7 @@ export default class ClientMaster extends React.Component {
 
   render() {
 
-    const { afterSave, onSubmit, getFormData, isGetFormData, setFieldValue, values, ...controller } = this.props;
+    const { isAfterSave, onSubmit, getFormData, isGetFormData, setFieldValue, values, ...controller } = this.props;
     const standardProps = { values, isGetFormData, setFieldValue };
 
     return (
@@ -60,7 +60,7 @@ export default class ClientMaster extends React.Component {
                             tableName="Client"
                             label="Code"
                             getFormData={getFormData}
-                            afterSave={afterSave}
+                            isAfterSave={isAfterSave}
                           />
                         </Col>
                       </Row>
@@ -210,8 +210,12 @@ export default class ClientMaster extends React.Component {
 
 
 
-
+                  <div className="text-right clearfix">
                   <Button color="success" className="pull-right" onClick={onSubmit} type="button" ><i className="fa fa-save"></i>  Submit</Button>
+                  </div>
+
+                  <br />
+                  <DisplayJson {...values}></DisplayJson>
 
                 </form>
 

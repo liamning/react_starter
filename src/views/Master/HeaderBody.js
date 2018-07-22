@@ -31,7 +31,7 @@ export default class ClientMaster extends React.Component {
 
   render() {
 
-    const { afterSave, onSubmit, getFormData, isGetFormData, setFieldValue, values, ...controller } = this.props;
+    const { isAfterSave, onSubmit, getFormData, isGetFormData, setFieldValue, values, ...controller } = this.props;
     const standardProps = { values, isGetFormData, setFieldValue };
     values.BodyList = values.BodyList || [];
 
@@ -63,8 +63,8 @@ export default class ClientMaster extends React.Component {
                             createAble={true}
                             tableName="Header"
                             label="Code"
-                            getFormData={getFormData}
-                            afterSave={afterSave}
+                            getFormData={getFormData} 
+                            isAfterSave={isAfterSave}
                           />
                         </Col>
                       </Row>
