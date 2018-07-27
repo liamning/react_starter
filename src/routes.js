@@ -2,13 +2,17 @@ import Home from './views/Home';
 // import Dashboard from './views/Dashboard';
 import ClientMasterCtrl from './containers/Master/ClientMaster';
 import HeaderBodyCtrl from './containers/Master/HeaderBody';
-import DataTable from './views/Master/TableTest'
+import UserProfileCtrl from './containers/Master/UserProfile'; 
+import ChangePasswordCtrl from './containers/Master/ChangePassword'; 
+import GeneralMasterCtrl from './containers/Master/GeneralMaster'; 
  
 export const routes = [ 
   { path: '/home', name: 'Home', component: Home, exact: true },
   { path: '/HeaderBody', name: 'Header Body', component: HeaderBodyCtrl, exact: true },
-  { path: '/home/DataTable', name: 'DataTable', component: DataTable },
-  { path: '/home/masterClient', name: 'Master Client', component: ClientMasterCtrl },
+  { path: '/UserProfile', name: 'User Profile', component: UserProfileCtrl, exact: true }, 
+  { path: '/ChangePassword', name: 'Change Password', component: ChangePasswordCtrl, exact: true }, 
+  { path: '/home/masterClient', name: 'Client Master', component: ClientMasterCtrl }, 
+  { path: '/GeneralMaster', name: 'General Master', component: GeneralMasterCtrl },
   // { path: '/dashboard', name: 'Dashboard', component: Dashboard },
 ];
 

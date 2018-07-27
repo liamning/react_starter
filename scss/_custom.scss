@@ -1,5 +1,5 @@
 body{
-    font-family: sans-serif,'Noto CJK Light', Arial;
+    font-family: "Open Sans",sans-serif,'Noto CJK Light', Arial;
 }
 
 // Here you can add other styles
@@ -232,7 +232,8 @@ body{
     // border: 1px solid $blue;
 }
 .app-header.navbar .navbar-toggler {
-    color:$blue;
+    color:$navbar-color;
+    font-size: 14px;
     }
    .rdtTimeToggle, .rdtTime th,   .rdtBtn {
         

@@ -485,6 +485,7 @@ export class DateField extends React.Component {
 export class TextField extends React.Component {
 
   state = {
+    isPropUpdate: true
   };
 
   handleChange = event => {
@@ -499,7 +500,10 @@ export class TextField extends React.Component {
     let name = nextProps.name;
     if (nextProps.values[name] == this.props.values[name] && nextState.value == this.state.value) return false;
 
-    this.state.value = undefined;
+    
+    if(nextState.value == this.state.value)
+      this.state.isPropUpdate = true; 
+
     return true;
   }
 
@@ -509,7 +513,7 @@ export class TextField extends React.Component {
 
 
     if (this.props.onBlur) {
-      this.props.onBlur(event);
+      this.props.onBlur(event.currentTarget.value);
     }
 
     if (!this.props.values[name] && !text) return;
@@ -530,8 +534,9 @@ export class TextField extends React.Component {
     const { setFieldValue, setFieldTouched, autoFocus, onChange, onBlur, isGetFormData, values, ...props } = this.props
 
     var name = this.props.name;
-    var value = this.state.value = this.state.value || values[name] || '';
+    var value = this.state.value = (this.state.isPropUpdate ? values[name] : this.state.value)  || '';
     
+    this.state.isPropUpdate = false; 
     return (
 
       <input
@@ -549,10 +554,9 @@ export class TextField extends React.Component {
   }
 }
 
-export class NumberField extends React.Component {
+export class NumberField extends React.Component {  
 
   state = {
-    propsUpdate: true
   };
 
   handleChange = event => {
@@ -565,8 +569,11 @@ export class NumberField extends React.Component {
   };
 
   shouldComponentUpdate(nextProps, nextState) {
-    if (nextProps.value == this.props.value && nextState.value == this.state.value) return false;
-    this.state.propsUpdate = (nextProps.value != this.props.value);
+    let name = nextProps.name;
+    if (nextProps.values[name] == this.props.values[name] && nextState.value == this.state.value) return false;
+
+    if(nextState.value == this.state.value)
+      this.state.value = '';
     return true;
   }
 
@@ -589,26 +596,27 @@ export class NumberField extends React.Component {
   }
 
   render() {
+ 
+    
+    console.log(`render TextField ${this.state.value}`);
+    const { setFieldValue, setFieldTouched, autoFocus, onChange, onBlur, isGetFormData, values, ...props } = this.props
 
-    const { setFieldValue, setFieldTouched, autoFocus, onChange, onBlur, ...props } = this.props
-
-    if (this.state.propsUpdate) {
-      this.state.value = this.props.value;
-      this.state.propsUpdate = false;
-    }
+    var name = this.props.name;
+    var value = this.state.value = this.state.value || values[name] || '';
+    
 
     return (
 
       <div className={this.props.error && "is-invalid"}>
 
-        <input className="form-control" type="text"
+        <input className="form-control text-right" type="text"
           ref={(input) => { this.nameInput = input; }}
 
           {...props}
 
           onChange={this.handleChange}
           onBlur={this.handleBlur}
-          value={this.state.value || ''}
+          value={value}
         />
 
         {!!this.props.error &&
