@@ -35,6 +35,7 @@ export class InlineNumberField extends React.Component {
   }
 }
 
+
 export class InlineTextField extends React.Component {
 
   state = {
@@ -42,37 +43,52 @@ export class InlineTextField extends React.Component {
     value: ''
   }
 
-  render() {
-   // console.log("========================");
+  
+  shouldComponentUpdate(nextProps, nextState) {
+ 
+
+    this.state.value = undefined;
+
+    return true;
+  }
+
+  render() {  
 
     this.state.value = this.state.value || this.props.value;
-    if (this.state.readonly)
+    if (this.state.readonly) {
+
+      var tmpVal = "";
+      if(this.state.value)
+        tmpVal = this.state.value;
+
       return (
         <div className="form-control" onClick={() => this.setState({ readonly: false })}>
-          {this.state.value || ' '}
+          {tmpVal}
         </div>
       );
+    }
     else {
 
       console.log(this.state.value);
       var values = { 'value': this.state.value };
 
       return (<TextField values={values} name='value'
-        autoFocus={true}
-        onBlur={(event) => {
+        autoFocus={true} 
+        onBlur={(value) => {
 
           this.setState({
             readonly: true,
-            value: event.target.value
+            value: value
           });
 
-          this.props.onBlur(event);
+          this.props.onBlur(value);
         }
         } />);
     }
 
   }
 }
+
 
 
 export class InlineDateTimeField extends React.Component {

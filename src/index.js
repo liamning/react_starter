@@ -17,6 +17,14 @@ import '../scss/style.scss'
 // Temp fix for reactstrap
 import '../scss/core/_dropdown-menu-right.scss'
 
+//import fonts
+import WebFont from 'webfontloader';
+WebFont.load({
+  google: {
+    families: ['Open+Sans:300,400,600,700', 'sans-serif']
+  }
+});
+
 // Containers
 import Full from './containers/Full/'
 import LoginCtrl from './containers/Master/Login' 

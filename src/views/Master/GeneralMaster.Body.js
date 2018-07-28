@@ -7,7 +7,7 @@ import {
 // Import React Table
 import ReactTable from "react-table";
 import "react-table/react-table.css";
-import { InlineDateTimeField, InlineAsyncSelectField } from "../../components/InlineControl";
+import { InlineDateTimeField, InlineTextField } from "../../components/InlineControl";
 
 export default class BodyTable extends React.Component {
 
@@ -25,10 +25,11 @@ export default class BodyTable extends React.Component {
         pageSize={data.length || 1}
         showPagination={false}
         sortable={false}
+
         columns={[
           {
             Header: "#",
-            accessor: "col1",
+            accessor: "Seq",
             width: 40,
             Cell: cellInfo => {
               return <div className='form-control'>
@@ -37,10 +38,10 @@ export default class BodyTable extends React.Component {
             }
           },
           {
-            Header: "Body DateTime",
-            accessor: "BodyDateTime",
+            Header: "Code",
+            accessor: "Code",
             Cell: cellInfo => {
-              return <InlineDateTimeField value={cellInfo.value}
+              return <InlineTextField value={cellInfo.value}
                 onBlur={value => {
                   data[cellInfo.index][cellInfo.column.id] = value;
 
@@ -48,27 +49,35 @@ export default class BodyTable extends React.Component {
             }
           },
           {
-            Header: "Combo1",
-            accessor: "Combo1",
+            Header: "English Desc",
+            accessor: "EngDesc",
             Cell: cellInfo => {
-              return <InlineAsyncSelectField 
-              value={cellInfo.value}
-              label={data[cellInfo.index]["Combo1Desc"]}
-              tableName="Gender"
-              onBlur= { value => {
-                data[cellInfo.index][cellInfo.column.id] = value.value;
-                data[cellInfo.index]["Combo1Desc"] = value.label;
-      
-              }} />
+              return <InlineTextField value={cellInfo.value}
+                onBlur={value => {
+                  data[cellInfo.index][cellInfo.column.id] = value;
+
+                }} />
             }
           },
+          {
+            Header: "Chinese Desc",
+            accessor: "ChiDesc",
+            Cell: cellInfo => {
+              return <InlineTextField value={cellInfo.value}
+                onBlur={value => {
+                  data[cellInfo.index][cellInfo.column.id] = value;
+
+                }} />
+            }
+          }, 
           {
             width: 40,
             accessor: "col2",
             Cell: cellInfo => {
               return (
-                <div className="text-center text-danger lineButton" role="button" onClick={e=>{
-                 
+                <div disabled={values.IsLocked} className="text-center text-danger lineButton" role="button" onClick={e=>{
+                 if(values.IsLocked) return;
+
                   data.splice(cellInfo.index, 1);
                   this.setState({});
 
@@ -81,9 +90,10 @@ export default class BodyTable extends React.Component {
         ]}
       />
 
-      <Button color="primary" className="mt-2" onClick={e=>{
+      <Button disabled={values.IsLocked} color="primary" className="mt-2" onClick={e=>{
                   data.push({
-                    HeaderCode: values.Code,
+                    Category: values.Category,
+                    CategoryDesc: values.CategoryDesc,
                   });
                   this.setState({});
                 }}><i className="fa fa-plus"></i></Button>

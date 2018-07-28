@@ -22,18 +22,12 @@ import {
   InputGroupText
 } from 'reactstrap';
 
-
-// Import React Table
-import BodyTable from "./HeaderBody.Body"; 
-import { InlineNumberField, InlineTextField, InlineDateTimeField, InlineAsyncSelectField } from "../../components/InlineControl";
-
 export default class ClientMaster extends React.Component {
 
   render() {
 
     const { isAfterSave, onSubmit, getFormData, isGetFormData, setFieldValue, values, ...controller } = this.props;
     const standardProps = { values, isGetFormData, setFieldValue };
-    values.BodyList = values.BodyList || [];
 
     return (
 
@@ -42,28 +36,30 @@ export default class ClientMaster extends React.Component {
           <Col xs="12" sm="12" md="12" lg="10">
             <Card>
               <CardHeader>
-                Header Body Sample
+              User Profile
               </CardHeader>
               <CardBody>
                 <form autoComplete="off">
+
+
 
                   <Row>
                     <Col xs="12" md="6">
 
                       <Row className="form-group">
                         <Col xs="12" md="4" className="col-form-label">
-                          Code
-                      </Col>
+                        Staff No
+                        </Col>
                         <Col xs="12" md="8">
                           <AsyncSelectField
-                            name="Code"
+                            name="StaffNo"
                             {...standardProps}
 
                             multi={false}
                             createAble={true}
-                            tableName="Header"
-                            label="Code"
-                            getFormData={getFormData} 
+                            tableName="UserProfile"
+                            label="StaffNo"
+                            getFormData={getFormData}
                             isAfterSave={isAfterSave}
                           />
                         </Col>
@@ -78,89 +74,35 @@ export default class ClientMaster extends React.Component {
 
                       <Row className="form-group">
                         <Col xs="12" md="4" className="col-form-label">
-                          Description
+                        Staff Name
                       </Col>
                         <Col xs="12" md="8">
                           <TextField
-                            name="Description"
-                            placeholder="Description"
+                            name="StaffName"
+                            placeholder="StaffName"
                             {...standardProps}
                           />
                         </Col>
                       </Row>
 
                     </Col>
-
-
-                    <Col xs="12" md="6">
-
-
-                      <Row className="form-group">
-
-                        <Col xs="12" md="4" className="col-form-label">
-                          HeaderDate
-
-                        </Col>
-                        <Col xs="12" md="8">
-                          <InputGroup>
-                            <DateField
-                              name="HeaderDate"
-                              placeholder="HeaderDate"
-                              {...standardProps}
-                            />
-                            <InputGroupAddon addonType="append">
-                              <InputGroupText><i className="fa fa-calendar"></i></InputGroupText>
-                            </InputGroupAddon>
-                          </InputGroup>
-
-                        </Col>
-                      </Row>
-                    </Col>
-
-
-                    <Col xs="12" md="6">
-
-
-                      <Row className="form-group">
-
-                        <Col xs="12" md="4" className="col-form-label">
-                          HeaderDateTime
-
-                        </Col>
-                        <Col xs="12" md="8">
-                          <InputGroup>
-                            <DateTimeField
-                              name="HeaderDateTime"
-                              placeholder="HeaderDateTime"
-                              {...standardProps}
-                            />
-                            <InputGroupAddon addonType="append">
-                              <InputGroupText><i className="fa fa-calendar"></i></InputGroupText>
-                            </InputGroupAddon>
-                          </InputGroup>
-
-                        </Col>
-                      </Row>
-                    </Col>
-
-
                     <Col xs="12" md="6">
 
                       <Row className="form-group">
 
                         <Col xs="12" md="4" className="col-form-label">
-                          Combo1
-                        </Col>
+                        Role
+                      </Col>
                         <Col xs="12" md="8">
-
+ 
                           <AsyncSelectField
-                            name="Combo1"
+                            name="Role"
                             {...standardProps}
-
+ 
                             multi={false}
                             createAble={false}
-                            tableName="Combo1"
-                            label="Combo1"
+                            tableName="Role"
+                            label="Role"
 
                           />
 
@@ -168,19 +110,108 @@ export default class ClientMaster extends React.Component {
                       </Row>
 
                     </Col>
+                  {/* </Row>
 
 
+                  <Row> */}
+                    <Col xs="12" md="6">
+
+                      <Row className="form-group">
+                        <Col xs="12" md="4" className="col-form-label">
+                        Age
+                      </Col>
+                        <Col xs="12" md="8">
+
+                          <NumberField
+                            name="Age"
+                            placeholder="Age"
+                            {...standardProps}
+                          />
+                        </Col>
+                      </Row>
+
+                    </Col>
+                    <Col xs="12" md="6">
+
+                      <Row className="form-group">
+
+                        <Col xs="12" md="4" className="col-form-label">
+                        Gender
+                        </Col>
+                        <Col xs="12" md="8">
+ 
+                          <AsyncSelectField
+                            name="Gender"
+                            {...standardProps}
+ 
+                            multi={false}
+                            createAble={false}
+                            tableName="Gender"
+                            label="Gender"
+
+                          />
+
+                        </Col>
+                      </Row>
+
+                    </Col>
+                  {/* </Row>
+
+
+                  <Row> */}
+                    <Col xs="12" md="6">
+
+
+                      <Row className="form-group">
+                        <Col xs="12" md="4" className="col-form-label">
+                        Mobile
+                    </Col>
+                        <Col xs="12" md="8">
+                          <TextField
+                            name="Mobile"
+                            placeholder="Mobile"
+                            {...standardProps}
+                          />
+                        </Col>
+                      </Row>
+
+
+
+                    </Col>
+                    <Col xs="12" md="6">
+
+
+                      <Row className="form-group">
+
+                        <Col xs="12" md="4" className="col-form-label">
+                        Email
+    
+                    </Col>
+                        <Col xs="12" md="8">
+                          
+                        <TextField 
+                              name="Email"
+                              placeholder="Email"
+                              {...standardProps}
+                            />
+
+                        </Col>
+                      </Row>
+
+
+
+                    </Col>
                   </Row>
 
-                  <BodyTable values={values} data={values.BodyList || []}></BodyTable>
 
-                  <div className="text-right">
-                    <Button disabled={!values.Code} color="success" onClick={onSubmit} type="button" ><i className="fa fa-save"></i>  Submit</Button>
+
+
+                  <div className="text-right clearfix">
+                  <Button color="success" className="pull-right" onClick={onSubmit} type="button" ><i className="fa fa-save"></i>  Submit</Button>
                   </div>
 
                   <br />
                   <DisplayJson {...values}></DisplayJson>
-
 
                 </form>
 
