@@ -40,7 +40,7 @@ class TableTest extends React.Component {
 
   cellClick = (cellInfo)=>{
 
-    console.log(cellInfo);
+    //console.log(cellInfo);
   }
 
   renderEditable(cellInfo) {

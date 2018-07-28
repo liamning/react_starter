@@ -24,7 +24,7 @@ export default class BodyTable extends React.Component {
         className="-striped"
         pageSize={data.length || 1}
         showPagination={false}
-
+        sortable={false}
         columns={[
           {
             Header: "#",

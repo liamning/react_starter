@@ -42,11 +42,11 @@ class TableTest extends React.Component {
 
   cellClick = (cellInfo) => {
 
-    console.log(cellInfo);
+    //console.log(cellInfo);
   }
 
   renderEditable(cellInfo) {
-    console.log(cellInfo);
+    //console.log(cellInfo);
 
     return (
 
@@ -59,13 +59,13 @@ class TableTest extends React.Component {
   }
 
   renderSelect = (cellInfo) => {
-   // console.log(cellInfo);
+   // //console.log(cellInfo);
     return (
 
       <InlineAsyncSelectField value={cellInfo.value}
         onBlur= { value => {
-          console.log(value);
-          console.log(cellInfo);
+          //console.log(value);
+          //console.log(cellInfo);
           this.state.data[cellInfo.index][cellInfo.column.id] = value;
 
         }} />
@@ -84,8 +84,10 @@ class TableTest extends React.Component {
 
           <ReactTable
             data={data}
+            pageSizeOptions={ [5, 10, 20, 25, 50, 100]}
             // className="-striped -highlight"
             className="-striped" 
+            resizable={true}
             showPagination={data.length>10} 
             defaultPageSize={10}
             
