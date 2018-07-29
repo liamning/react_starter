@@ -30,6 +30,7 @@ export default class BodyTable extends React.Component {
           {
             Header: "#",
             accessor: "Seq",
+            resizable: false,
             width: 40,
             Cell: cellInfo => {
               return <div className='form-control'>
@@ -61,6 +62,7 @@ export default class BodyTable extends React.Component {
           },
           {
             Header: "Chinese Desc",
+            resizable: false,
             accessor: "ChiDesc",
             Cell: cellInfo => {
               return <InlineTextField value={cellInfo.value}
@@ -72,6 +74,7 @@ export default class BodyTable extends React.Component {
           }, 
           {
             width: 40,
+            resizable: false,
             accessor: "col2",
             Cell: cellInfo => {
               return (

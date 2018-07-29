@@ -335,3 +335,7 @@ body{
         line-height: 2.5; 
         cursor: pointer;
     }
+    div.form-control{
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }

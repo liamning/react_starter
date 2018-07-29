@@ -500,6 +500,8 @@ export class TextField extends React.Component {
     let name = nextProps.name;
     if (nextProps.values[name] == this.props.values[name] && nextState.value == this.state.value) return false;
 
+    //console.log(`===========nextState: ${nextState.value} ---state: ${this.state.value}`);
+    //console.log(`============nextProps: ${nextProps.values[name]} --- props: ${this.props.values[name]}`);
     
     if(nextState.value == this.state.value)
       this.state.isPropUpdate = true; 
@@ -556,7 +558,14 @@ export class TextField extends React.Component {
 
 export class NumberField extends React.Component {  
 
+  constructor(props) {
+    super(props);
+    // var ref = React.createRef();
+    // console.log(ref);
+  }
+
   state = {
+    isPropUpdate: true
   };
 
   handleChange = event => {
@@ -573,21 +582,24 @@ export class NumberField extends React.Component {
     if (nextProps.values[name] == this.props.values[name] && nextState.value == this.state.value) return false;
 
     if(nextState.value == this.state.value)
-      this.state.value = '';
+      this.state.isPropUpdate = true;
+
     return true;
   }
 
   handleBlur = event => {
+    var name = this.props.name;
     var text = event.currentTarget.value;
 
-    if (!this.props.value && !text) return;
-
-    if (this.props.value !== text && this.props.setFieldValue)
-      this.props.setFieldValue(this.props.name, text);
 
     if (this.props.onBlur) {
-      this.props.onBlur(event);
+      this.props.onBlur(event.currentTarget.value);
     }
+
+    if (!this.props.values[name] && !text) return;
+
+    if (this.props.values[name] !== text && this.props.setFieldValue)
+      this.props.setFieldValue(name, text);
   };
 
   componentDidMount() {
@@ -602,8 +614,10 @@ export class NumberField extends React.Component {
     const { setFieldValue, setFieldTouched, autoFocus, onChange, onBlur, isGetFormData, values, ...props } = this.props
 
     var name = this.props.name;
-    var value = this.state.value = this.state.value || values[name] || '';
     
+    var value = this.state.value = (this.state.isPropUpdate ? values[name] : this.state.value)  || ''; 
+    
+    this.state.isPropUpdate = false;
 
     return (
 

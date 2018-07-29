@@ -46,6 +46,7 @@ export class InlineTextField extends React.Component {
   
   shouldComponentUpdate(nextProps, nextState) {
  
+    if (nextProps.value == this.props.value && nextState.value == this.state.value) return false;
 
     this.state.value = undefined;
 
@@ -53,6 +54,8 @@ export class InlineTextField extends React.Component {
   }
 
   render() {  
+
+    console.log("==========InlineTextField==============");
 
     this.state.value = this.state.value || this.props.value;
     if (this.state.readonly) {
