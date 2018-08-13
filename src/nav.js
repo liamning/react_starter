@@ -2,19 +2,19 @@ export default {
     items: [
         {
             name: 'Home',
-            url: '/',
+            url: '/Home',
             icon: 'icon-home',
         },
         {
             name: 'Client Master',
-            url: '/home/masterClient',
+            url: '/Home/masterClient',
             icon: 'icon-puzzle'
         },
         {
             name: 'Header Body',
             url: '/HeaderBody',
             icon: 'icon-puzzle'
-        },
+        }, 
         {
             name: 'System',
             icon: 'fa fa-cog',
@@ -29,8 +29,7 @@ export default {
                 },
                 {
                     name: 'General Master',
-                    url: '/GeneralMaster',
-                    // icon: 'icon-puzzle',
+                    url: '/GeneralMaster', 
                 }, 
             ]
         },

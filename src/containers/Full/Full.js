@@ -36,7 +36,7 @@ class Full extends Component {
                   },
                 )}
                 <Route path="/login" name="Login" component={LoginCtrl} />
-                <Redirect from="/" to="/home" />
+                <Redirect from="/" to="/Home" />
 
               </Switch>
 

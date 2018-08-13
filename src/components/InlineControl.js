@@ -45,6 +45,8 @@ export class InlineTextField extends React.Component {
 
   
   shouldComponentUpdate(nextProps, nextState) {
+
+    if(nextState.readonly != this.state.readonly) return true;
  
     if (nextProps.value == this.props.value && nextState.value == this.state.value) return false;
 

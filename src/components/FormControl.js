@@ -12,14 +12,16 @@ var debounce = require('debounce-promise')
 import { loginInfo } from '../global';
 //import { FastField } from "../../node_modules/formik";
 
-const options = [
-  { value: 'Food', label: 'Food' },
-  { value: 'Being Fabulous', label: 'Being Fabulous' },
-  { value: 'Ken Wheeler', label: 'Ken Wheeler' },
-  { value: 'ReasonML', label: 'ReasonML' },
-  { value: 'Unicorns', label: 'Unicorns' },
-  { value: 'Kittens', label: 'Kittens' },
-];
+import { Spring } from 'react-spring'
+
+// const options = [
+//   { value: 'Food', label: 'Food' },
+//   { value: 'Being Fabulous', label: 'Being Fabulous' },
+//   { value: 'Ken Wheeler', label: 'Ken Wheeler' },
+//   { value: 'ReasonML', label: 'ReasonML' },
+//   { value: 'Unicorns', label: 'Unicorns' },
+//   { value: 'Kittens', label: 'Kittens' },
+// ];
 
 const selectDict = {};
 
@@ -31,7 +33,6 @@ const getGeneralMaster = (input, table, createAble, descField) => {
       return response.json();
     }).then((json) => {
 
-      console.log(json);
 
       //selectDict[table] = {};
       if(!selectDict[table])
@@ -44,6 +45,9 @@ const getGeneralMaster = (input, table, createAble, descField) => {
       });
       if (createAble && input && !json.length)
         json.push({ value: input, label: input });
+
+        
+      //console.log(json);
 
       return { options: json };
     });
@@ -96,8 +100,8 @@ export class AsyncSelectField extends React.Component {
       if (this.props.setFieldValue) {
         this.props.setFieldValue(this.props.name, value.value);
       }
-      console.log('handleChange');
-      console.log(value);
+      //console.log('handleChange');
+      //console.log(value);
       this.setState(value);
 
     }
@@ -139,7 +143,8 @@ export class AsyncSelectField extends React.Component {
   }
 
   render() {
-    console.log(`async select ${this.props.name}`);
+    //console.log(`async select ${this.props.name}`);
+    console.log(this.cache);
 
     const {
       tableName,
@@ -163,11 +168,16 @@ export class AsyncSelectField extends React.Component {
       value: value ,
       label: labelValue 
     };
- 
-
+    var cache;
+    if(this.props.createAble){
+      cache = undefined;
+    }else{
+      cache = this.cache;
+    }
+    
     return (
       <Async disabled={disabled}
-        cache={this.cache}
+        cache={cache} 
         ignoreCase={false}
         ref={(input) => {
           this.nameInput = input;
@@ -231,7 +241,7 @@ export class DateTimeField extends React.Component {
 
   blurControl = (count)=>{
     this.state.blurCount+=count;
-    console.log(`==================this.state.blurCount: ${this.state.blurCount}`);
+    //console.log(`==================this.state.blurCount: ${this.state.blurCount}`);
     if(this.state.blurCount <= 0){ 
       if(this.props.onBlur)
         this.props.onBlur(this.state.outputValue);
@@ -243,7 +253,7 @@ export class DateTimeField extends React.Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     let name = nextProps.name;
-    console.log(`shouldComponentUpdate ${name}`);
+    //console.log(`shouldComponentUpdate ${name}`);
 
     if (nextProps.values[name] == this.props.values[name] && nextState.value == this.state.value) return false;
 
@@ -259,7 +269,7 @@ export class DateTimeField extends React.Component {
 
 
   handleChange = event => {
-    console.log("handleChange");
+    //console.log("handleChange");
     if (!event._isValid) return;
     var text = event;
     this.setState({
@@ -321,7 +331,7 @@ export class DateTimeField extends React.Component {
 
   render() {
 
-    console.log(`render ${this.props.name} ${this.state.value}`);
+    //console.log(`render ${this.props.name} ${this.state.value}`);
 
     const { setFieldValue, setFieldTouched, autoFocus, closeOnTab, onChange, onBlur, isGetFormData, ...props } = this.props;
     
@@ -349,13 +359,13 @@ export class DateTimeField extends React.Component {
         }} 
 
         // onChange={()=>{ 
-        //   console.log("=====================handleChange===================");
+        //   //console.log("=====================handleChange===================");
         // }}
         // onBlur={()=>{ 
-        //   console.log("=====================onBlur===================");
+        //   //console.log("=====================onBlur===================");
         // }}
         // onFocus={()=>{
-        //   console.log("=====================onFocus===================");
+        //   //console.log("=====================onFocus===================");
         // }} 
         inputProps={{
           onBlur: (e)=>{
@@ -363,7 +373,7 @@ export class DateTimeField extends React.Component {
             this.blurControl(-1);
           },
           // onBlur: ()=>{ 
-          //   console.log("=====================inputOnBlur===================");
+          //   //console.log("=====================inputOnBlur===================");
           // },
           ...props
         }}
@@ -386,7 +396,7 @@ export class DateField extends React.Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     let name = nextProps.name;
-    console.log(`shouldComponentUpdate ${name}`);
+    //console.log(`shouldComponentUpdate ${name}`);
 
     if (nextProps.values[name] == this.props.values[name] && nextState.value == this.state.value) return false;
 
@@ -402,7 +412,7 @@ export class DateField extends React.Component {
 
 
   handleChange = event => {
-    console.log("handleChange");
+    //console.log("handleChange");
     if (!event._isValid) return;
     var text = event;
     this.setState({
@@ -456,7 +466,7 @@ export class DateField extends React.Component {
 
   render() {
 
-    console.log(`render ${this.props.name} ${this.state.value}`);
+    //console.log(`render ${this.props.name} ${this.state.value}`);
 
     const { setFieldValue, setFieldTouched, autoFocus, onChange, onBlur, isGetFormData, values, ...props } = this.props
  
@@ -500,8 +510,8 @@ export class TextField extends React.Component {
     let name = nextProps.name;
     if (nextProps.values[name] == this.props.values[name] && nextState.value == this.state.value) return false;
 
-    //console.log(`===========nextState: ${nextState.value} ---state: ${this.state.value}`);
-    //console.log(`============nextProps: ${nextProps.values[name]} --- props: ${this.props.values[name]}`);
+    ////console.log(`===========nextState: ${nextState.value} ---state: ${this.state.value}`);
+    ////console.log(`============nextProps: ${nextProps.values[name]} --- props: ${this.props.values[name]}`);
     
     if(nextState.value == this.state.value)
       this.state.isPropUpdate = true; 
@@ -532,7 +542,7 @@ export class TextField extends React.Component {
 
   render() {
 
-    console.log(`render TextField ${this.state.value}`);
+    //console.log(`render TextField ${this.state.value}`);
     const { setFieldValue, setFieldTouched, autoFocus, onChange, onBlur, isGetFormData, values, ...props } = this.props
 
     var name = this.props.name;
@@ -561,7 +571,7 @@ export class NumberField extends React.Component {
   constructor(props) {
     super(props);
     // var ref = React.createRef();
-    // console.log(ref);
+    // //console.log(ref);
   }
 
   state = {
@@ -610,7 +620,7 @@ export class NumberField extends React.Component {
   render() {
  
     
-    console.log(`render TextField ${this.state.value}`);
+    //console.log(`render TextField ${this.state.value}`);
     const { setFieldValue, setFieldTouched, autoFocus, onChange, onBlur, isGetFormData, values, ...props } = this.props
 
     var name = this.props.name;

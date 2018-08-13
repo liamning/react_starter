@@ -37,7 +37,7 @@ for (var pro in window.loginInfo) {
   loginInfo[pro] = window.loginInfo[pro];
 }
 
-console.log(loginInfo);
+//console.log(loginInfo);
 
 
 ReactDOM.render((

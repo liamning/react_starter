@@ -96,14 +96,6 @@ body{
     display: none!important;
 }
 
-.sidebar .nav-dropdown-items {
-    max-height: 0;
-    padding: 0;
-    margin: 0;
-    overflow-y: hidden;
-    transition: none;
-    /* transition: max-height .3s ease-in-out; */
-}
 
 .ReactTable .rt-thead.-header {
     box-shadow: none; 
@@ -234,6 +226,9 @@ body{
 .app-header.navbar .navbar-toggler {
     color:$navbar-color;
     font-size: 14px;
+    
+    outline: none;
+
     }
    .rdtTimeToggle, .rdtTime th,   .rdtBtn {
         
@@ -338,4 +333,11 @@ body{
     div.form-control{
         overflow: hidden;
         text-overflow: ellipsis;
+    }
+
+    .TestUL li{
+        background: $gray-200;
+        width: 250px;
+        list-style: none;
+        cursor: pointer;
     }

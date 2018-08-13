@@ -39,7 +39,7 @@ $vimeo:                               #aad450 !default;
 
 $navbar-height:                       55px !default;
 // $navbar-bg:                           #fff !default;
-$navbar-bg:                           #29363d !default;
+$navbar-bg:                           #18252b !default;
 $navbar-color:                        white !default;
 $navbar-border: (
   bottom: (
@@ -50,7 +50,7 @@ $navbar-border: (
 )  !default;
 $navbar-brand-width:                  155px !default;
 // $navbar-brand-bg:                     #fff !default;
-$navbar-brand-bg:                     #333 !default;
+$navbar-brand-bg:                     #18252b !default;
 $navbar-brand-logo:                   url('../img/logo.png') !default;
 $navbar-brand-logo-size:              70px auto !default;
 $navbar-brand-border: (
@@ -83,7 +83,8 @@ $sidebar-minimized-width:             50px !default;
 $sidebar-minimized-height:            $sidebar-minimized-width !default;
 $sidebar-compact-width:               150px !default;
 $sidebar-compact-height:              $sidebar-compact-width !default;
-$sidebar-color:                       #fff !default;
+// $sidebar-color:                       #fff !default;
+$sidebar-color:                       #c2cfd6 !default;
 $sidebar-bg:                          $gray-800 !default;
 $sidebar-borders:                     none !default;
 $mobile-sidebar-width:                220px !default;
@@ -110,7 +111,8 @@ $sidebar-nav-title-padding-x:         1rem !default;
 $sidebar-nav-title-color:             $gray-200 !default;
 $sidebar-nav-link-padding-y:          .75rem !default;
 $sidebar-nav-link-padding-x:          1rem !default;
-$sidebar-nav-link-color:              #fff !default;
+// $sidebar-nav-link-color:              #fff !default;
+$sidebar-nav-link-color:              #c2cfd6 !default;
 $sidebar-nav-link-bg:                 transparent !default;
 $sidebar-nav-link-icon-color:         $gray-600 !default;
 $sidebar-nav-link-borders:            0 !default;
@@ -125,7 +127,8 @@ $sidebar-nav-link-active-bg:          lighten($sidebar-bg, 5%) !default;
 $sidebar-nav-link-active-icon-color:  theme-color("primary") !default;
 $sidebar-nav-link-active-borders:     0 !default;
 
-$sidebar-nav-dropdown-color:          #fff !default;
+// $sidebar-nav-dropdown-color:          #fff !default;
+$sidebar-nav-dropdown-color:          #c2cfd6;
 $sidebar-nav-dropdown-bg:             rgba(0,0,0,.2) !default;
 $sidebar-nav-dropdown-borders:        0 !default;
 $sidebar-nav-dropdown-indicator-color:$gray-600 !default;

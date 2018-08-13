@@ -48,7 +48,7 @@ const Breadcrumbs = ({...rest, location : {pathname}, match}) => {
   const paths = getPaths(pathname);
   const items = paths.map((path, i) => <Route key={i++} path={path} component={BreadcrumbsItem}/>);
 
-  console.log(paths);
+  //console.log(paths);
 
   return (
     <Breadcrumb>

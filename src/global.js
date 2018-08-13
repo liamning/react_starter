@@ -18,7 +18,7 @@ export const ajaxPost = function (url, data) {
         })
     })
     .then(response => {
-        console.log(response);
+        //console.log(response);
         if (response.status != 200) {
             delete loginInfo.UserID;
             history.push('/login');

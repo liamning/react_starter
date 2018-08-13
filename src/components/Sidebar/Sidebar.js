@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Badge, Nav, NavItem, NavLink as RsNavLink } from 'reactstrap';
-import classNames from 'classnames'; 
+import classNames from 'classnames';
 import SidebarFooter from './../SidebarFooter';
 import SidebarForm from './../SidebarForm';
 import SidebarHeader from './../SidebarHeader';
 import SidebarMinimizer from './../SidebarMinimizer';
 import { loginInfo } from '../../global';
 import nav from '../../nav';
+
+
+import AnimateHeight from 'react-animate-height';
+// import { func } from '../../../node_modules/@types/prop-types';
 
 
 class Sidebar extends Component {
@@ -21,9 +25,18 @@ class Sidebar extends Component {
   }
 
 
-  handleClick(e) {
+  handleClick(e, key, item) {
     e.preventDefault();
     e.target.parentElement.classList.toggle('open');
+
+    const { height } = this.state;
+    height[key] = height[key] || 0;
+    height[key] = height[key] === 0 ? 'auto' : 0;
+
+    this.setState({
+      height: height,
+    });
+
   }
 
   activeRoute(routeName, props) {
@@ -42,11 +55,18 @@ class Sidebar extends Component {
   // secondLevelActive(routeName) {
   //   return this.props.location.pathname.indexOf(routeName) > -1 ? "nav nav-second-level collapse in" : "nav nav-second-level collapse";
   // }
+  state = {
+    height: {},
+  };
 
 
   render() {
 
+    console.log("=====render====");
+    const { height } = this.state;
     const props = this.props;
+    //console.log(height);
+
 
     // badge addon to NavItem
     const badge = (badge) => {
@@ -119,12 +139,22 @@ class Sidebar extends Component {
 
     // nav dropdown
     const navDropdown = (item, key) => {
+      //console.log("===========navDropdown===============");
+      //console.log(key);
+      //console.log(item);
       return (
         <li key={key} className={this.activeRoute(item.url, props)}>
-          <a className="nav-link nav-dropdown-toggle" href="#" onClick={this.handleClick}><i className={item.icon}></i>{item.name}</a>
-          <ul className="nav-dropdown-items">
-            {navList(item.children)}
-          </ul>
+          <a className="nav-link nav-dropdown-toggle" href="#" onClick={(e)=>{
+            this.handleClick(e, key, item);
+          }} ><i className={item.icon}></i>{item.name}</a>
+          <AnimateHeight
+            duration={300}
+            height={height[key] || 0} // see props documentation bellow
+          >
+            <ul className="nav-dropdown-items">
+              {navList(item.children)}
+            </ul>
+          </AnimateHeight>
         </li>)
     };
 
