@@ -13,8 +13,9 @@ class Login extends Component {
 
   render() {
 
-    const { isAfterSave, onSubmit, getFormData, isGetFormData, setFieldValue, values, ...controller } = this.props;
-    const standardProps = { values, isGetFormData, setFieldValue };
+
+    const { isAfterSave, isSubmitted, onSubmit, getFormData, isGetFormData, setFieldValue, values, errors, validateFieldValue, formComponents, ...controller } = this.props;
+    const standardProps = { values, errors, isGetFormData, setFieldValue, validateFieldValue, isSubmitted, formComponents };
 
     return (
       <div className="app flex-row align-items-center">

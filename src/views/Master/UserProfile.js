@@ -26,8 +26,8 @@ export default class ClientMaster extends React.Component {
 
   render() {
 
-    const { isAfterSave, onSubmit, getFormData, isGetFormData, setFieldValue, values, ...controller } = this.props;
-    const standardProps = { values, isGetFormData, setFieldValue };
+    const { isAfterSave, isSubmitted, onSubmit, getFormData, isGetFormData, setFieldValue, values, errors, validateFieldValue, formComponents, ...controller } = this.props;
+    const standardProps = { values, errors, isGetFormData, setFieldValue, validateFieldValue, isSubmitted, formComponents };
 
     return (
 
@@ -53,7 +53,7 @@ export default class ClientMaster extends React.Component {
                         <Col xs="12" md="8">
                           <AsyncSelectField
                             name="StaffNo"
-                            {...standardProps}
+                            {...standardProps} 
 
                             multi={false}
                             createAble={true}
@@ -123,9 +123,12 @@ export default class ClientMaster extends React.Component {
                         <Col xs="12" md="8">
 
                           <NumberField
+                            required="1"
                             name="Age"
+                            error="1"
                             placeholder="Age"
                             {...standardProps}
+                            RelatedField="Mobile"
                           />
                         </Col>
                       </Row>

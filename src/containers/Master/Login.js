@@ -21,6 +21,7 @@ const LoginCtrl = WithFormEvent(Login, {
       console.log(response);
       if (response.StaffNo) {
         loginInfo.UserID = response.StaffNo;
+        loginInfo.save();
         console.log(loginInfo);
         history.push('/');
 

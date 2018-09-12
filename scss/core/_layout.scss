@@ -312,7 +312,7 @@ app-root {
     width: 100%;
     text-align: center;
     background-color: $navbar-brand-bg;
-    @include borders($navbar-brand-border);
+    // @include borders($navbar-brand-border);
 
     .navbar-toggler {
       @if (lightness( $navbar-brand-bg ) > 40) {

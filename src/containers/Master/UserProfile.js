@@ -32,6 +32,13 @@ export default WithFormEvent(UserProfile, {
     });
 
   },
+  validatePattern:{
+    Age:{
+      required:"",
+      pattern: /^\d{2}$/,
+    }
+  }
+
 
 
 })

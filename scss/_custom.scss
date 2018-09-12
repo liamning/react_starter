@@ -40,7 +40,7 @@ body{
     }
 
     .sidebar-mobile-show .main {
-        margin-right: -220px !important;
+        margin-right: -250px !important;
         margin-left: 250px !important;
     }
 
@@ -49,14 +49,6 @@ body{
     margin-left: -250px;
 }
  
-.is-invalid input, .is-invalid .input-group-text{
-    border-color: red;
-
-}
-
-.is-invalid .message, .is-invalid .input-group-text{
-    color:red!important;
-}
  
 .input-group .rdt {
     position: relative;
@@ -341,3 +333,15 @@ body{
         list-style: none;
         cursor: pointer;
     }
+
+    
+.is-invalid>input, 
+.is-invalid div.Select-control, 
+.is-invalid>.input-group-text{
+    border-color: red; 
+
+}
+
+.is-invalid .message, .is-invalid .input-group-text{
+    color:red!important;
+}

@@ -1,5 +1,6 @@
 
 import { createHashHistory } from 'history'
+import { func } from 'prop-types';
  
 const history = createHashHistory();
 
@@ -7,6 +8,24 @@ const param = require('jquery-param');
 
 export const loginInfo = {
 };
+
+if (typeof(sessionStorage) !== "undefined") {
+
+    console.log(sessionStorage);
+    if(sessionStorage["loginInfo"]){
+        Object.assign(loginInfo, JSON.parse(sessionStorage["loginInfo"]));
+    }
+    loginInfo.save = function(){
+        sessionStorage["loginInfo"] = JSON.stringify(loginInfo);
+    }
+    loginInfo.clear = function(){
+        sessionStorage["loginInfo"] = JSON.stringify({});
+    }
+
+} else {
+    // Sorry! No Web Storage support..
+    console.log("Sorry! No Web Storage support..");
+}
 
 export const ajaxPost = function (url, data) {
     return fetch(`${loginInfo.host}/${url}`, {
