@@ -32,6 +32,17 @@ export default WithFormEvent(ClientMaster, {
     });
 
   },
+  validatePattern:{
+    RegistrationDate:{
+      required:"", 
+    },
+    Address:{
+      required:"",
+    },
+    Phone:{
+      required:"",
+    }
+  }
 
 
 })

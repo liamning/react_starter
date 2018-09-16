@@ -335,7 +335,7 @@ body{
     }
 
     
-.is-invalid>input, 
+.is-invalid input.form-control, 
 .is-invalid div.Select-control, 
 .is-invalid>.input-group-text{
     border-color: red; 

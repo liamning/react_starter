@@ -21,12 +21,13 @@ import { Route, Redirect } from 'react-router-dom';
 
     validateFieldValue = (field, value) => {
       var pattern = this.validatePattern[field];
+      //console.log(pattern);
       if(pattern){
         for(var pro in pattern){
           switch(pro){
             case "required":
             if(!value) this.state.errors[field] = `${field} required`;
-            else delete this.state.errors[field];
+            else this.state.errors[field] = undefined;
             break; 
 
             case "pattern":
@@ -34,17 +35,28 @@ import { Route, Redirect } from 'react-router-dom';
             console.log(pattern["pattern"]);
             const regex = RegExp(pattern["pattern"]);
             if(!regex.test(value)) this.state.errors[field] = `${field} invalid`;
-            else delete this.state.errors[field];
+            else this.state.errors[field] = undefined;
             break;
 
+            case "customValidate":
+            var customValidate = pattern["customValidate"];
+            var error = customValidate(value);
+            if(error) this.state.errors[field] = error;
+            else this.state.errors[field] = undefined;
+            break; 
              
           }
+          if(this.state.errors[field]) break;
         }
       }
+      console.log(field);
+      console.log(value);
+      console.log(this.state.errors);
     }
 
     setFieldValue = (field, value) => {
       this.state.values[field] = value;
+      this.validateFieldValue(field, value);
     }
 
     getFormData = (params) => { 
@@ -64,12 +76,18 @@ import { Route, Redirect } from 'react-router-dom';
     }
 
     onSubmit = () => {
+
+      for(var pro in this.validatePattern){
+        this.validateFieldValue(pro, this.state.values[pro]);  
+      }
+      
+
       console.log(this.state.values);
       this.state.isSubmitted = true;
       console.log(this.state.errors);
 
       for(var pro in this.state.errors){
-        if(pro) {
+        if(pro && this.state.errors[pro]) {
           this.setState({});
           return;
         }

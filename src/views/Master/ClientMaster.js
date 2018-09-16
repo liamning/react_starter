@@ -100,8 +100,6 @@ export default class ClientMaster extends React.Component {
                             name="Phone"
                             {...standardProps}
  
-                            multi={false}
-                            createAble={false}
                             tableName="Relationship"
                             label="Phone"
 
@@ -188,17 +186,18 @@ export default class ClientMaster extends React.Component {
                           Registration Date
     
                     </Col>
-                        <Col xs="12" md="8">
-                          <InputGroup>
-                            <DateTimeField 
+                        <Col xs="12" md="8"><DateTimeField 
                               name="RegistrationDate"
                               placeholder="RegistrationDate"
                               {...standardProps}
                             />
+
+                          {/* <InputGroup>
+                            
                             <InputGroupAddon addonType="append">
                               <InputGroupText><i className="fa fa-calendar"></i></InputGroupText>
                             </InputGroupAddon>
-                          </InputGroup>
+                          </InputGroup> */}
 
                         </Col>
                       </Row>

@@ -122,10 +122,8 @@ export default class ClientMaster extends React.Component {
                       </Col>
                         <Col xs="12" md="8">
 
-                          <NumberField
-                            required="1"
+                          <NumberField 
                             name="Age"
-                            error="1"
                             placeholder="Age"
                             {...standardProps}
                             RelatedField="Mobile"

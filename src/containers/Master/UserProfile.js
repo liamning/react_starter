@@ -23,8 +23,8 @@ export default WithFormEvent(UserProfile, {
     var data = { action: 'getUser', StaffNo: params.Code };
     ajaxPost(url, data).then(response => {
 
-      if (!response) response = {
-        ...params
+      if (!response) response = { 
+        StaffNo: params.Code
       };
 
       if (callback)
@@ -36,6 +36,18 @@ export default WithFormEvent(UserProfile, {
     Age:{
       required:"",
       pattern: /^\d{2}$/,
+      customValidate: value=>{
+        if(value <= 0)
+          return "Age must be greater than 0";
+        
+        return "";
+      },
+    },
+    Mobile:{
+      required:"",
+    },
+    Role:{
+      required:"",
     }
   }
 
