@@ -16,8 +16,15 @@ import { Route, Redirect } from 'react-router-dom';
       };
 
       this.validatePattern = eventHanlders.validatePattern || {};
+      this.fieldChange = eventHanlders.fieldChange || {};
+
+      console.log(this.fieldChange);
 
     } 
+
+    updateFieldComponent = field=>{
+      this.state.formComponents[field].setState({});
+    }
 
     validateFieldValue = (field, value) => {
       var pattern = this.validatePattern[field];
@@ -26,7 +33,7 @@ import { Route, Redirect } from 'react-router-dom';
         for(var pro in pattern){
           switch(pro){
             case "required":
-            if(!value) this.state.errors[field] = `${field} required`;
+            if(!value) this.state.errors[field] = pattern[`${pro}Error`] || `${field} required`;
             else this.state.errors[field] = undefined;
             break; 
 
@@ -34,7 +41,7 @@ import { Route, Redirect } from 'react-router-dom';
             if(!value) break;
             console.log(pattern["pattern"]);
             const regex = RegExp(pattern["pattern"]);
-            if(!regex.test(value)) this.state.errors[field] = `${field} invalid`;
+            if(!regex.test(value)) this.state.errors[field] =pattern[`${pro}Error`] ||  `${field} invalid`;
             else this.state.errors[field] = undefined;
             break;
 
@@ -49,14 +56,17 @@ import { Route, Redirect } from 'react-router-dom';
           if(this.state.errors[field]) break;
         }
       }
-      console.log(field);
-      console.log(value);
-      console.log(this.state.errors);
+      // console.log(field);
+      // console.log(value);
+      // console.log(this.state.errors);
     }
 
     setFieldValue = (field, value) => {
       this.state.values[field] = value;
       this.validateFieldValue(field, value);
+
+      if(this.fieldChange[field])
+        this.fieldChange[field](this.state.values, this.updateFieldComponent);
     }
 
     getFormData = (params) => { 

@@ -13,7 +13,9 @@ export default class BodyTable extends React.Component {
 
   render() {
 
-    const { values, data } = this.props; 
+    const { setFieldValue, values, data, errors, formComponents, ...controller } = this.props;
+    const standardProps = { data, errors, setFieldValue, formComponents };
+    console.log(data);
     
     return (
 
@@ -42,22 +44,21 @@ export default class BodyTable extends React.Component {
             Header: "Code",
             accessor: "Code",
             Cell: cellInfo => {
-              return <InlineTextField value={cellInfo.value}
-                onBlur={value => {
-                  data[cellInfo.index][cellInfo.column.id] = value;
-
-                }} />
+              return <InlineTextField 
+              name="Code"
+              index={cellInfo.index}
+              {...standardProps} />
             }
           },
           {
             Header: "English Desc",
             accessor: "EngDesc",
             Cell: cellInfo => {
-              return <InlineTextField value={cellInfo.value}
-                onBlur={value => {
-                  data[cellInfo.index][cellInfo.column.id] = value;
-
-                }} />
+              return <InlineTextField 
+              name="EngDesc"
+              index={cellInfo.index}
+              {...standardProps} 
+              />
             }
           },
           {
@@ -65,11 +66,11 @@ export default class BodyTable extends React.Component {
             resizable: false,
             accessor: "ChiDesc",
             Cell: cellInfo => {
-              return <InlineTextField value={cellInfo.value}
-                onBlur={value => {
-                  data[cellInfo.index][cellInfo.column.id] = value;
-
-                }} />
+              return <InlineTextField 
+              name="ChiDesc"
+              index={cellInfo.index}
+              {...standardProps} 
+              />
             }
           }, 
           {

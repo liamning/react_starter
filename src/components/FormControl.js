@@ -150,8 +150,12 @@ export class AsyncSelectField extends React.Component {
 
 
   componentDidMount() {
+
     let name = this.props.name;
-    if(!this.props.formComponents[name]) this.props.formComponents[name] = this;
+    let index = this.props.index || '';
+    let fieldIndex = `${name}${index}` 
+    if(this.props.formComponents && !this.props.formComponents[fieldIndex]) this.props.formComponents[fieldIndex] = this;
+
     if (this.props.autoFocus)
       this.nameInput.focus();
   }
@@ -164,7 +168,7 @@ export class AsyncSelectField extends React.Component {
       tableName,
       multi,
       name,
-      values, errors, validateFieldValue, isSubmitted,formComponents,RelatedField,
+      values, errors, validateFieldValue, isSubmitted,formComponents,
       label,
       setFieldValue,
       setFieldTouched,
@@ -234,6 +238,8 @@ export class DateTimeField extends React.Component {
     this.dateTimeLengh = 19;
     
   }
+  
+  isInternal = false;
 
   state = {
     value: '',
@@ -252,13 +258,66 @@ export class DateTimeField extends React.Component {
     this.state.blurCount = 2;
   };
 
+  componentDidMount() {
+
+    let name = this.props.name;
+    let index = this.props.index || '';
+    let fieldIndex = `${name}${index}` 
+    if(this.props.formComponents && !this.props.formComponents[fieldIndex]) this.props.formComponents[fieldIndex] = this;
+
+    if (this.props.autoFocus &&  this.nameInput)
+      this.nameInput.focus();
+      //this.nameInput.openCalendar();
+  }
+
+  handleChange = event => {
+    console.log("handleChange");
+
+    var text = "";
+    if (event) {
+      if (event._isValid) 
+        text = event.format("DD/MM/YYYY HH:mm:ss"); 
+      else
+        text = moment().format("DD/MM/YYYY HH:mm:ss");
+    }
+    
+    this.isInternal = true;
+    this.setState({
+      value: text
+    });
+    
+
+  };
+
+  handleBlur = event => {
+    console.log("handleBlur");
+
+    var name = this.props.name;
+    var text = '';
+    if (event) {
+      if (event._isValid) 
+       text = event.format("DD/MM/YYYY HH:mm:ss");  
+    }
+
+    if (this.props.setFieldValue)
+      this.props.setFieldValue(name, text);
+
+    this.state.outputValue = text;
+ 
+    if(this.props.errors.hasOwnProperty(name))
+      this.setState({});
+  };
+
   shouldComponentUpdate(nextProps, nextState) {
     var shouldUpdate = false;
     var name = nextProps.name;
 
     //internal update
-    if(nextState.value != this.state.value)
+    if(this.isInternal || nextState.value != this.state.value){
       shouldUpdate = true;
+      this.isInternal = false;
+    }
+    
     
     //props update
     else if (this.state.value != nextProps.values[name]){ 
@@ -274,45 +333,6 @@ export class DateTimeField extends React.Component {
     nextState.error = nextProps.errors[name];
     return shouldUpdate;
   }
-
-  componentDidMount() {
-    let name = this.props.name;
-    if(!this.props.formComponents[name]) this.props.formComponents[name] = this;
-    if (this.props.autoFocus &&  this.nameInput)
-      this.nameInput.focus();
-      //this.nameInput.openCalendar();
-  }
-
-
-  handleChange = event => {
-    console.log("handleChange");
-    if (!event._isValid) return;
-    var text = event;
-    
-
-    this.setState({
-      value: text
-    });
-
-  };
-
-  handleBlur = event => {
-
-    var name = this.props.name;
-    var text = "";
-    if (event) {
-      if (!event._isValid) return;
-       text = event.format("DD/MM/YYYY HH:mm:ss");
-    }
-
-    if (this.props.values[name] !== text && this.props.setFieldValue)
-      this.props.setFieldValue(name, text);
-
-    this.state.outputValue = text;
- 
-    if(this.props.errors.hasOwnProperty(name))
-      this.setState({});
-  };
 
   inputOnBlur = event => {
     var date_moment = moment(event.currentTarget.value, `${this.format} ${this.timeFormat}`);
@@ -353,13 +373,19 @@ export class DateTimeField extends React.Component {
 
     console.log(`render ${this.props.name} ${this.state.value}`);
 
-    const { setFieldValue, setFieldTouched, closeOnTab, autoFocus, onChange, onBlur, isGetFormData, values, errors, validateFieldValue, isSubmitted,formComponents,RelatedField,  ...props } = this.props
+    const { setFieldValue, setFieldTouched, closeOnTab, autoFocus, onChange, onBlur, isGetFormData, values, errors, validateFieldValue, isSubmitted,formComponents,  ...props } = this.props
 
     var name = this.props.name; 
-    if (!this.state.value && this.props.values[name] && this.props.values[name].length == 19)
-      this.state.value = moment(this.props.values[name], this.format + " HH:mm:ss")._d;
+    var value; 
 
-    var value = this.state.value = this.state.value || '';
+    if (this.state.value 
+      && this.state.value.length == 19) {
+        //value = moment(this.state.value, this.format + " HH:mm:ss").format(`${this.format} ${this.timeFormat}`);; 
+        value = moment(this.state.value, this.format + " HH:mm:ss"); 
+    } else {
+      value = this.state.value = '';
+    }
+
     const error = isSubmitted ? this.state.error: '';
 
     return (
@@ -419,57 +445,89 @@ export class DateField extends React.Component {
     this.format = "DD/MM/YYYY"; 
   }
 
+  
+  isInternal = false;
+
   state = {
     value: ''
   };
 
-  shouldComponentUpdate(nextProps, nextState) {
-    let name = nextProps.name;
-    //console.log(`shouldComponentUpdate ${name}`);
-
-    if (nextProps.values[name] == this.props.values[name] && nextState.value == this.state.value) return false;
-
-    this.state.value = undefined;
-    return true;
-    
-  }
-
   componentDidMount() {
+
     let name = this.props.name;
-    if(!this.props.formComponents[name]) this.props.formComponents[name] = this;
+    let index = this.props.index || '';
+    let fieldIndex = `${name}${index}` 
+    if(this.props.formComponents && !this.props.formComponents[fieldIndex]) this.props.formComponents[fieldIndex] = this;
+
     if (this.props.autoFocus)
       this.nameInput.focus();
   }
 
 
-  handleChange = event => {
-    //console.log("handleChange");
-    if (!event._isValid) return;
-    var text = event;
+  handleChange = event => { 
+    console.log("handleChange");
+    
+    var text = "";
+    if (event) {
+      if (event._isValid) 
+        text = event.format("DD/MM/YYYY HH:mm:ss"); 
+      else
+        text = moment().format("DD/MM/YYYY HH:mm:ss");
+    }
+    
+    this.isInternal = true;
     this.setState({
       value: text
     });
+    
 
   };
 
   handleBlur = event => {
 
+    console.log("handleBlur");
+
     var name = this.props.name;
-    var text = "";
+    var text = '';
     if (event) {
-      if (!event._isValid) return;
-      var text = event.format("DD/MM/YYYY HH:mm:ss");
+      if (event._isValid) 
+       text = event.format("DD/MM/YYYY HH:mm:ss");  
     }
 
-    if (this.props.values[name] !== text && this.props.setFieldValue)
+    if (this.props.setFieldValue)
       this.props.setFieldValue(name, text);
 
-    if (this.props.onBlur) {
-      this.props.onBlur(event);
-    }
-
-
+    this.state.outputValue = text;
+ 
+    if(this.props.errors.hasOwnProperty(name))
+      this.setState({});
   };
+
+  shouldComponentUpdate(nextProps, nextState) {
+    var shouldUpdate = false;
+    var name = nextProps.name;
+
+    //internal update
+    if(this.isInternal || nextState.value != this.state.value){
+      shouldUpdate = true;
+      this.isInternal = false;
+    }
+    
+    //props update
+    else if (this.state.value != nextProps.values[name]){ 
+      shouldUpdate = true;
+      nextState.value = nextProps.values[name];
+    }
+    
+    //validation update
+    else if (nextProps.errors.hasOwnProperty(name) 
+    && (this.state.error != nextProps.errors[name] || this.props.isSubmitted != nextProps.isSubmitted)){
+      shouldUpdate = true; 
+    }
+    nextState.error = nextProps.errors[name];
+    return shouldUpdate;
+    
+  }
 
   inputOnBlur = event => {
     var date_moment = moment(event.currentTarget.value, this.format);
@@ -500,26 +558,63 @@ export class DateField extends React.Component {
 
     //console.log(`render ${this.props.name} ${this.state.value}`);
 
-    const { setFieldValue, setFieldTouched, autoFocus, onChange, onBlur, isGetFormData, values, errors, validateFieldValue, isSubmitted,formComponents,RelatedField, ...props } = this.props
+    // const { setFieldValue, setFieldTouched, autoFocus, onChange, onBlur, isGetFormData, values, errors, validateFieldValue, isSubmitted,formComponents, ...props } = this.props
  
-    var name = this.props.name;
+    // var name = this.props.name;
     
-    if (!this.state.value && values[name] && values[name].length >= 10)
-      this.state.value = moment(values[name].substring(0, 10), this.format)._d;
+    // if (!this.state.value && values[name] && values[name].length >= 10)
+    //   this.state.value = moment(values[name].substring(0, 10), this.format)._d;
  
-    var value =this.state.value = this.state.value || '';
+    // var value =this.state.value = this.state.value || '';
+//////////////////////
+    console.log(`render ${this.props.name} ${this.state.value}`);
+
+    const { setFieldValue, setFieldTouched, closeOnTab, autoFocus, onChange, onBlur, isGetFormData, values, errors, validateFieldValue, isSubmitted,formComponents,  ...props } = this.props
+
+    var name = this.props.name; 
+    var value; 
+
+    if (this.state.value 
+      && this.state.value.length >= 10) {
+        //value = moment(this.state.value, this.format + " HH:mm:ss").format(`${this.format} ${this.timeFormat}`);; 
+        value = moment(this.state.value, this.format + " HH:mm:ss"); 
+    } else {
+      value = this.state.value = '';
+    }
+
+    const error = isSubmitted ? this.state.error: '';
+
 
     return (
-      <DateTime input={true} closeOnSelect={true} dateFormat={this.format} timeFormat={false}
-        ref={(input) => { this.nameInput = input; }} 
-        value={value}
-        onChange={this.handleChange}
-        onBlur={this.handleBlur}
-        inputProps={{
-          onBlur: this.inputOnBlur,
-          ...props
-        }}
-      />
+
+      <div className={error && "is-invalid"}>
+
+        <div className="input-group">
+         
+          <DateTime input={true} closeOnSelect={true} dateFormat={this.format} timeFormat={false}
+            ref={(input) => { this.nameInput = input; }} 
+            value={value}
+            onChange={this.handleChange}
+            onBlur={this.handleBlur}
+            inputProps={{
+              onBlur: this.inputOnBlur,
+              ...props
+            }}
+          />
+
+          <div className="input-group-append">
+            <span className="input-group-text"><i className="fa fa-calendar"></i></span>
+          </div>
+        </div>
+         
+        {!!error &&
+          (
+            <div className="message">
+              {error}
+            </div>
+          )}
+      </div>
+      
     );
   }
 }
@@ -574,11 +669,6 @@ export class TextField extends React.Component {
     if (this.props.setFieldValue)
       this.props.setFieldValue(name, text);
 
-    var field = this.props.RelatedField;
-    if(field) {
-      this.props.formComponents[field].setState({});
-    }
-
     
     if(this.props.errors.hasOwnProperty(name))
       this.setState({});
@@ -587,7 +677,9 @@ export class TextField extends React.Component {
 
   componentDidMount() {
     let name = this.props.name;
-    if(!this.props.formComponents[name]) this.props.formComponents[name] = this;
+    let index = this.props.index || '';
+    let fieldIndex = `${name}${index}` 
+    if(this.props.formComponents && !this.props.formComponents[fieldIndex]) this.props.formComponents[fieldIndex] = this;
 
     if (this.props.autoFocus)
       this.nameInput.focus();
@@ -597,7 +689,7 @@ export class TextField extends React.Component {
   
     console.log(`render TextField ${this.state.value}`);
     
-    const { setFieldValue, setFieldTouched, autoFocus, onChange, onBlur, isGetFormData, values, errors, validateFieldValue, isSubmitted,formComponents,RelatedField,  ...props } = this.props
+    const { setFieldValue, setFieldTouched, autoFocus, onChange, onBlur, isGetFormData, values, errors, validateFieldValue, isSubmitted,formComponents,  ...props } = this.props
 
     const value = this.state.value || ''; 
 
@@ -660,11 +752,6 @@ export class NumberField extends React.Component {
     if (this.props.setFieldValue)
       this.props.setFieldValue(name, text);
 
-    //update the relative component
-    var field = this.props.RelatedField;
-    if(field) {
-      this.props.formComponents[field].setState({});
-    }
 
     if(text != event.currentTarget.value
       || this.props.errors.hasOwnProperty(name))
@@ -673,8 +760,12 @@ export class NumberField extends React.Component {
   };
 
   componentDidMount() {
+
     let name = this.props.name;
-    if(!this.props.formComponents[name]) this.props.formComponents[name] = this;
+    let index = this.props.index || '';
+    let fieldIndex = `${name}${index}` 
+    if(this.props.formComponents && !this.props.formComponents[fieldIndex]) this.props.formComponents[fieldIndex] = this;
+
     if (this.props.autoFocus)
       this.nameInput.focus();
   }
@@ -708,7 +799,7 @@ export class NumberField extends React.Component {
   
     console.log(`render NumberField ${this.state.value}`);
     
-    const { setFieldValue, setFieldTouched, autoFocus, onChange, onBlur, isGetFormData, values, errors, validateFieldValue, isSubmitted,formComponents,RelatedField,  ...props } = this.props
+    const { setFieldValue, setFieldTouched, autoFocus, onChange, onBlur, isGetFormData, values, errors, validateFieldValue, isSubmitted,formComponents,  ...props } = this.props
 
     const value = (this.state.value || this.state.value == 0) ? this.state.value: ''; 
 
@@ -742,18 +833,18 @@ export class NumberField extends React.Component {
 export const DisplayJson = props => {
   return (
     
-  <div className="mt-1">
-  <h3 style={{ fontFamily: 'monospace' }} />
-  <pre
-    style={{
-      background: '#f6f8fa', 
-      padding: '.5rem',
-    }}
-  > 
-  //For debug only <br/>
-  //Current Form Data <br/>
-    {JSON.stringify(props, null, 2)}
-  </pre>
-</div>
+    <div className="mt-1">
+    <h3 style={{ fontFamily: 'monospace' }} />
+    <pre
+      style={{
+        background: '#f6f8fa', 
+        padding: '.5rem',
+      }}
+    > 
+    //For debug only <br/>
+    //Current Form Data <br/>
+      {JSON.stringify(props, null, 2)}
+    </pre>
+  </div>
   );
 }

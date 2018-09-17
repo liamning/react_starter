@@ -43,41 +43,77 @@ export class InlineTextField extends React.Component {
     value: ''
   }
 
-  
+  componentDidMount() {
+
+    let name = this.props.name;
+    let index = this.props.index || '';
+    let fieldIndex = `${name}${index}` 
+    if(this.props.formComponents && !this.props.formComponents[fieldIndex]) this.props.formComponents[fieldIndex] = this;
+ 
+  }
+
+
   shouldComponentUpdate(nextProps, nextState) {
 
-    if(nextState.readonly != this.state.readonly) return true;
+    var shouldUpdate = false;
+    var name = nextProps.name;
+    var index = nextProps.index;
+    var nameIndex = `${name}${index}`;
+
+    if(nextState.readonly != this.state.readonly) shouldUpdate = true;
  
-    if (nextProps.value == this.props.value && nextState.value == this.state.value) return false;
 
-    this.state.value = undefined;
+    //internal update
+    if(nextState.value != this.state.value)
+      shouldUpdate = true;
+    
+    //props update
+    else if (this.state.value != nextProps.data[index][name]){ 
+      shouldUpdate = true;
+      nextState.value = nextProps.data[index][name];
+    }
+    
+    
+    //validation update
+    // else if (nextProps.errors.hasOwnProperty(name) 
+    // && (this.state.error != nextProps.errors[name] || this.props.isSubmitted != nextProps.isSubmitted)){
+    //   shouldUpdate = true; 
+    // }
 
-    return true;
+    // nextState.error = nextProps.errors[name];
+
+    return shouldUpdate;
+
   }
 
   render() {  
 
     console.log("==========InlineTextField==============");
+    const { 
+      setFieldValue, 
+      data, 
+      name,
+      index,
+      errors, 
+      formComponents,  
+      ...restProps } = this.props
+      
+    var value = this.state.value || '';
 
-    this.state.value = this.state.value || this.props.value;
+    console.log(data);
+    console.log(value);
+
     if (this.state.readonly) {
-
-      var tmpVal = "";
-      if(this.state.value)
-        tmpVal = this.state.value;
-
+ 
       return (
         <div className="form-control" onClick={() => this.setState({ readonly: false })}>
-          {tmpVal}
+          {value}
         </div>
       );
     }
     else {
 
-      console.log(this.state.value);
-      var values = { 'value': this.state.value };
-
-      return (<TextField values={values} name='value'
+      return (<TextField values={data[index]} name={name}
         autoFocus={true} 
         onBlur={(value) => {
 

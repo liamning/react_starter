@@ -13,7 +13,11 @@ export default class BodyTable extends React.Component {
 
   render() {
 
-    const { values, data } = this.props; 
+    
+    const { isAfterSave, isSubmitted, onSubmit, getFormData, isGetFormData, setFieldValue, values, errors, validateFieldValue, formComponents, ...controller } = this.props;
+    const standardProps = { values, errors, isGetFormData, setFieldValue, validateFieldValue, isSubmitted, formComponents };
+    
+    data = values.BodyList || [];
     
     return (
 
@@ -41,7 +45,8 @@ export default class BodyTable extends React.Component {
             Header: "Body DateTime",
             accessor: "BodyDateTime",
             Cell: cellInfo => {
-              return <InlineDateTimeField value={cellInfo.value}
+              return <InlineDateTimeField 
+                value={cellInfo.value}
                 onBlur={value => {
                   data[cellInfo.index][cellInfo.column.id] = value;
 

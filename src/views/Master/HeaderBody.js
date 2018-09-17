@@ -25,7 +25,6 @@ import {
 
 // Import React Table
 import BodyTable from "./HeaderBody.Body"; 
-import { InlineNumberField, InlineTextField, InlineDateTimeField, InlineAsyncSelectField } from "../../components/InlineControl";
 
 export default class ClientMaster extends React.Component {
 
@@ -104,16 +103,11 @@ export default class ClientMaster extends React.Component {
 
                         </Col>
                         <Col xs="12" md="8">
-                          <InputGroup>
-                            <DateField
+                          <DateField
                               name="HeaderDate"
                               placeholder="HeaderDate"
                               {...standardProps}
                             />
-                            <InputGroupAddon addonType="append">
-                              <InputGroupText><i className="fa fa-calendar"></i></InputGroupText>
-                            </InputGroupAddon>
-                          </InputGroup>
 
                         </Col>
                       </Row>
@@ -130,16 +124,11 @@ export default class ClientMaster extends React.Component {
 
                         </Col>
                         <Col xs="12" md="8">
-                          <InputGroup>
                             <DateTimeField
                               name="HeaderDateTime"
                               placeholder="HeaderDateTime"
                               {...standardProps}
                             />
-                            <InputGroupAddon addonType="append">
-                              <InputGroupText><i className="fa fa-calendar"></i></InputGroupText>
-                            </InputGroupAddon>
-                          </InputGroup>
 
                         </Col>
                       </Row>
@@ -174,10 +163,10 @@ export default class ClientMaster extends React.Component {
 
                   </Row>
 
-                  <BodyTable values={values} data={values.BodyList || []}></BodyTable>
+                  <BodyTable {...this.props}></BodyTable>
 
                   <div className="text-right">
-                    <Button disabled={!values.Code} color="success" onClick={onSubmit} type="button" ><i className="fa fa-save"></i>  Submit</Button>
+                    <Button  color="success" onClick={onSubmit} type="button" ><i className="fa fa-save"></i>  Submit</Button>
                   </div>
 
                   <br />

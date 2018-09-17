@@ -57,14 +57,6 @@ body{
     margin-bottom: 0;
 }
 
-.form-control:focus {
-    color: #3e515b;
-    background-color: #fff;
-    border-color: #8ad4ee;
-    outline: 0;
-    box-shadow: 0 0 0 0.1rem rgba(32, 168, 216, 0.25);
-}
-
 .ReactTable .rt-th, .ReactTable .rt-td{
     overflow: visible;
 }
@@ -182,7 +174,7 @@ body{
     box-shadow: none;
 }
 .form-control:focus { 
-    border-color: $blue;
+    border-color: $blue!important;
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 0 3px rgba(0, 126, 255, 0.1);
     // background: #fff;
 }
@@ -339,9 +331,16 @@ body{
 .is-invalid div.Select-control, 
 .is-invalid>.input-group-text{
     border-color: red; 
+}
 
+.form-control:focus {
+    color: #3e515b;
+    background-color: #fff;
+    // border-color: #8ad4ee!important;
+    outline: 0;
+    box-shadow: 0 0 0 0.1rem rgba(32, 168, 216, 0.25);
 }
 
 .is-invalid .message, .is-invalid .input-group-text{
-    color:red!important;
+    color:red;
 }

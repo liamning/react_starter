@@ -126,7 +126,6 @@ export default class ClientMaster extends React.Component {
                             name="Age"
                             placeholder="Age"
                             {...standardProps}
-                            RelatedField="Mobile"
                           />
                         </Col>
                       </Row>

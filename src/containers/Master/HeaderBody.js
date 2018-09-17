@@ -32,6 +32,39 @@ export default WithFormEvent(HeaderBody, {
     });
 
   },
+  validatePattern:{
+    Code:{
+      required:"", 
+      requiredError:"test", 
+    },
+    Description:{
+      required:"",
+      requiredError:"Description is required", 
+      pattern: /^[a-zA-Z\s]+$/,
+      customValidate: function(value){
+        if(value && value.length > 10){
+          return "Maximum length of Description is 10"
+        }
+      }
+    },
+    HeaderDate:{
+      required:"",
+    },
+    HeaderDateTime:{
+      required:"",
+    },
+    Combo1:{
+      required:"",
+    }, 
+  },
+  fieldChange: {
+    Description: function(values, updateFieldComponent){
+      
+      values.Combo1 = "Value1";
+      updateFieldComponent('Combo1');
+      
+    }
+  }
 
 
 })

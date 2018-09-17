@@ -24,8 +24,7 @@ import {
 
 
 // Import React Table
-import BodyTable from "./GeneralMaster.Body"; 
-import { InlineNumberField, InlineTextField, InlineDateTimeField, InlineAsyncSelectField } from "../../components/InlineControl";
+import BodyTable from '../../containers/Master/GeneralMaster.Body'; 
 
 export default class ClientMaster extends React.Component {
 
@@ -36,6 +35,8 @@ export default class ClientMaster extends React.Component {
     const standardProps = { values, errors, isGetFormData, setFieldValue, validateFieldValue, isSubmitted, formComponents };
     
     values.BodyList = values.BodyList || [];
+
+    console.log(values.BodyList);
 
     return (
 
@@ -95,7 +96,7 @@ export default class ClientMaster extends React.Component {
                     </Col> 
                   </Row>
 
-                  <BodyTable values={values} data={values.BodyList || []}></BodyTable>
+                  <BodyTable data={values.BodyList} values={values}></BodyTable>
 
                   <div className="text-right">
                     <Button disabled={values.IsLocked} color="success" onClick={onSubmit} type="button" ><i className="fa fa-save"></i>  Submit</Button>
