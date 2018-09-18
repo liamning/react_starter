@@ -96,7 +96,12 @@ export default class ClientMaster extends React.Component {
                     </Col> 
                   </Row>
 
-                  <BodyTable data={values.BodyList} values={values}></BodyTable>
+                  <BodyTable 
+                  data={values.BodyList} 
+                  values={values}
+                  errors={errors}
+                  isSubmitted={isSubmitted}
+                  ></BodyTable>
 
                   <div className="text-right">
                     <Button disabled={values.IsLocked} color="success" onClick={onSubmit} type="button" ><i className="fa fa-save"></i>  Submit</Button>

@@ -35,12 +35,20 @@ export class InlineNumberField extends React.Component {
   }
 }
 
-
 export class InlineTextField extends React.Component {
 
-  state = {
-    readonly: true,
-    value: ''
+  
+  constructor(props) {
+    super(props);
+
+    let name = this.props.name;
+    let index = this.props.index;
+
+    this.state = {
+      readonly: true,
+      value: props.data[index][name]
+    }
+
   }
 
   componentDidMount() {
@@ -52,13 +60,14 @@ export class InlineTextField extends React.Component {
  
   }
 
-
   shouldComponentUpdate(nextProps, nextState) {
 
+    console.log("==========InlineTextField shouldComponentUpdate==============");
+    console.log(nextProps);
     var shouldUpdate = false;
     var name = nextProps.name;
     var index = nextProps.index;
-    var nameIndex = `${name}${index}`;
+    var nameIndex = `${name}${index||''}`;
 
     if(nextState.readonly != this.state.readonly) shouldUpdate = true;
  
@@ -75,12 +84,14 @@ export class InlineTextField extends React.Component {
     
     
     //validation update
-    // else if (nextProps.errors.hasOwnProperty(name) 
-    // && (this.state.error != nextProps.errors[name] || this.props.isSubmitted != nextProps.isSubmitted)){
-    //   shouldUpdate = true; 
-    // }
+    else if (nextProps.errors.hasOwnProperty(nameIndex) 
+    && (this.state.error != nextProps.errors[nameIndex] 
+      || this.props.isSubmitted != nextProps.isSubmitted)){
+      shouldUpdate = true; 
+      this.state.readonly = false;
+    }
 
-    // nextState.error = nextProps.errors[name];
+    nextState.error = nextProps.errors[nameIndex];
 
     return shouldUpdate;
 
@@ -95,16 +106,19 @@ export class InlineTextField extends React.Component {
       name,
       index,
       errors, 
+      isSubmitted,
       formComponents,  
-      ...restProps } = this.props
+      ...restProps } = this.props 
       
     var value = this.state.value || '';
+    var fieldKey = `${name}${index||''}`;
 
-    console.log(data);
-    console.log(value);
+    console.log(data[index]);
+
+    console.log(errors);
 
     if (this.state.readonly) {
- 
+  
       return (
         <div className="form-control" onClick={() => this.setState({ readonly: false })}>
           {value}
@@ -113,24 +127,36 @@ export class InlineTextField extends React.Component {
     }
     else {
 
-      return (<TextField values={data[index]} name={name}
+      return (<TextField 
+        ref={(input) => { this.nameInput = input; }}
+        values={data[index]} 
+        index={index}
+        errors={errors}
+        name={name}
         autoFocus={true} 
-        onBlur={(value) => {
+        isSubmitted={isSubmitted}
+        setFieldValue={(name, value) => {
 
+          console.log(setFieldValue);
+          this.props.setFieldValue(name, index, value);
+          this.state.value = value;
+          if(errors[fieldKey] && isSubmitted){
+            //alert(errors[fieldKey]);
+            console.log(this.nameInput);
+            this.nameInput.setState({ 
+            });
+            return;
+          }
           this.setState({
             readonly: true,
-            value: value
           });
 
-          this.props.onBlur(value);
         }
         } />);
     }
 
   }
 }
-
-
 
 export class InlineDateTimeField extends React.Component {
 

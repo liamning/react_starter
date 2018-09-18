@@ -622,6 +622,7 @@ export class DateField extends React.Component {
 export class TextField extends React.Component {
 
   state = {
+    value: this.props.values[this.props.name]
   };
 
   handleChange = event => {
@@ -636,6 +637,8 @@ export class TextField extends React.Component {
     
     var shouldUpdate = false;
     var name = nextProps.name;
+    var index = nextProps.index;
+    var nameIndex = `${name}${index||''}`;
 
     //internal update
     if(nextState.value != this.state.value)
@@ -649,11 +652,12 @@ export class TextField extends React.Component {
     
     
     //validation update
-    else if (nextProps.errors.hasOwnProperty(name) 
-    && (this.state.error != nextProps.errors[name] || this.props.isSubmitted != nextProps.isSubmitted)){
+    else if (nextProps.errors.hasOwnProperty(nameIndex) 
+    && (this.state.error != nextProps.errors[nameIndex] 
+      || this.props.isSubmitted != nextProps.isSubmitted)){
       shouldUpdate = true; 
     }
-    nextState.error = nextProps.errors[name];
+    nextState.error = nextProps.errors[nameIndex];
     return shouldUpdate;
   }
 

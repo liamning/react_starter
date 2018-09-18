@@ -3,6 +3,10 @@ import WithFormEventBody from '../../components/WithFormEvent.Body'
 
 
 export default WithFormEventBody(GeneralMasterBody, {
-
+    validatePattern:{
+        Code:{
+            required:"",
+        }
+    }
 
 })

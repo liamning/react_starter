@@ -13,8 +13,8 @@ export default class BodyTable extends React.Component {
 
   render() {
 
-    const { setFieldValue, values, data, errors, formComponents, ...controller } = this.props;
-    const standardProps = { data, errors, setFieldValue, formComponents };
+    const { setFieldValue, values,isSubmitted, data, errors, formComponents, ...restProps } = this.props;
+    const standardProps = { data, errors, setFieldValue, formComponents, isSubmitted };
     console.log(data);
     
     return (
