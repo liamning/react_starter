@@ -45,6 +45,12 @@ export default WithFormEvent(GeneralMaster, {
     });
 
   },
+  validatePattern:{
+    CategoryDesc:{
+        required:"",
+        // pattern: /^\d[2]$/
+    }, 
+}
 
 
 })

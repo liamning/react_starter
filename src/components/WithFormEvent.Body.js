@@ -1,4 +1,5 @@
 import React from 'react';
+import { getFieldIndex } from '../global';
 
 const WithFormEventBody = function (TargetBodyForm, eventHanlders) {
 
@@ -30,7 +31,7 @@ const WithFormEventBody = function (TargetBodyForm, eventHanlders) {
 
     validateFieldValue = (field, index, value) => {
       var pattern = this.validatePattern[field];
-      let fieldIndex = `${field}${index || ''}`;
+      let fieldIndex = getFieldIndex(field, index);;
       //console.log(pattern);
       if (pattern) {
         for (var pro in pattern) {
@@ -66,15 +67,12 @@ const WithFormEventBody = function (TargetBodyForm, eventHanlders) {
 
     setFieldValue = (field, index, value) => {
 
-      let fieldIndex = `${field}${index || ''}`;
-      console.log(`setFieldValue: ${fieldIndex}`);
       this.props.data[index][field] = value;
 
       this.validateFieldValue(field, index, value);
 
-      return;
-      if (this.fieldChange[fieldIndex])
-        this.fieldChange[fieldIndex](this.state.data, this.updateFieldComponent);
+      if (this.fieldChange[field])
+        this.fieldChange[field](this.props.data, index, this.updateFieldComponent);
     }
 
     render() {

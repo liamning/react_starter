@@ -1,6 +1,8 @@
 import React from "react";
 import moment from 'moment';
 
+import { getFieldIndex } from '../global';
+
 import { AsyncSelectField, DateTimeField, TextField, NumberField } from "./FormControl";
 
 export class InlineNumberField extends React.Component {
@@ -11,8 +13,8 @@ export class InlineNumberField extends React.Component {
   }
 
   render() {
-    console.log("InlineTextField");
-    console.log(this.props);
+    //console.log("InlineTextField");
+    //console.log(this.props);
 
     if (this.state.readonly)
       return (
@@ -53,20 +55,20 @@ export class InlineTextField extends React.Component {
   componentDidMount() {
 
     let name = this.props.name;
-    let index = this.props.index || '';
-    let fieldIndex = `${name}${index}`
+    let index = this.props.index;
+    let fieldIndex = getFieldIndex(name, index);
     if (this.props.formComponents && !this.props.formComponents[fieldIndex]) this.props.formComponents[fieldIndex] = this;
 
   }
 
   shouldComponentUpdate(nextProps, nextState) {
 
-    console.log("==========InlineTextField shouldComponentUpdate==============");
-    console.log(nextProps);
+    //console.log("==========InlineTextField shouldComponentUpdate==============");
+    //console.log(nextProps);
     var shouldUpdate = false;
     var name = nextProps.name;
     var index = nextProps.index;
-    var nameIndex = `${name}${index || ''}`;
+    var nameIndex = getFieldIndex(name, index);
 
     if (nextState.readonly != this.state.readonly) shouldUpdate = true;
 
@@ -98,7 +100,7 @@ export class InlineTextField extends React.Component {
 
   render() {
 
-    console.log("==========InlineTextField==============");
+    //console.log("==========InlineTextField==============");
     const {
       setFieldValue,
       data,
@@ -110,14 +112,15 @@ export class InlineTextField extends React.Component {
       ...restProps } = this.props
 
     var value = this.state.value || '';
-    var fieldKey = `${name}${index || ''}`;
-    if(this.state.error && isSubmitted){
+    var fieldKey = getFieldIndex(name, index);
+
+    if (this.state.error && isSubmitted) {
       this.state.readonly = false;
     }
 
-    console.log(data[index]);
+    //console.log(data[index]);
 
-    console.log(errors);
+    //console.log(errors);
 
     if (this.state.readonly) {
 
@@ -139,12 +142,12 @@ export class InlineTextField extends React.Component {
         isSubmitted={isSubmitted}
         setFieldValue={(name, value) => {
 
-          console.log(setFieldValue);
+          //console.log(setFieldValue);
           this.props.setFieldValue(name, index, value);
           this.state.value = value;
           if (errors[fieldKey] && isSubmitted) {
-            console.log(errors);
-            console.log(this.nameInput);
+            //console.log(errors);
+            //console.log(this.nameInput);
             this.nameInput.setState({
             });
             return;
@@ -193,7 +196,7 @@ export class InlineDateTimeField extends React.Component {
     }
     else {
 
-      console.log(this.state.value);
+      //console.log(this.state.value);
       var values = { 'value': this.state.value };
 
       return (<DateTimeField values={values} name='value'
@@ -260,8 +263,8 @@ export class InlineAsyncSelectField extends React.Component {
 
 
         onBlur={(value) => {
-          console.log("================          console.log(value);");
-          console.log(value);
+          //console.log("================          //console.log(value);");
+          //console.log(value);
           this.setState({
             readonly: true,
             ...value

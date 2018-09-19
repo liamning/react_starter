@@ -109,6 +109,8 @@ export default class ClientMaster extends React.Component {
                   </div>
 
                   <br />
+                  <DisplayJson {...errors}></DisplayJson>
+                  <br />
                   <DisplayJson {...values}></DisplayJson>
 
 

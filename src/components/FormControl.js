@@ -9,7 +9,7 @@ import 'react-select/dist/react-select.css';
 // import { Field } from "formik";
 
 var debounce = require('debounce-promise')
-import { loginInfo } from '../global';
+import { loginInfo, getFieldIndex } from '../global';
 //import { FastField } from "../../node_modules/formik";
 
 import { Spring } from 'react-spring'
@@ -152,8 +152,8 @@ export class AsyncSelectField extends React.Component {
   componentDidMount() {
 
     let name = this.props.name;
-    let index = this.props.index || '';
-    let fieldIndex = `${name}${index}` 
+    let index = this.props.index;
+    let fieldIndex = getFieldIndex(name, index);
     if(this.props.formComponents && !this.props.formComponents[fieldIndex]) this.props.formComponents[fieldIndex] = this;
 
     if (this.props.autoFocus)
@@ -261,8 +261,8 @@ export class DateTimeField extends React.Component {
   componentDidMount() {
 
     let name = this.props.name;
-    let index = this.props.index || '';
-    let fieldIndex = `${name}${index}` 
+    let index = this.props.index;
+    let fieldIndex = getFieldIndex(name, index);
     if(this.props.formComponents && !this.props.formComponents[fieldIndex]) this.props.formComponents[fieldIndex] = this;
 
     if (this.props.autoFocus &&  this.nameInput)
@@ -455,8 +455,8 @@ export class DateField extends React.Component {
   componentDidMount() {
 
     let name = this.props.name;
-    let index = this.props.index || '';
-    let fieldIndex = `${name}${index}` 
+    let index = this.props.index;
+    let fieldIndex = getFieldIndex(name, index);
     if(this.props.formComponents && !this.props.formComponents[fieldIndex]) this.props.formComponents[fieldIndex] = this;
 
     if (this.props.autoFocus)
@@ -626,7 +626,7 @@ export class TextField extends React.Component {
 
     var name = props.name;
     var index = props.index;
-    var nameIndex = `${name}${index||''}`;
+    var nameIndex = getFieldIndex(name,index);
 
     this.state = { 
       value: props.values[name],
@@ -666,7 +666,7 @@ export class TextField extends React.Component {
     var shouldUpdate = false;
     var name = nextProps.name;
     var index = nextProps.index;
-    var nameIndex = `${name}${index||''}`;
+    var nameIndex = getFieldIndex(name,index); 
 
     //internal update
     if(nextState.value != this.state.value)
@@ -692,8 +692,8 @@ export class TextField extends React.Component {
 
   componentDidMount() {
     let name = this.props.name;
-    let index = this.props.index || '';
-    let fieldIndex = `${name}${index}` 
+    let index = this.props.index;
+    let fieldIndex = getFieldIndex(name, index);
     if(this.props.formComponents && !this.props.formComponents[fieldIndex]) this.props.formComponents[fieldIndex] = this;
 
     if (this.props.autoFocus)
@@ -701,16 +701,14 @@ export class TextField extends React.Component {
   }
 
   render() {
-  
+
     console.log(`render TextField ${this.state.value}`);
-    
-    const { setFieldValue, setFieldTouched, autoFocus, onChange, onBlur, isGetFormData, values, errors, validateFieldValue, isSubmitted,formComponents,  ...props } = this.props
 
-    const value = this.state.value || ''; 
+    const { setFieldValue, setFieldTouched, autoFocus, onChange, onBlur, isGetFormData, values, errors, validateFieldValue, isSubmitted, formComponents, ...props } = this.props
 
-    console.log(errors);
-    const error = isSubmitted ? this.state.error: '';
-    console.log(error);
+    const value = this.state.value || '';
+
+    const error = isSubmitted ? this.state.error : '';
 
     return (
 
@@ -779,8 +777,8 @@ export class NumberField extends React.Component {
   componentDidMount() {
 
     let name = this.props.name;
-    let index = this.props.index || '';
-    let fieldIndex = `${name}${index}` 
+    let index = this.props.index;
+    let fieldIndex = getFieldIndex(name, index);
     if(this.props.formComponents && !this.props.formComponents[fieldIndex]) this.props.formComponents[fieldIndex] = this;
 
     if (this.props.autoFocus)
@@ -847,21 +845,41 @@ export class NumberField extends React.Component {
   }
 }
 
-export const DisplayJson = props => {
-  return (
+export class DisplayJson extends React.Component {
+
+  constructor(props) {
+    super(props);
+  }
+  
+  state = {
+    height:10000
+  }
+
+  render(){
+
+    var props = this.props;
+    return (
     
-    <div className="mt-1">
-    <h3 style={{ fontFamily: 'monospace' }} />
-    <pre
-      style={{
-        background: '#f6f8fa', 
-        padding: '.5rem',
-      }}
-    > 
-    //For debug only <br/>
-    //Current Form Data <br/>
-      {JSON.stringify(props, null, 2)}
-    </pre>
-  </div>
-  );
-}
+      <div className="mt-1" style={{maxHeight: `${this.state.height}px`, overflow:'hidden'}} onClick={()=>{
+        
+        if(this.state.height == 10000)
+          this.setState({height:35});
+        else
+          this.setState({height:10000});
+
+      }}>
+      <h3 style={{ fontFamily: 'monospace' }} />
+      <pre
+        style={{
+          background: '#f6f8fa', 
+          padding: '.5rem',
+        }}
+      > 
+      //For debug only <br/>
+      {/* //Current Form Data <br/> */}
+        {JSON.stringify(props, null, 2)}
+      </pre>
+    </div>
+    );
+  }
+} 

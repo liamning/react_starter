@@ -1,7 +1,7 @@
 
 import { createHashHistory } from 'history'
 import { func } from 'prop-types';
- 
+
 export const history = createHashHistory();
 
 const param = require('jquery-param');
@@ -9,16 +9,16 @@ const param = require('jquery-param');
 export const loginInfo = {
 };
 
-if (typeof(sessionStorage) !== "undefined") {
+if (typeof (sessionStorage) !== "undefined") {
 
     console.log(sessionStorage);
-    if(sessionStorage["loginInfo"]){
+    if (sessionStorage["loginInfo"]) {
         Object.assign(loginInfo, JSON.parse(sessionStorage["loginInfo"]));
     }
-    loginInfo.save = function(){
+    loginInfo.save = function () {
         sessionStorage["loginInfo"] = JSON.stringify(loginInfo);
     }
-    loginInfo.clear = function(){
+    loginInfo.clear = function () {
         sessionStorage["loginInfo"] = JSON.stringify({});
     }
 
@@ -36,15 +36,15 @@ export const ajaxPost = function (url, data) {
             'Content-Type': 'application/x-www-form-urlencoded'
         })
     })
-    .then(response => {
-        //console.log(response);
-        if (response.status != 200) {
-            delete loginInfo.UserID;
-            history.push('/login');
-            return false;
-        }
-        return response.json();
-    });
+        .then(response => {
+            //console.log(response);
+            if (response.status != 200) {
+                delete loginInfo.UserID;
+                history.push('/login');
+                return false;
+            }
+            return response.json();
+        });
 }
 
 export const ajaxGet = function (url, data) {
@@ -55,19 +55,26 @@ export const ajaxGet = function (url, data) {
         headers: new Headers({
             'Content-Type': 'application/x-www-form-urlencoded'
         })
-    }).then(response => { 
+    }).then(response => {
         if (response.status != 200) {
             delete loginInfo.UserID;
             history.push('/login');
             return false;
-            
+
         }
-        return  response.json()
+        return response.json()
 
     });
 }
 
-export const logout = function(){
-    loginInfo.clear(); 
+export const logout = function () {
+    loginInfo.clear();
     history.push("/login");
+}
+
+export const getFieldIndex = function (field, index) {
+    index = index === undefined ? '' : index;
+    var result = `${field}${index}`;
+
+    return result;
 }
