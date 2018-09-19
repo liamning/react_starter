@@ -621,10 +621,19 @@ export class DateField extends React.Component {
 
 export class TextField extends React.Component {
 
-  state = {
-    value: this.props.values[this.props.name]
-  };
+  constructor(props) {
+    super(props);
 
+    var name = props.name;
+    var index = props.index;
+    var nameIndex = `${name}${index||''}`;
+
+    this.state = { 
+      value: props.values[name],
+      error: props.errors[nameIndex],
+    }
+  }
+ 
   handleChange = event => {
     var text = event.currentTarget.value;
     this.setState({
@@ -632,9 +641,28 @@ export class TextField extends React.Component {
     });
 
   };
+  handleBlur = event => {
+    var name = this.props.name;
+    var text = event.currentTarget.value;
+ 
+
+    if (this.props.onBlur) {
+      this.props.onBlur(event.currentTarget.value);
+    }
+
+    if (this.props.setFieldValue)
+      this.props.setFieldValue(name, text);
+
+    
+    if(this.props.errors.hasOwnProperty(name))
+      this.setState({});
+
+  };
 
   shouldComponentUpdate(nextProps, nextState) {
     
+    console.log("Text field shouldComponentUpdate");
+
     var shouldUpdate = false;
     var name = nextProps.name;
     var index = nextProps.index;
@@ -661,23 +689,6 @@ export class TextField extends React.Component {
     return shouldUpdate;
   }
 
-  handleBlur = event => {
-    var name = this.props.name;
-    var text = event.currentTarget.value;
- 
-
-    if (this.props.onBlur) {
-      this.props.onBlur(event.currentTarget.value);
-    }
-
-    if (this.props.setFieldValue)
-      this.props.setFieldValue(name, text);
-
-    
-    if(this.props.errors.hasOwnProperty(name))
-      this.setState({});
-
-  };
 
   componentDidMount() {
     let name = this.props.name;
@@ -697,8 +708,10 @@ export class TextField extends React.Component {
 
     const value = this.state.value || ''; 
 
+    console.log(errors);
     const error = isSubmitted ? this.state.error: '';
-      
+    console.log(error);
+
     return (
 
       <div className={error && "is-invalid"}>

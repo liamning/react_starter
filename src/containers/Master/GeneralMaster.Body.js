@@ -6,6 +6,13 @@ export default WithFormEventBody(GeneralMasterBody, {
     validatePattern:{
         Code:{
             required:"",
+            pattern: /^\d[2]$/
+        },
+        EngDesc:{
+            required:"",
+        },
+        ChiDesc:{
+            required:"",
         }
     }
 

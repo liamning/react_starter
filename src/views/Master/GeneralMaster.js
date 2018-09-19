@@ -101,6 +101,7 @@ export default class ClientMaster extends React.Component {
                   values={values}
                   errors={errors}
                   isSubmitted={isSubmitted}
+                  bodyEvent={this.props.bodyEvent}
                   ></BodyTable>
 
                   <div className="text-right">

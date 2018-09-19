@@ -1,10 +1,6 @@
 import Login from '../../views/Pages/Login'
 import WithFormEvent from '../../components/WithFormEvent'
-import { ajaxPost, loginInfo } from '../../global';
-
-import { createHashHistory } from 'history'
-
-const history = createHashHistory()
+import { ajaxPost, loginInfo, history } from '../../global';
 
 const LoginCtrl = WithFormEvent(Login, {
 

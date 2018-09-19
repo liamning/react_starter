@@ -2,7 +2,7 @@
 import { createHashHistory } from 'history'
 import { func } from 'prop-types';
  
-const history = createHashHistory();
+export const history = createHashHistory();
 
 const param = require('jquery-param');
 
@@ -28,7 +28,7 @@ if (typeof(sessionStorage) !== "undefined") {
 }
 
 export const ajaxPost = function (url, data) {
-    return fetch(`${loginInfo.host}/${url}`, {
+    return fetch(`${window.host}/${url}`, {
         method: 'POST',
         credentials: 'include',
         body: param(data),
@@ -48,7 +48,7 @@ export const ajaxPost = function (url, data) {
 }
 
 export const ajaxGet = function (url, data) {
-    return fetch(`${loginInfo.host}/${url}`, {
+    return fetch(`${window.host}/${url}`, {
         method: 'GET',
         credentials: 'include',
         body: param(data),
@@ -65,4 +65,9 @@ export const ajaxGet = function (url, data) {
         return  response.json()
 
     });
+}
+
+export const logout = function(){
+    loginInfo.clear(); 
+    history.push("/login");
 }

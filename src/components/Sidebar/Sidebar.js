@@ -5,8 +5,8 @@ import classNames from 'classnames';
 import SidebarFooter from './../SidebarFooter';
 import SidebarForm from './../SidebarForm';
 import SidebarHeader from './../SidebarHeader';
-import SidebarMinimizer from './../SidebarMinimizer';
-import { loginInfo } from '../../global';
+//import SidebarMinimizer from './../SidebarMinimizer';
+import { ajaxPost, logout } from '../../global';
 import nav from '../../nav';
 
 
@@ -144,7 +144,7 @@ class Sidebar extends Component {
       //console.log(item);
       return (
         <li key={key} className={this.activeRoute(item.url, props)}>
-          <a className="nav-link nav-dropdown-toggle" href="#" onClick={(e)=>{
+          <a className="nav-link nav-dropdown-toggle" href="#" onClick={(e) => {
             this.handleClick(e, key, item);
           }} ><i className={item.icon}></i>{item.name}</a>
           <AnimateHeight
@@ -184,7 +184,15 @@ class Sidebar extends Component {
         <nav className="sidebar-nav">
           <Nav>
             {navList(nav.items)}
-            <li className="nav-item"><a className="nav-link" aria-current="false" href={loginInfo.host + '/HttpHandler/LogOutHandler.ashx'}><i className="fa fa-sign-out"></i>Logout</a></li>
+            <li className="nav-item"><a className="nav-link" aria-current="false" onClick={() => {
+
+              var url = 'HttpHandler/LogOutHandler.ashx';
+              var data = {}; 
+              ajaxPost(url, data).then(response => { 
+                logout(); 
+              });
+
+            }} ><i className="fa fa-sign-out"></i>Logout</a></li>
           </Nav>
         </nav>
         <SidebarFooter />

@@ -11,19 +11,20 @@ import { Route, Redirect } from 'react-router-dom';
         isGetFormData: false,
         isSubmitted: false,
         values: { ...eventHanlders.values },
-        errors: {},
-        formComponents: {},
+        errors: {}, 
       };
 
       this.validatePattern = eventHanlders.validatePattern || {};
       this.fieldChange = eventHanlders.fieldChange || {};
+      this.formComponents = {};
+      this.bodyEvent={};
 
       console.log(this.fieldChange);
 
     } 
 
     updateFieldComponent = field=>{
-      this.state.formComponents[field].setState({});
+      this.formComponents[field].setState({});
     }
 
     validateFieldValue = (field, value) => {
@@ -41,7 +42,7 @@ import { Route, Redirect } from 'react-router-dom';
             if(!value) break;
             console.log(pattern["pattern"]);
             const regex = RegExp(pattern["pattern"]);
-            if(!regex.test(value)) this.state.errors[field] =pattern[`${pro}Error`] ||  `${field} invalid`;
+            if(!regex.test(value)) this.state.errors[field] =pattern[`${pro}Error`] || `${field} invalid`;
             else this.state.errors[field] = undefined;
             break;
 
@@ -73,6 +74,10 @@ import { Route, Redirect } from 'react-router-dom';
       this.state.isSubmitted = false;
       eventHanlders.getFormData(params, data => {
 
+        for(var pro in this.state.errors){
+          delete this.state.errors[pro];
+        }
+
         this.setState({
           values: data
         });
@@ -90,6 +95,7 @@ import { Route, Redirect } from 'react-router-dom';
       for(var pro in this.validatePattern){
         this.validateFieldValue(pro, this.state.values[pro]);  
       }
+      if(this.bodyEvent["validate"]) this.bodyEvent["validate"]();
       
 
       console.log(this.state.values);
@@ -122,21 +128,21 @@ import { Route, Redirect } from 'react-router-dom';
     }
 
     componentDidMount() {
-      console.log('componentDidMount'); 
+      // console.log('componentDidMount'); 
  
-      sessionStorage["currentURL"] = window.location.href;
+      // sessionStorage["currentURL"] = window.location.href;
 
-      if(sessionStorage[window.location.href]){
-        this.state.values = JSON.parse(sessionStorage[window.location.href]);
-        this.setState({});
-      } 
-      console.log(this.state.values);
+      // if(sessionStorage[window.location.href]){
+      //   this.state.values = JSON.parse(sessionStorage[window.location.href]);
+      //   this.setState({});
+      // } 
+      // console.log(this.state.values);
       
     }
 
     componentWillUnmount() {
-      console.log('componentWillUnmount'); 
-      sessionStorage[sessionStorage["currentURL"]] = JSON.stringify(this.state.values);
+      // console.log('componentWillUnmount'); 
+      // sessionStorage[sessionStorage["currentURL"]] = JSON.stringify(this.state.values);
     }
 
     render() {
@@ -147,7 +153,7 @@ import { Route, Redirect } from 'react-router-dom';
       return (
         <TargetForm {...this.props} {...passEventHanlders}
           values={this.state.values}
-          formComponents={this.state.formComponents}
+          formComponents={this.formComponents}
           errors={this.state.errors}
           isSubmitted = {this.state.isSubmitted}
           isGetFormData={this.state.isGetFormData} 
@@ -156,6 +162,7 @@ import { Route, Redirect } from 'react-router-dom';
           validateFieldValue={this.validateFieldValue}
           onSubmit={this.onSubmit}
           getFormData={this.getFormData}
+          bodyEvent={this.bodyEvent}
         />
       );
     }
