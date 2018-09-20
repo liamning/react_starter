@@ -10,7 +10,7 @@ const WithFormEvent = function (TargetForm, eventHanlders) {
       this.state = {
         isGetFormData: false,
         isSubmitted: false,
-        values: { ...eventHanlders.values },
+        values: { ...eventHanlders.defaultValues },
         errors: {},
       };
 
@@ -19,7 +19,7 @@ const WithFormEvent = function (TargetForm, eventHanlders) {
       this.formComponents = {};
       this.bodyEvent = {};
 
-      console.log(this.fieldChange);
+      //console.log(this.fieldChange);
 
     }
 
@@ -40,7 +40,7 @@ const WithFormEvent = function (TargetForm, eventHanlders) {
 
             case "pattern":
               if (!value) break;
-              console.log(pattern["pattern"]);
+              //console.log(pattern["pattern"]);
               const regex = RegExp(pattern["pattern"]);
               if (!regex.test(value)) this.state.errors[field] = pattern[`${pro}Error`] || `${field} invalid`;
               else this.state.errors[field] = undefined;
@@ -57,9 +57,9 @@ const WithFormEvent = function (TargetForm, eventHanlders) {
           if (this.state.errors[field]) break;
         }
       }
-      // console.log(field);
-      // console.log(value);
-      // console.log(this.state.errors);
+      // //console.log(field);
+      // //console.log(value);
+      // //console.log(this.state.errors);
     }
 
     setFieldValue = (field, value) => {
@@ -71,7 +71,7 @@ const WithFormEvent = function (TargetForm, eventHanlders) {
     }
 
     getFormData = (params) => {
-      console.log("getFormData");
+      //console.log("getFormData");
       this.state.isSubmitted = false;
       eventHanlders.getFormData(params, data => {
 
@@ -99,9 +99,9 @@ const WithFormEvent = function (TargetForm, eventHanlders) {
       if (this.bodyEvent["validate"]) this.bodyEvent["validate"]();
 
 
-      console.log(this.state.values);
+      //console.log(this.state.values);
       this.state.isSubmitted = true;
-      console.log(this.state.errors);
+      //console.log(this.state.errors);
 
       for (var pro in this.state.errors) {
         if (pro && this.state.errors[pro]) {
@@ -129,7 +129,7 @@ const WithFormEvent = function (TargetForm, eventHanlders) {
     }
 
     componentDidMount() {
-      // console.log('componentDidMount'); 
+      // //console.log('componentDidMount'); 
 
       // sessionStorage["currentURL"] = window.location.href;
 
@@ -137,33 +137,41 @@ const WithFormEvent = function (TargetForm, eventHanlders) {
       //   this.state.values = JSON.parse(sessionStorage[window.location.href]);
       //   this.setState({});
       // } 
-      // console.log(this.state.values);
+      // //console.log(this.state.values);
 
     }
 
     componentWillUnmount() {
-      // console.log('componentWillUnmount'); 
+      // //console.log('componentWillUnmount'); 
       // sessionStorage[sessionStorage["currentURL"]] = JSON.stringify(this.state.values);
     }
 
     render() {
 
-      console.log('render');
-      var { values, onSubmit, getFormData, validatePattern, ...passEventHanlders } = eventHanlders;
+      //console.log('render');
+      const { values, onSubmit, getFormData, validatePattern, ...passEventHanlders } = eventHanlders; 
+      const standardProps = {
+        values: this.state.values,
+        errors: this.state.errors,
+        isGetFormData: this.state.isGetFormData,
+        setFieldValue: this.setFieldValue,
+        isSubmitted: this.state.isSubmitted,
+        formComponents: this.formComponents
+      };
 
       return (
         <TargetForm {...this.props} {...passEventHanlders}
-          values={this.state.values}
-          formComponents={this.formComponents}
-          errors={this.state.errors}
-          isSubmitted={this.state.isSubmitted}
-          isGetFormData={this.state.isGetFormData}
           isAfterSave={this.isAfterSave}
-          setFieldValue={this.setFieldValue}
-          validateFieldValue={this.validateFieldValue}
           onSubmit={this.onSubmit}
           getFormData={this.getFormData}
           bodyEvent={this.bodyEvent}
+          standardProps={standardProps}
+          // values={this.state.values}
+          // errors={this.state.errors}
+          // isSubmitted={this.state.isSubmitted}
+          // isGetFormData={this.state.isGetFormData}
+          // setFieldValue={this.setFieldValue}
+          // formComponents={}
         />
       );
     }

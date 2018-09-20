@@ -46,7 +46,17 @@ const getGeneralMaster = (input, table, createAble, descField) => {
 
 export class AsyncSelectField extends React.Component {
 
-  state = { 
+  constructor(props) {
+    super(props);
+
+    var name = props.name;
+    var index = props.index;
+    var nameIndex = getFieldIndex(name,index);
+
+    this.state = { 
+      value: props.values[name],
+      error: props.errors[nameIndex],
+    }
   }
   
 
@@ -61,41 +71,6 @@ export class AsyncSelectField extends React.Component {
   }
   //==== End
 
-  shouldComponentUpdate(nextProps, nextState) {
-    //clear cache
-    if (nextProps.isAfterSave && nextProps.isAfterSave()) {
-      this.purgeCache();
-    }
-
-    // var name = nextProps.name; 
-
-    // if (nextProps.values[name] == this.props.values[name] && nextState.value == this.state.value) return false;
-        
-    // //clear state
-    // this.state.value = undefined;
-    // return true;
-
-    var shouldUpdate = false;
-    var name = nextProps.name;
-
-    //internal update
-    if(nextState.value != this.state.value)
-      shouldUpdate = true;
-    
-    //props update
-    else if (this.state.value != nextProps.values[name]){ 
-      shouldUpdate = true;
-      nextState.value = nextProps.values[name];
-    }
-    
-    //validation update
-    else if (nextProps.errors.hasOwnProperty(name) 
-    && (this.state.error != nextProps.errors[name] || this.props.isSubmitted != nextProps.isSubmitted)){
-      shouldUpdate = true; 
-    }
-    nextState.error = nextProps.errors[name];
-    return shouldUpdate;
-  }
 
   handleChange = (value, par1, par2) => {
 
@@ -110,10 +85,11 @@ export class AsyncSelectField extends React.Component {
       this.props.getFormData({ Code: value.value });
     } else {
       if (this.props.setFieldValue) {
-        this.props.setFieldValue(this.props.name, value.value);
+        this.props.setFieldValue(this.props.name, value.value, value.label); 
       }
       //console.log('handleChange');
       //console.log(value);
+      
       this.setState(value);
 
     }
@@ -122,15 +98,44 @@ export class AsyncSelectField extends React.Component {
   handleBlur = (event) => {
 
     if (this.props.onBlur) {
-      this.props.onBlur({
-        value: this.state.value,
-        label: this.state.label
-      });
+      this.props.onBlur();
     }
   };
 
+  shouldComponentUpdate(nextProps, nextState) {
+    //clear cache
+    if (nextProps.isAfterSave && nextProps.isAfterSave()) {
+      this.purgeCache();
+    }
+
+    var shouldUpdate = false;
+    var name = nextProps.name;
+    var index = nextProps.index;
+    var nameIndex = getFieldIndex(name,index); 
+
+    //internal update
+    if(nextState.value != this.state.value)
+      shouldUpdate = true;
+    
+    //props update
+    else if (this.state.value != nextProps.values[name]){ 
+      shouldUpdate = true;
+      nextState.value = nextProps.values[name];
+    }
+    
+    
+    //validation update
+    else if (nextProps.errors.hasOwnProperty(nameIndex) 
+    && (this.state.error != nextProps.errors[nameIndex] 
+      || this.props.isSubmitted != nextProps.isSubmitted)){
+      shouldUpdate = true; 
+    }
+    nextState.error = nextProps.errors[nameIndex];
+    return shouldUpdate;
+  }
+
   getOptions = (input) => {
-    console.log("getOptions");
+    //console.log("getOptions");
     return getGeneralMaster(input, this.props.tableName, this.props.createAble, this.props.label);
   }
 
@@ -161,14 +166,14 @@ export class AsyncSelectField extends React.Component {
   }
 
   render() {
-    console.log(`async select ${this.props.name}`);
+    //console.log(`async select ${this.props.name}`);
     //console.log(this.cache);
 
     const {
       tableName,
       multi,
       name,
-      values, errors, validateFieldValue, isSubmitted,formComponents,
+      values, errors, validateFieldValue, isSubmitted, formComponents,
       label,
       setFieldValue,
       setFieldTouched,
@@ -176,24 +181,23 @@ export class AsyncSelectField extends React.Component {
       disabled
     } = this.props;
 
-    //update value
-    //var value = this.state.value = this.state.value || values[name]  || '';
+
     var value = this.state.value || '';
-    const error = isSubmitted ? this.state.error: '';
-    
+    const error = isSubmitted ? this.state.error : '';
+
     //update label 
     var labelValue = this.state.label = this.getLabel(value, values[label]);
 
     var selectedValue = {
-      value: value ,
-      label: labelValue 
+      value: value,
+      label: labelValue
     };
 
     //cache
     var cache;
-    if(this.props.createAble){
+    if (this.props.createAble) {
       cache = undefined;
-    }else{
+    } else {
       cache = this.cache;
     }
     
@@ -262,7 +266,7 @@ export class DateTimeField extends React.Component {
   }
 
   handleChange = event => {
-    console.log("handleChange");
+    //console.log("handleChange");
 
     var text = "";
     if (event) {
@@ -281,7 +285,7 @@ export class DateTimeField extends React.Component {
   };
 
   handleBlur = event => {
-    console.log("handleBlur");
+    //console.log("handleBlur");
 
     var name = this.props.name;
     var text = '';
@@ -341,7 +345,7 @@ export class DateTimeField extends React.Component {
 
   render() {
 
-    console.log(`render ${this.props.name} ${this.state.value}`);
+    //console.log(`render ${this.props.name} ${this.state.value}`);
 
     const { setFieldValue, setFieldTouched, closeOnTab, autoFocus, onChange, onBlur, isGetFormData, values, errors, validateFieldValue, isSubmitted,formComponents,  ...props } = this.props
 
@@ -362,26 +366,24 @@ export class DateTimeField extends React.Component {
       <div className={error && "is-invalid"}>
 
         <div className="input-group">
-          
 
-          <DateTime input={true} dateFormat={this.format} timeFormat={this.timeFormat}
+          <DateTime input={true} closeOnTab={closeOnTab || true} dateFormat={this.format} timeFormat={this.timeFormat}
 
             renderInput={this.renderInput}
-            value={value}
-            closeOnTab={closeOnTab || true}
+            value={value} 
             onChange={this.handleChange}
-            onBlur={this.handleBlur}
+            onBlur={this.handleBlur} 
+            inputProps={{
+              ...props
+            }}
 
-          inputProps={{
-            ...props
-          }}
           />
 
           <div className="input-group-append">
             <span className="input-group-text"><i className="fa fa-calendar"></i></span>
           </div>
         </div>
-         
+
         {!!error &&
           (
             <div className="message">
@@ -425,7 +427,7 @@ export class DateField extends React.Component {
   }
 
   handleChange = event => { 
-    console.log("handleChange");
+    //console.log("handleChange");
     
     var text = "";
     if (event) {
@@ -445,7 +447,7 @@ export class DateField extends React.Component {
 
   handleBlur = event => {
 
-    console.log("handleBlur");
+    //console.log("handleBlur");
 
     var name = this.props.name;
     var text = '';
@@ -508,11 +510,16 @@ export class DateField extends React.Component {
   render() {
 
 
-    console.log(`render ${this.props.name} ${this.state.value}`);
+    //console.log(`render ${this.props.name} ${this.state.value}`);
 
-    const { setFieldValue, setFieldTouched, closeOnTab, autoFocus, onChange, onBlur, isGetFormData, values, errors, validateFieldValue, isSubmitted,formComponents,  ...props } = this.props
+    const { setFieldValue, setFieldTouched, closeOnTab, closeOnSelect, autoFocus, onChange, onBlur, isGetFormData, values, errors, validateFieldValue, isSubmitted,formComponents,  ...props } = this.props
 
     var name = this.props.name; 
+    var tmpCloseOnSelect = true;
+    if(closeOnSelect === false){
+      tmpCloseOnSelect = false;
+    }
+    
     var value; 
 
     if (this.state.value 
@@ -532,11 +539,12 @@ export class DateField extends React.Component {
 
         <div className="input-group">
          
-          <DateTime input={true} closeOnSelect={true} dateFormat={this.format} timeFormat={false}
-            ref={(input) => { this.nameInput = input; }} 
+          <DateTime input={true} closeOnTab={true} closeOnSelect={tmpCloseOnSelect} dateFormat={this.format} timeFormat={false}
+
+            renderInput={this.renderInput}
             value={value}
             onChange={this.handleChange}
-            onBlur={this.handleBlur} 
+            onBlur={this.handleBlur}
             inputProps={{
               ...props
             }}
@@ -595,7 +603,7 @@ export class TextField extends React.Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     
-    console.log(`Text field shouldComponentUpdate  ${this.props.name}`);
+    //console.log(`Text field shouldComponentUpdate  ${this.props.name}`);
 
     var shouldUpdate = false;
     var name = nextProps.name;
@@ -644,7 +652,7 @@ export class TextField extends React.Component {
 
   render() {
 
-    console.log(`render TextField ${this.props.name} ${this.state.value} ${this.state.error}`);
+    //console.log(`render TextField ${this.props.name} ${this.state.value} ${this.state.error}`);
 
     const { setFieldValue, setFieldTouched, autoFocus, onChange, onBlur, isGetFormData, values, errors, validateFieldValue, isSubmitted, formComponents, ...props } = this.props
 
@@ -759,7 +767,7 @@ export class NumberField extends React.Component {
   }
   render() {
   
-    console.log(`render NumberField ${this.state.value}`);
+    //console.log(`render NumberField ${this.state.value}`);
     
     const { setFieldValue, setFieldTouched, autoFocus, onChange, onBlur, isGetFormData, values, errors, validateFieldValue, isSubmitted,formComponents,  ...props } = this.props
 

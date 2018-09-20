@@ -30,13 +30,8 @@ export default class ClientMaster extends React.Component {
 
   render() {
 
-
-    const { isAfterSave, isSubmitted, onSubmit, getFormData, isGetFormData, setFieldValue, values, errors, validateFieldValue, formComponents, ...controller } = this.props;
-    const standardProps = { values, errors, isGetFormData, setFieldValue, validateFieldValue, isSubmitted, formComponents };
-    
-    values.BodyList = values.BodyList || [];
-
-    console.log(values.BodyList);
+    const { standardProps, isAfterSave, onSubmit, getFormData,  ...restProps } = this.props;    
+    //console.log(standardProps);
 
     return (
 
@@ -88,7 +83,7 @@ export default class ClientMaster extends React.Component {
                             name="CategoryDesc"
                             placeholder="CategoryDesc"
                             {...standardProps}
-                            disabled={values.IsLocked}
+                            disabled={standardProps.values.IsLocked}
                           />
                         </Col>
                       </Row>
@@ -97,21 +92,21 @@ export default class ClientMaster extends React.Component {
                   </Row>
 
                   <BodyTable 
-                  data={values.BodyList} 
-                  values={values}
-                  errors={errors}
-                  isSubmitted={isSubmitted}
+                  data={standardProps.values.BodyList} 
+                  values={standardProps.values}
+                  errors={standardProps.errors}
+                  isSubmitted={standardProps.isSubmitted}
                   bodyEvent={this.props.bodyEvent}
                   ></BodyTable>
 
                   <div className="text-right">
-                    <Button disabled={values.IsLocked} color="success" onClick={onSubmit} type="button" ><i className="fa fa-save"></i>  Submit</Button>
+                    <Button disabled={standardProps.values.IsLocked} color="success" onClick={onSubmit} type="button" ><i className="fa fa-save"></i>  Submit</Button>
                   </div>
 
                   <br />
-                  <DisplayJson {...errors}></DisplayJson>
+                  <DisplayJson {...standardProps.errors}></DisplayJson>
                   <br />
-                  <DisplayJson {...values}></DisplayJson>
+                  <DisplayJson {...standardProps.values}></DisplayJson>
 
 
                 </form>

@@ -3,28 +3,27 @@ import {
   Button,
 } from 'reactstrap';
 
-
 // Import React Table
 import ReactTable from "react-table";
 import "react-table/react-table.css";
-import { InlineDateTimeField, InlineTextField, InlineNumberField } from "../../components/InlineControl";
+import { InlineAsyncSelectField, InlineDateTimeField, InlineTextField, InlineNumberField, InlineDateField } from "../../components/InlineControl";
 
 export default class BodyTable extends React.Component {
 
   render() {
 
-    const { setFieldValue, values, isSubmitted, data, errors, formComponents, ...restProps } = this.props;
-    const standardProps = { data, errors, setFieldValue, formComponents, isSubmitted };
-    console.log(data);
+    const { standardProps, ...restProps } = this.props; 
+
+    //console.log(standardProps);
 
     return (
 
       <div className="inlineEdit my-3">
 
         <ReactTable
-          data={data}
+          data={standardProps.data}
           className="-striped"
-          pageSize={data.length || 1}
+          pageSize={standardProps.data.length || 1}
           showPagination={false}
           sortable={false}
 
@@ -66,8 +65,10 @@ export default class BodyTable extends React.Component {
               resizable: false,
               accessor: "ChiDesc",
               Cell: cellInfo => {
-                return <InlineDateTimeField
-                  name="ChiDesc"
+                return <InlineAsyncSelectField
+                name="ChiDesc"
+                label="ChiDesc"
+                tableName="Gender"
                   index={cellInfo.index}
                   {...standardProps}
                 />
@@ -79,10 +80,10 @@ export default class BodyTable extends React.Component {
               accessor: "col2",
               Cell: cellInfo => {
                 return (
-                  <div disabled={values.IsLocked} className="text-center text-danger lineButton" role="button" onClick={e => {
-                    if (values.IsLocked) return;
+                  <div disabled={standardProps.values.IsLocked} className="text-center text-danger lineButton" role="button" onClick={e => {
+                    if (standardProps.values.IsLocked) return;
 
-                    data.splice(cellInfo.index, 1);
+                    standardProps.data.splice(cellInfo.index, 1);
                     this.setState({});
 
                   }}>
@@ -94,10 +95,10 @@ export default class BodyTable extends React.Component {
           ]}
         />
 
-        <Button disabled={values.IsLocked} color="primary" className="mt-2" onClick={e => {
-          data.push({
-            Category: values.Category,
-            CategoryDesc: values.CategoryDesc,
+        <Button disabled={standardProps.values.IsLocked} color="primary" className="mt-2" onClick={e => {
+          standardProps.data.push({
+            Category: standardProps.values.Category,
+            CategoryDesc: standardProps.values.CategoryDesc,
           });
           this.setState({});
         }}><i className="fa fa-plus"></i></Button>

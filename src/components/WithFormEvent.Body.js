@@ -85,13 +85,20 @@ const WithFormEventBody = function (TargetBodyForm, eventHanlders) {
     render() {
 
       //console.log('render');
-      var { ...passEventHanlders } = eventHanlders;
+      const { ...passEventHanlders } = eventHanlders;
+      const { isSubmitted, data, errors, ...restProps } = this.props;
+      const standardProps = {
+        data: this.props.data,
+        values: this.props.values,
+        errors: this.props.errors,
+        isSubmitted: this.props.isSubmitted,
+        setFieldValue: this.setFieldValue,
+        formComponents: this.formComponents
+      };
 
       return (
-        <TargetBodyForm {...this.props} {...passEventHanlders}
-          errors={this.props.errors}
-          formComponents={this.formComponents}
-          setFieldValue={this.setFieldValue}
+        <TargetBodyForm {...restProps} {...passEventHanlders}
+          standardProps={standardProps}
         />
       );
     }

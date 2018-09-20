@@ -14,8 +14,8 @@ class Login extends Component {
   render() {
 
 
-    const { isAfterSave, isSubmitted, onSubmit, getFormData, isGetFormData, setFieldValue, values, errors, validateFieldValue, formComponents, ...controller } = this.props;
-    const standardProps = { values, errors, isGetFormData, setFieldValue, validateFieldValue, isSubmitted, formComponents };
+    const { standardProps, isAfterSave, onSubmit, getFormData, ...restProps } = this.props;
+    
 
     return (
       <div className="app flex-row align-items-center">
@@ -35,7 +35,7 @@ class Login extends Component {
                       </InputGroupAddon>
 
                       <TextField
-                        name="UserID" 
+                        name="UserID"
                         placeholder="User Name"
                         {...standardProps}
                       />
@@ -50,10 +50,10 @@ class Login extends Component {
 
                       <TextField
                         name="Password"
-                        type="password" 
+                        type="password"
                         placeholder="Password"
                         {...standardProps}
-                        />
+                      />
 
 
                     </InputGroup>

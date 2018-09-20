@@ -186,7 +186,7 @@ export default class ClientMaster extends React.Component {
                           Registration Date
     
                     </Col>
-                        <Col xs="12" md="8"><DateTimeField 
+                        <Col xs="12" md="8"><DateField  
                               name="RegistrationDate"
                               placeholder="RegistrationDate"
                               {...standardProps}

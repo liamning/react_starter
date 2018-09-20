@@ -6,19 +6,19 @@ const LoginCtrl = WithFormEvent(Login, {
 
   onSubmit: function (values, callback) {
 
-    console.log("================");
+    //console.log("================");
     var url = 'HttpHandler/LoginHandler.ashx';
     var data = { action: 'login', ...values };
 
     ajaxPost(url, data).then(response => {
 
-      console.log("================");
+      //console.log("================");
       
-      console.log(response);
+      //console.log(response);
       if (response.StaffNo) {
         loginInfo.UserID = response.StaffNo;
         loginInfo.save();
-        console.log(loginInfo);
+        //console.log(loginInfo);
         history.push('/');
 
         // if (callback)

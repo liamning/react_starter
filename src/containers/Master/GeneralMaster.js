@@ -6,7 +6,7 @@ import { ajaxPost } from '../../global';
 export default WithFormEvent(GeneralMaster, {
 
   onSubmit: function (values, callback) {
-    
+
     var url = 'HttpHandler/AjaxHandler.ashx';
 
     values.BodyList.forEach(element => {
@@ -23,22 +23,23 @@ export default WithFormEvent(GeneralMaster, {
   },
   getFormData: function (params, callback) {
 
-    console.log("General master getFormData");
+    //console.log("General master getFormData");
 
     var url = 'HttpHandler/AjaxHandler.ashx';
     var data = { action: 'getGeneralMaster', Category: params.Code };
     ajaxPost(url, data).then(response => {
- 
-      if(response && response[0]){
+
+      if (response && response[0]) {
         response = {
           Category: response[0].Category,
           CategoryDesc: response[0].CategoryDesc,
           IsLocked: response[0].IsLocked,
-          BodyList: response
+          BodyList: response || []
         };
-      } else  {
+      } else {
         response = {
           Category: params.Code || '',
+          BodyList: []
         };
       }
 
@@ -47,12 +48,15 @@ export default WithFormEvent(GeneralMaster, {
     });
 
   },
-  validatePattern:{
-    CategoryDesc:{
-        required:"",
-        // pattern: /^\d[2]$/
-    }, 
-}
+  defaultValues: {
+    BodyList: []
+  },
+  validatePattern: {
+    CategoryDesc: {
+      required: "",
+      // pattern: /^\d[2]$/
+    },
+  }
 
 
 })

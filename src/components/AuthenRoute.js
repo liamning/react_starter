@@ -13,8 +13,8 @@ const AuthenRoute = ({ component: Component, ...rest }) =>
       //     to='/login'
       //   />)
 
-      // console.log(paths);(loginInfo);
-      // console.log(props);
+      // //console.log(paths);(loginInfo);
+      // //console.log(props);
 
       if (loginInfo.UserID){
         return (<Component {...props} />);

@@ -62,7 +62,7 @@ class Sidebar extends Component {
 
   render() {
 
-    console.log("=====render====");
+    //console.log("=====render====");
     const { height } = this.state;
     const props = this.props;
     //console.log(height);

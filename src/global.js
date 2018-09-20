@@ -11,7 +11,7 @@ export const loginInfo = {
 
 if (typeof (sessionStorage) !== "undefined") {
 
-    console.log(sessionStorage);
+    //console.log(sessionStorage);
     if (sessionStorage["loginInfo"]) {
         Object.assign(loginInfo, JSON.parse(sessionStorage["loginInfo"]));
     }
@@ -24,7 +24,7 @@ if (typeof (sessionStorage) !== "undefined") {
 
 } else {
     // Sorry! No Web Storage support..
-    console.log("Sorry! No Web Storage support..");
+    //console.log("Sorry! No Web Storage support..");
 }
 
 export const ajaxPost = function (url, data) {
