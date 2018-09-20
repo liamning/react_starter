@@ -236,28 +236,19 @@ export class DateTimeField extends React.Component {
     this.format = "DD/MM/YYYY"; 
     this.timeFormat = "hh:mm A"; 
     this.dateTimeLengh = 19;
+ 
+    var name = props.name;
+    var index = props.index;
+    var nameIndex = getFieldIndex(name,index);
+
+    this.state = { 
+      value: props.values[name],
+      error: props.errors[nameIndex],
+      isInternal: false,
+    }
     
   }
   
-  isInternal = false;
-
-  state = {
-    value: '',
-    blurCount: 0,
-  };
-
-  blurControl = (count)=>{
-    this.state.blurCount+=count;
-    //console.log(`==================this.state.blurCount: ${this.state.blurCount}`);
-    if(this.state.blurCount <= 0){ 
-      if(this.props.onBlur)
-        this.props.onBlur(this.state.outputValue);
-    }
-  };
-  blurReset = ()=>{ 
-    this.state.blurCount = 2;
-  };
-
   componentDidMount() {
 
     let name = this.props.name;
@@ -267,7 +258,7 @@ export class DateTimeField extends React.Component {
 
     if (this.props.autoFocus &&  this.nameInput)
       this.nameInput.focus();
-      //this.nameInput.openCalendar();
+
   }
 
   handleChange = event => {
@@ -301,16 +292,18 @@ export class DateTimeField extends React.Component {
 
     if (this.props.setFieldValue)
       this.props.setFieldValue(name, text);
-
-    this.state.outputValue = text;
- 
+  
     if(this.props.errors.hasOwnProperty(name))
       this.setState({});
   };
 
   shouldComponentUpdate(nextProps, nextState) {
+    
     var shouldUpdate = false;
     var name = nextProps.name;
+    var index = nextProps.index;
+    var nameIndex = getFieldIndex(name,index); 
+
 
     //internal update
     if(this.isInternal || nextState.value != this.state.value){
@@ -318,56 +311,33 @@ export class DateTimeField extends React.Component {
       this.isInternal = false;
     }
     
-    
     //props update
     else if (this.state.value != nextProps.values[name]){ 
       shouldUpdate = true;
       nextState.value = nextProps.values[name];
     }
     
+    
     //validation update
-    else if (nextProps.errors.hasOwnProperty(name) 
-    && (this.state.error != nextProps.errors[name] || this.props.isSubmitted != nextProps.isSubmitted)){
+    else if (nextProps.errors.hasOwnProperty(nameIndex) 
+    && (this.state.error != nextProps.errors[nameIndex] 
+      || this.props.isSubmitted != nextProps.isSubmitted)){
       shouldUpdate = true; 
     }
-    nextState.error = nextProps.errors[name];
+    nextState.error = nextProps.errors[nameIndex];
     return shouldUpdate;
   }
 
-  inputOnBlur = event => {
-    var date_moment = moment(event.currentTarget.value, `${this.format} ${this.timeFormat}`);
-
-    //invalid date input
-    if(event.currentTarget.value.length == 0 && !date_moment._isValid){
-      date_moment = '';
-    }
-    else if (event.currentTarget.value.length != this.dateTimeLengh || !date_moment._isValid) {
-      if(this.state.value){
-
-        date_moment = moment(this.state.value);
-        this.setState({ value: date_moment._d });
-        return;
-
-      }else{ 
-        date_moment = moment();
-        this.setState({ value: date_moment._d });
-      }
-
-    }
-
-    this.handleBlur(date_moment);
-  }
- 
-  renderInput = props=>{ 
+  renderInput = props => {
     return (
-        <div>
-            <input ref={(input) => {  
-              this.nameInput = input; 
-        
-              }}  {...props} /> 
-        </div>
+      <div>
+        <input ref={(input) => {
+          this.nameInput = input;
+
+        }}  {...props} />
+      </div>
     );
-}
+  }
 
   render() {
 
@@ -375,7 +345,6 @@ export class DateTimeField extends React.Component {
 
     const { setFieldValue, setFieldTouched, closeOnTab, autoFocus, onChange, onBlur, isGetFormData, values, errors, validateFieldValue, isSubmitted,formComponents,  ...props } = this.props
 
-    var name = this.props.name; 
     var value; 
 
     if (this.state.value 
@@ -397,25 +366,13 @@ export class DateTimeField extends React.Component {
 
           <DateTime input={true} dateFormat={this.format} timeFormat={this.timeFormat}
 
-          renderInput={this.renderInput}
-          value={value}
-          closeOnTab={closeOnTab || true}
-          onChange={(e) => {
-            this.handleChange(e);
-          }}
-          onBlur={(e) => {
-            this.handleBlur(e);
-            this.blurControl(-1);
-          }}
-          onFocus={(e) => {
-            this.blurReset();
-          }}
+            renderInput={this.renderInput}
+            value={value}
+            closeOnTab={closeOnTab || true}
+            onChange={this.handleChange}
+            onBlur={this.handleBlur}
 
           inputProps={{
-            onBlur: (e) => {
-              this.inputOnBlur(e);
-              this.blurControl(-1);
-            },
             ...props
           }}
           />
@@ -443,15 +400,19 @@ export class DateField extends React.Component {
     super(props);
 
     this.format = "DD/MM/YYYY"; 
+
+
+    var name = props.name;
+    var index = props.index;
+    var nameIndex = getFieldIndex(name,index);
+
+    this.state = { 
+      value: props.values[name],
+      error: props.errors[nameIndex],
+      isInternal: false,
+    }
   }
-
-  
-  isInternal = false;
-
-  state = {
-    value: ''
-  };
-
+ 
   componentDidMount() {
 
     let name = this.props.name;
@@ -462,7 +423,6 @@ export class DateField extends React.Component {
     if (this.props.autoFocus)
       this.nameInput.focus();
   }
-
 
   handleChange = event => { 
     console.log("handleChange");
@@ -497,15 +457,18 @@ export class DateField extends React.Component {
     if (this.props.setFieldValue)
       this.props.setFieldValue(name, text);
 
-    this.state.outputValue = text;
  
     if(this.props.errors.hasOwnProperty(name))
       this.setState({});
   };
 
   shouldComponentUpdate(nextProps, nextState) {
+    
     var shouldUpdate = false;
     var name = nextProps.name;
+    var index = nextProps.index;
+    var nameIndex = getFieldIndex(name,index); 
+
 
     //internal update
     if(this.isInternal || nextState.value != this.state.value){
@@ -519,54 +482,32 @@ export class DateField extends React.Component {
       nextState.value = nextProps.values[name];
     }
     
+    
     //validation update
-    else if (nextProps.errors.hasOwnProperty(name) 
-    && (this.state.error != nextProps.errors[name] || this.props.isSubmitted != nextProps.isSubmitted)){
+    else if (nextProps.errors.hasOwnProperty(nameIndex) 
+    && (this.state.error != nextProps.errors[nameIndex] 
+      || this.props.isSubmitted != nextProps.isSubmitted)){
       shouldUpdate = true; 
     }
-    nextState.error = nextProps.errors[name];
+    nextState.error = nextProps.errors[nameIndex];
     return shouldUpdate;
     
   }
 
-  inputOnBlur = event => {
-    var date_moment = moment(event.currentTarget.value, this.format);
+  renderInput = props => {
+    return (
+      <div>
+        <input ref={(input) => {
+          this.nameInput = input;
 
-    //invalid date input
-    if(event.currentTarget.value.length == 0 && !date_moment._isValid){
-      date_moment = '';
-    }
-    else if (event.currentTarget.value.length != 10 || !date_moment._isValid) {
-      if(this.state.value){
-
-        date_moment = moment(this.state.value);
-        this.setState({ value: date_moment._d });
-        return;
-
-      }else{ 
-        date_moment = moment();
-        this.setState({ value: date_moment._d });
-      }
-
-    }
-
-    this.handleBlur(date_moment);
+        }}  {...props} />
+      </div>
+    );
   }
- 
 
   render() {
 
-    //console.log(`render ${this.props.name} ${this.state.value}`);
 
-    // const { setFieldValue, setFieldTouched, autoFocus, onChange, onBlur, isGetFormData, values, errors, validateFieldValue, isSubmitted,formComponents, ...props } = this.props
- 
-    // var name = this.props.name;
-    
-    // if (!this.state.value && values[name] && values[name].length >= 10)
-    //   this.state.value = moment(values[name].substring(0, 10), this.format)._d;
- 
-    // var value =this.state.value = this.state.value || '';
-//////////////////////
     console.log(`render ${this.props.name} ${this.state.value}`);
 
     const { setFieldValue, setFieldTouched, closeOnTab, autoFocus, onChange, onBlur, isGetFormData, values, errors, validateFieldValue, isSubmitted,formComponents,  ...props } = this.props
@@ -595,9 +536,8 @@ export class DateField extends React.Component {
             ref={(input) => { this.nameInput = input; }} 
             value={value}
             onChange={this.handleChange}
-            onBlur={this.handleBlur}
+            onBlur={this.handleBlur} 
             inputProps={{
-              onBlur: this.inputOnBlur,
               ...props
             }}
           />
@@ -641,27 +581,21 @@ export class TextField extends React.Component {
     });
 
   };
+
   handleBlur = event => {
     var name = this.props.name;
     var text = event.currentTarget.value;
  
-
-    if (this.props.onBlur) {
-      this.props.onBlur(event.currentTarget.value);
-    }
-
     if (this.props.setFieldValue)
       this.props.setFieldValue(name, text);
 
-    
     if(this.props.errors.hasOwnProperty(name))
       this.setState({});
-
   };
 
   shouldComponentUpdate(nextProps, nextState) {
     
-    console.log("Text field shouldComponentUpdate");
+    console.log(`Text field shouldComponentUpdate  ${this.props.name}`);
 
     var shouldUpdate = false;
     var name = nextProps.name;
@@ -689,7 +623,6 @@ export class TextField extends React.Component {
     return shouldUpdate;
   }
 
-
   componentDidMount() {
     let name = this.props.name;
     let index = this.props.index;
@@ -699,10 +632,19 @@ export class TextField extends React.Component {
     if (this.props.autoFocus)
       this.nameInput.focus();
   }
+  
+  componentWillUnmount() {
+    
+    // let name = this.props.name;
+    // let index = this.props.index;
+    // let fieldIndex = getFieldIndex(name, index);
+    // if(this.props.formComponents && !this.props.formComponents[fieldIndex]) delete this.props.formComponents[fieldIndex];
+    
+  }
 
   render() {
 
-    console.log(`render TextField ${this.state.value}`);
+    console.log(`render TextField ${this.props.name} ${this.state.value} ${this.state.error}`);
 
     const { setFieldValue, setFieldTouched, autoFocus, onChange, onBlur, isGetFormData, values, errors, validateFieldValue, isSubmitted, formComponents, ...props } = this.props
 
@@ -737,12 +679,19 @@ export class TextField extends React.Component {
 
 export class NumberField extends React.Component {
 
+
   constructor(props) {
     super(props);
-  }
 
-  state = { 
-  };
+    var name = props.name;
+    var index = props.index;
+    var nameIndex = getFieldIndex(name,index);
+
+    this.state = { 
+      value: props.values[name],
+      error: props.errors[nameIndex],
+    }
+  }
 
   handleChange = event => {
     var text = event.currentTarget.value;
@@ -759,11 +708,6 @@ export class NumberField extends React.Component {
     var name = this.props.name;
     var text = event.currentTarget.value.replace(/\.$/g,'');
  
-
-    if (this.props.onBlur) {
-      this.props.onBlur(text);
-    }
-
     if (this.props.setFieldValue)
       this.props.setFieldValue(name, text);
 
@@ -774,21 +718,12 @@ export class NumberField extends React.Component {
  
   };
 
-  componentDidMount() {
-
-    let name = this.props.name;
-    let index = this.props.index;
-    let fieldIndex = getFieldIndex(name, index);
-    if(this.props.formComponents && !this.props.formComponents[fieldIndex]) this.props.formComponents[fieldIndex] = this;
-
-    if (this.props.autoFocus)
-      this.nameInput.focus();
-  }
-
   shouldComponentUpdate(nextProps, nextState) {
     
     var shouldUpdate = false;
     var name = nextProps.name;
+    var index = nextProps.index;
+    var nameIndex = getFieldIndex(name,index); 
 
     //internal update
     if(nextState.value != this.state.value)
@@ -802,14 +737,26 @@ export class NumberField extends React.Component {
     
     
     //validation update
-    else if (nextProps.errors.hasOwnProperty(name) 
-    && (this.state.error != nextProps.errors[name] || this.props.isSubmitted != nextProps.isSubmitted)){
+    else if (nextProps.errors.hasOwnProperty(nameIndex) 
+    && (this.state.error != nextProps.errors[nameIndex] 
+      || this.props.isSubmitted != nextProps.isSubmitted)){
       shouldUpdate = true; 
     }
-    nextState.error = nextProps.errors[name];
+    nextState.error = nextProps.errors[nameIndex];
     return shouldUpdate;
   }
 
+
+  componentDidMount() {
+
+    let name = this.props.name;
+    let index = this.props.index;
+    let fieldIndex = getFieldIndex(name, index);
+    if(this.props.formComponents && !this.props.formComponents[fieldIndex]) this.props.formComponents[fieldIndex] = this;
+
+    if (this.props.autoFocus)
+      this.nameInput.focus();
+  }
   render() {
   
     console.log(`render NumberField ${this.state.value}`);

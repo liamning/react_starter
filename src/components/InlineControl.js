@@ -3,36 +3,121 @@ import moment from 'moment';
 
 import { getFieldIndex } from '../global';
 
-import { AsyncSelectField, DateTimeField, TextField, NumberField } from "./FormControl";
+import { AsyncSelectField, DateTimeField,DateField, TextField, NumberField } from "./FormControl";
 
 export class InlineNumberField extends React.Component {
 
-  state = {
-    readonly: true,
-    value: ''
+
+  constructor(props) {
+    super(props);
+
+    let name = this.props.name;
+    let index = this.props.index;
+
+    this.state = {
+      readonly: true,
+      value: props.data[index][name]
+    }
+
+  }
+
+  componentDidMount() {
+
+    let name = this.props.name;
+    let index = this.props.index;
+    let fieldIndex = getFieldIndex(name, index);
+    if (this.props.formComponents) this.props.formComponents[fieldIndex] = this;
+
+  }
+
+  componentWillUnmount() {
+
+  }
+
+
+  shouldComponentUpdate(nextProps, nextState) {
+
+    var shouldUpdate = false;
+    var name = nextProps.name;
+    var index = nextProps.index;
+    var nameIndex = getFieldIndex(name, index);
+
+    if (nextState.readonly != this.state.readonly) shouldUpdate = true;
+
+    //internal update
+    if (nextState.value != this.state.value)
+      shouldUpdate = true;
+
+    //props update
+    else if (this.state.value != nextProps.data[index][name]) {
+      shouldUpdate = true;
+      nextState.value = nextProps.data[index][name];
+      nextState.readonly = true;
+    }
+
+    //validation update
+    else if (nextProps.errors.hasOwnProperty(nameIndex)
+      && (this.state.error != nextProps.errors[nameIndex]
+        || this.props.isSubmitted != nextProps.isSubmitted)) {
+      shouldUpdate = true;
+    }
+
+    nextState.error = nextProps.errors[nameIndex];
+
+    return shouldUpdate;
+
   }
 
   render() {
-    //console.log("InlineTextField");
-    //console.log(this.props);
+
+    const {
+      setFieldValue,
+      data,
+      name,
+      index,
+      errors,
+      isSubmitted,
+      formComponents,
+      ...restProps } = this.props
+
+    const value = (this.state.value == undefined ? '' : this.state.value);
+    var fieldKey = getFieldIndex(name, index);
+
+    if (this.state.error && isSubmitted) {
+      this.state.readonly = false;
+    }
+
 
     if (this.state.readonly)
       return (
-        <div className="form-control" onClick={() => this.setState({ readonly: false })}>
-          {this.state.value || this.props.value}
+        <div className="form-control text-right" onClick={() => this.setState({ readonly: false })}>
+          {value}
         </div>
       );
     else
-      return (<NumberField value={this.state.value || this.props.value}
+      return (<NumberField 
+        ref={(input) => { this.nameInput = input; }}
+        values={data[index]}
+        index={index}
+        errors={errors}
+        name={name}
         autoFocus={true}
-        onBlur={(event) => {
-          this.setState({
-            readonly: true,
-            value: event.target.value
-          });
-          this.props.onBlur(event);
-        }
-        } />);
+        isSubmitted={isSubmitted}
+        setFieldValue={(name, value) => {
+
+          this.props.setFieldValue(name, index, value);
+          this.state.value = value;
+
+          if (errors[fieldKey] && isSubmitted) {
+            this.nameInput.setState({});
+          }
+          else
+            this.setState({
+              readonly: true,
+            });
+
+        }}
+        />);
   }
 }
 
@@ -57,14 +142,16 @@ export class InlineTextField extends React.Component {
     let name = this.props.name;
     let index = this.props.index;
     let fieldIndex = getFieldIndex(name, index);
-    if (this.props.formComponents && !this.props.formComponents[fieldIndex]) this.props.formComponents[fieldIndex] = this;
+    if (this.props.formComponents) this.props.formComponents[fieldIndex] = this;
+
+  }
+
+  componentWillUnmount() {
 
   }
 
   shouldComponentUpdate(nextProps, nextState) {
 
-    //console.log("==========InlineTextField shouldComponentUpdate==============");
-    //console.log(nextProps);
     var shouldUpdate = false;
     var name = nextProps.name;
     var index = nextProps.index;
@@ -81,7 +168,7 @@ export class InlineTextField extends React.Component {
     else if (this.state.value != nextProps.data[index][name]) {
       shouldUpdate = true;
       nextState.value = nextProps.data[index][name];
-      this.state.readonly = true;
+      nextState.readonly = true;
     }
 
 
@@ -100,7 +187,6 @@ export class InlineTextField extends React.Component {
 
   render() {
 
-    //console.log("==========InlineTextField==============");
     const {
       setFieldValue,
       data,
@@ -117,10 +203,6 @@ export class InlineTextField extends React.Component {
     if (this.state.error && isSubmitted) {
       this.state.readonly = false;
     }
-
-    //console.log(data[index]);
-
-    //console.log(errors);
 
     if (this.state.readonly) {
 
@@ -142,22 +224,19 @@ export class InlineTextField extends React.Component {
         isSubmitted={isSubmitted}
         setFieldValue={(name, value) => {
 
-          //console.log(setFieldValue);
           this.props.setFieldValue(name, index, value);
           this.state.value = value;
-          if (errors[fieldKey] && isSubmitted) {
-            //console.log(errors);
-            //console.log(this.nameInput);
-            this.nameInput.setState({
-            });
-            return;
-          }
-          this.setState({
-            readonly: true,
-          });
 
-        }
-        } />);
+          if (errors[fieldKey] && isSubmitted) {
+            this.nameInput.setState({});
+          }
+          else
+            this.setState({
+              readonly: true,
+            });
+
+        }}
+         />);
     }
 
   }
@@ -165,28 +244,91 @@ export class InlineTextField extends React.Component {
 
 export class InlineDateTimeField extends React.Component {
 
-  state = {
-    readonly: true,
-    value: ''
+  constructor(props) {
+    super(props);
+
+    let name = this.props.name;
+    let index = this.props.index;
+
+    this.state = {
+      readonly: true,
+      value: props.data[index][name]
+    }
+
+  }
+
+  componentDidMount() {
+
+    let name = this.props.name;
+    let index = this.props.index;
+    let fieldIndex = getFieldIndex(name, index);
+    if (this.props.formComponents) this.props.formComponents[fieldIndex] = this;
+
+  }
+
+  componentWillUnmount() {
+
   }
 
 
   shouldComponentUpdate(nextProps, nextState) {
 
+    var shouldUpdate = false;
+    var name = nextProps.name;
+    var index = nextProps.index;
+    var nameIndex = getFieldIndex(name, index);
 
-    this.state.value = undefined;
+    if (nextState.readonly != this.state.readonly) shouldUpdate = true;
 
-    return true;
+
+    //internal update
+    if (nextState.value != this.state.value)
+      shouldUpdate = true;
+
+    //props update
+    else if (this.state.value != nextProps.data[index][name]) {
+      shouldUpdate = true;
+      nextState.value = nextProps.data[index][name];
+      nextState.readonly = true;
+    }
+
+
+    //validation update
+    else if (nextProps.errors.hasOwnProperty(nameIndex)
+      && (this.state.error != nextProps.errors[nameIndex]
+        || this.props.isSubmitted != nextProps.isSubmitted)) {
+      shouldUpdate = true;
+    }
+
+    nextState.error = nextProps.errors[nameIndex];
+
+    return shouldUpdate;
   }
 
   render() {
 
-    this.state.value = this.state.value || this.props.value;
+    const {
+      setFieldValue,
+      data,
+      name,
+      index,
+      errors,
+      isSubmitted,
+      formComponents,
+      ...restProps } = this.props
+
+    var value = this.state.value || '';
+    var fieldKey = getFieldIndex(name, index);
+
+    if (this.state.error && isSubmitted) {
+      this.state.readonly = false;
+    }
+
     if (this.state.readonly) {
 
       var tmpVal = "";
-      if (this.state.value)
-        tmpVal = moment(this.state.value, "DD/MM/YYYY HH:mm:ss").format("DD/MM/YYYY hh:mm A");
+      if (value)
+        tmpVal = moment(value, "DD/MM/YYYY HH:mm:ss").format("DD/MM/YYYY hh:mm A");
 
       return (
         <div className="form-control" onClick={() => this.setState({ readonly: false })}>
@@ -196,22 +338,185 @@ export class InlineDateTimeField extends React.Component {
     }
     else {
 
-      //console.log(this.state.value);
-      var values = { 'value': this.state.value };
+      return (<DateTimeField 
+        
+        //values={values}  
+        // name='value'
+        // autoFocus={true}
+        // closeOnTab={false}
+        // onBlur={(value) => {
 
-      return (<DateTimeField values={values} name='value'
+        //   this.setState({
+        //     readonly: true,
+        //     value: value
+        //   });
+
+        //   this.props.onBlur(value);
+        // }
+        // } 
+        ref={(input) => { this.nameInput = input; }}
+        values={data[index]}
+        index={index}
+        errors={errors}
+        name={name}
         autoFocus={true}
-        closeOnTab={false}
-        onBlur={(value) => {
+        isSubmitted={isSubmitted}
+        setFieldValue={(name, value) => {
 
-          this.setState({
-            readonly: true,
-            value: value
-          });
+          this.props.setFieldValue(name, index, value);
+          this.state.value = value;
 
-          this.props.onBlur(value);
-        }
-        } />);
+          if (errors[fieldKey] && isSubmitted) {
+            this.nameInput.setState({});
+          }
+          else
+            this.setState({
+              readonly: true,
+            });
+
+        }}
+        
+        />);
+    }
+
+  }
+}
+
+export class InlineDateField extends React.Component {
+
+  constructor(props) {
+    super(props);
+
+    let name = this.props.name;
+    let index = this.props.index;
+
+    this.state = {
+      readonly: true,
+      value: props.data[index][name]
+    }
+
+  }
+
+  componentDidMount() {
+
+    let name = this.props.name;
+    let index = this.props.index;
+    let fieldIndex = getFieldIndex(name, index);
+    if (this.props.formComponents) this.props.formComponents[fieldIndex] = this;
+
+  }
+
+  componentWillUnmount() {
+
+  }
+
+
+  shouldComponentUpdate(nextProps, nextState) {
+
+    var shouldUpdate = false;
+    var name = nextProps.name;
+    var index = nextProps.index;
+    var nameIndex = getFieldIndex(name, index);
+
+    if (nextState.readonly != this.state.readonly) shouldUpdate = true;
+
+
+    //internal update
+    if (nextState.value != this.state.value)
+      shouldUpdate = true;
+
+    //props update
+    else if (this.state.value != nextProps.data[index][name]) {
+      shouldUpdate = true;
+      nextState.value = nextProps.data[index][name];
+      nextState.readonly = true;
+    }
+
+
+    //validation update
+    else if (nextProps.errors.hasOwnProperty(nameIndex)
+      && (this.state.error != nextProps.errors[nameIndex]
+        || this.props.isSubmitted != nextProps.isSubmitted)) {
+      shouldUpdate = true;
+    }
+
+    nextState.error = nextProps.errors[nameIndex];
+
+    return shouldUpdate;
+  }
+
+  render() {
+
+    const {
+      setFieldValue,
+      data,
+      name,
+      index,
+      errors,
+      isSubmitted,
+      formComponents,
+      ...restProps } = this.props
+
+    var value = this.state.value || '';
+    var fieldKey = getFieldIndex(name, index);
+
+    if (this.state.error && isSubmitted) {
+      this.state.readonly = false;
+    }
+
+    if (this.state.readonly) {
+
+      var tmpVal = "";
+      if (value)
+        tmpVal = moment(value, "DD/MM/YYYY HH:mm:ss").format("DD/MM/YYYY");
+
+      return (
+        <div className="form-control" onClick={() => this.setState({ readonly: false })}>
+          {tmpVal}
+        </div>
+      );
+    }
+    else {
+
+      return (<DateField 
+        
+        //values={values}  
+        // name='value'
+        // autoFocus={true}
+        // closeOnTab={false}
+        // onBlur={(value) => {
+
+        //   this.setState({
+        //     readonly: true,
+        //     value: value
+        //   });
+
+        //   this.props.onBlur(value);
+        // }
+        // } 
+        ref={(input) => { this.nameInput = input; }}
+        values={data[index]}
+        index={index}
+        errors={errors}
+        name={name}
+        autoFocus={true}
+        isSubmitted={isSubmitted}
+        setFieldValue={(name, value) => {
+
+          this.props.setFieldValue(name, index, value);
+          this.state.value = value;
+
+          if (errors[fieldKey] && isSubmitted) {
+            this.nameInput.setState({});
+          }
+          else
+            this.setState({
+              readonly: true,
+            });
+
+        }}
+        
+        />);
     }
 
   }

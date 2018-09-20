@@ -23,6 +23,8 @@ export default WithFormEvent(GeneralMaster, {
   },
   getFormData: function (params, callback) {
 
+    console.log("General master getFormData");
+
     var url = 'HttpHandler/AjaxHandler.ashx';
     var data = { action: 'getGeneralMaster', Category: params.Code };
     ajaxPost(url, data).then(response => {
@@ -36,7 +38,7 @@ export default WithFormEvent(GeneralMaster, {
         };
       } else  {
         response = {
-          Category: params.Code
+          Category: params.Code || '',
         };
       }
 

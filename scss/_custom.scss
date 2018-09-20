@@ -344,3 +344,8 @@ body{
 .is-invalid .message, .is-invalid .input-group-text{
     color:red;
 }
+
+.message { 
+    word-wrap: word-break;
+    white-space: normal;
+}

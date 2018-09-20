@@ -24,14 +24,21 @@ const WithFormEventBody = function (TargetBodyForm, eventHanlders) {
 
     }
 
-
     updateFieldComponent = (field, index) => {
-      this.formComponents[`${field}${index}`].setState({});
+      var fieldKey = `${field}${index}`;
+
+      //console.log(`updateFieldComponent ${fieldKey}`);
+
+
+      setTimeout(() => {
+        this.formComponents[fieldKey].setState({});
+      }, 1);
+
     }
 
     validateFieldValue = (field, index, value) => {
       var pattern = this.validatePattern[field];
-      let fieldIndex = getFieldIndex(field, index);;
+      let fieldIndex = getFieldIndex(field, index);
       //console.log(pattern);
       if (pattern) {
         for (var pro in pattern) {
@@ -43,7 +50,7 @@ const WithFormEventBody = function (TargetBodyForm, eventHanlders) {
 
             case "pattern":
               if (!value) break;
-              console.log(pattern["pattern"]);
+              //console.log(pattern["pattern"]);
               const regex = RegExp(pattern["pattern"]);
               if (!regex.test(value)) this.props.errors[fieldIndex] = pattern[`${pro}Error`] || `${field} invalid`;
               else this.props.errors[fieldIndex] = undefined;
@@ -60,9 +67,9 @@ const WithFormEventBody = function (TargetBodyForm, eventHanlders) {
           if (this.props.errors[fieldIndex]) break;
         }
       }
-      // console.log(field);
-      // console.log(value);
-      // console.log(this.props.errors);
+      // //console.log(field);
+      // //console.log(value);
+      // //console.log(this.props.errors);
     }
 
     setFieldValue = (field, index, value) => {
@@ -72,12 +79,12 @@ const WithFormEventBody = function (TargetBodyForm, eventHanlders) {
       this.validateFieldValue(field, index, value);
 
       if (this.fieldChange[field])
-        this.fieldChange[field](this.props.data, index, this.updateFieldComponent);
+        this.fieldChange[field](this.props.data, field, index, this.updateFieldComponent, this.setFieldValue);
     }
 
     render() {
 
-      console.log('render');
+      //console.log('render');
       var { ...passEventHanlders } = eventHanlders;
 
       return (

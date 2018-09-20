@@ -10,18 +10,27 @@ export default WithFormEventBody(GeneralMasterBody, {
         },
         EngDesc:{
             required:"",
+            requiredError:"123123 123123123123 123123123123 123123123123 123123123123 123123",
         },
         ChiDesc:{
             required:"",
+            // pattern: /^\d{2}$/
         }
     },
     fieldChange: {
-        EngDesc: function (data, index, updateFieldComponent) {
+        EngDesc: function (data, field, index, updateFieldComponent, setFieldValue) {
 
-            data[index]["ChiDesc"] = data[index]["EngDesc"];
+            setFieldValue('ChiDesc', index, data[index][field]);
             updateFieldComponent('ChiDesc', index);
 
-        }
+        },
+        
+        // ChiDesc: function (data, field, index, updateFieldComponent, setFieldValue) {
+
+        //     setFieldValue('Code', index, data[index][field]);
+        //     updateFieldComponent('Code', index);
+
+        // }
     }
 
 })
