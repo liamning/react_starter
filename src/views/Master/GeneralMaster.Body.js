@@ -13,6 +13,7 @@ export default class BodyTable extends React.Component {
   render() {
 
     const { standardProps, ...restProps } = this.props; 
+    const { values, data, errors, isSubmitted } = standardProps;
 
     //console.log(standardProps);
 
@@ -21,9 +22,9 @@ export default class BodyTable extends React.Component {
       <div className="inlineEdit my-3">
 
         <ReactTable
-          data={standardProps.data}
+          data={data}
           className="-striped"
-          pageSize={standardProps.data.length || 1}
+          pageSize={data.length || 1}
           showPagination={false}
           sortable={false}
 
@@ -80,10 +81,10 @@ export default class BodyTable extends React.Component {
               accessor: "col2",
               Cell: cellInfo => {
                 return (
-                  <div disabled={standardProps.values.IsLocked} className="text-center text-danger lineButton" role="button" onClick={e => {
-                    if (standardProps.values.IsLocked) return;
+                  <div disabled={values.IsLocked} className="text-center text-danger lineButton" role="button" onClick={e => {
+                    if (values.IsLocked) return;
 
-                    standardProps.data.splice(cellInfo.index, 1);
+                    data.splice(cellInfo.index, 1);
                     this.setState({});
 
                   }}>
@@ -95,10 +96,10 @@ export default class BodyTable extends React.Component {
           ]}
         />
 
-        <Button disabled={standardProps.values.IsLocked} color="primary" className="mt-2" onClick={e => {
-          standardProps.data.push({
-            Category: standardProps.values.Category,
-            CategoryDesc: standardProps.values.CategoryDesc,
+        <Button disabled={values.IsLocked} color="primary" className="mt-2" onClick={e => {
+          data.push({
+            Category: values.Category,
+            CategoryDesc: values.CategoryDesc,
           });
           this.setState({});
         }}><i className="fa fa-plus"></i></Button>

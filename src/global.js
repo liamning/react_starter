@@ -8,30 +8,14 @@ const param = require('jquery-param');
 
 export const loginInfo = {
 };
-
-if (typeof (sessionStorage) !== "undefined") {
-
-    //console.log(sessionStorage);
-    if (sessionStorage["loginInfo"]) {
-        Object.assign(loginInfo, JSON.parse(sessionStorage["loginInfo"]));
-    }
-    loginInfo.save = function () {
-        sessionStorage["loginInfo"] = JSON.stringify(loginInfo);
-    }
-    loginInfo.clear = function () {
-        sessionStorage["loginInfo"] = JSON.stringify({});
-    }
-
-} else {
-    // Sorry! No Web Storage support..
-    //console.log("Sorry! No Web Storage support..");
-}
-
 export const ajaxPost = function (url, data) {
+    if (loginInfo.Session)
+        data.session = loginInfo.Session;
+		
     return fetch(`${window.host}/${url}`, {
         method: 'POST',
         credentials: 'include',
-        body: param(data),
+        body: JSON.stringify(data),
         headers: new Headers({
             'Content-Type': 'application/x-www-form-urlencoded'
         })
@@ -67,6 +51,45 @@ export const ajaxGet = function (url, data) {
     });
 }
 
+
+loginInfo.save = function () {
+    sessionStorage["loginInfo"] = JSON.stringify(loginInfo);
+    localStorage["session"] = loginInfo.Session;
+
+}
+loginInfo.clear = function () {
+    sessionStorage.clear();
+    localStorage.clear(); 
+}
+
+
+if (typeof (sessionStorage) !== "undefined") {
+ 
+    if (sessionStorage["loginInfo"] && localStorage["session"]) {
+        Object.assign(loginInfo, JSON.parse(sessionStorage["loginInfo"]));
+
+    } else if(localStorage["session"]) {
+        let url = 'Logout'; 
+        let data = { session: localStorage["session"] };
+        loginInfo.clear();
+        ajaxPost(url, data).then(response => {
+
+          console.log(response);
+
+        });
+    } else {
+        loginInfo.clear();
+    }
+ 
+
+
+
+
+} else {
+    // Sorry! No Web Storage support..
+    console.log("Sorry! No Web Storage support..");
+
+}
 export const logout = function () {
     loginInfo.clear();
     history.push("/login");

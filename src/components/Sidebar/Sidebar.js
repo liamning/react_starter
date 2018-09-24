@@ -6,7 +6,7 @@ import SidebarFooter from './../SidebarFooter';
 import SidebarForm from './../SidebarForm';
 import SidebarHeader from './../SidebarHeader';
 //import SidebarMinimizer from './../SidebarMinimizer';
-import { ajaxPost, logout } from '../../global';
+import { ajaxPost, logout, loginInfo } from '../../global';
 import nav from '../../nav';
 
 
@@ -186,10 +186,10 @@ class Sidebar extends Component {
             {navList(nav.items)}
             <li className="nav-item"><a className="nav-link" aria-current="false" onClick={() => {
 
-              var url = 'HttpHandler/LogOutHandler.ashx';
-              var data = {}; 
-              ajaxPost(url, data).then(response => { 
-                logout(); 
+              var url = 'Logout';
+              var data = { session: loginInfo.Session };
+              ajaxPost(url, data).then(response => {
+                logout();
               });
 
             }} ><i className="fa fa-sign-out"></i>Logout</a></li>

@@ -15,17 +15,34 @@ import { loginInfo, getFieldIndex } from '../global';
 import { Spring } from 'react-spring'
 
 
+
+
+
+
+
+
+
+
 const selectDict = {};
 
-const getGeneralMaster = (input, table, createAble, descField) => {
 
-  return fetch(`${loginInfo.host}/HttpHandler/JsonHandler.ashx?Table=${table}&input=${input}`)
-    .then((response) => {
+const getGeneralMaster = (input, table, createAble, descField) => {
+  let data = JSON.stringify({ Table: table, Input: input, session: loginInfo.Session});
+
+  return fetch(`${window.host}/FB.GetGeneralMaster`, {
+        method: 'POST',
+        credentials: 'include',
+        body: data,
+        headers: new Headers({
+            'Content-Type': 'application/x-www-form-urlencoded'
+        })
+    }).then((response) => {
       return response.json();
     }).then((json) => {
+ 
 
 
-      //selectDict[table] = {};
+
       if(!selectDict[table])
       selectDict[table] = {};
       
@@ -51,11 +68,11 @@ export class AsyncSelectField extends React.Component {
 
     var name = props.name;
     var index = props.index;
-    var nameIndex = getFieldIndex(name,index);
+    this.nameIndex = getFieldIndex(name,index);
 
     this.state = { 
       value: props.values[name],
-      error: props.errors[nameIndex],
+      error: props.errors[this.nameIndex],
     }
   }
   
@@ -70,6 +87,21 @@ export class AsyncSelectField extends React.Component {
     this.nameInput.loadOptions("");
   }
   //==== End
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
   handleChange = (value, par1, par2) => {
@@ -99,6 +131,9 @@ export class AsyncSelectField extends React.Component {
 
     if (this.props.onBlur) {
       this.props.onBlur();
+
+
+
     }
   };
 
@@ -111,7 +146,7 @@ export class AsyncSelectField extends React.Component {
     var shouldUpdate = false;
     var name = nextProps.name;
     var index = nextProps.index;
-    var nameIndex = getFieldIndex(name,index); 
+    this.nameIndex = getFieldIndex(name,index); 
 
     //internal update
     if(nextState.value != this.state.value)
@@ -125,12 +160,16 @@ export class AsyncSelectField extends React.Component {
     
     
     //validation update
-    else if (nextProps.errors.hasOwnProperty(nameIndex) 
-    && (this.state.error != nextProps.errors[nameIndex] 
+    else if (nextProps.errors.hasOwnProperty(this.nameIndex) 
+    && (this.state.error != nextProps.errors[this.nameIndex] 
       || this.props.isSubmitted != nextProps.isSubmitted)){
       shouldUpdate = true; 
     }
-    nextState.error = nextProps.errors[nameIndex];
+    else if(this.state.disabled != nextProps.disableds[this.nameIndex] ){
+      shouldUpdate = true; 
+      this.state.disabled = nextProps.disableds[this.nameIndex];
+    }
+    nextState.error = nextProps.errors[this.nameIndex];
     return shouldUpdate;
   }
 
@@ -182,6 +221,9 @@ export class AsyncSelectField extends React.Component {
     } = this.props;
 
 
+
+
+
     var value = this.state.value || '';
     const error = isSubmitted ? this.state.error : '';
 
@@ -200,6 +242,8 @@ export class AsyncSelectField extends React.Component {
     } else {
       cache = this.cache;
     }
+
+
     
     return (
       
@@ -219,7 +263,36 @@ export class AsyncSelectField extends React.Component {
           onChange={this.handleChange}
           onBlur={this.handleBlur}
           value={selectedValue}
+          disabled={this.props.disableds[this.nameIndex]}
         />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         {!!error &&
           (
@@ -240,18 +313,45 @@ export class DateTimeField extends React.Component {
     this.format = "DD/MM/YYYY"; 
     this.timeFormat = "hh:mm A"; 
     this.dateTimeLengh = 19;
+
+
+
+
+
+
+
  
     var name = props.name;
     var index = props.index;
-    var nameIndex = getFieldIndex(name,index);
+    this.nameIndex = getFieldIndex(name,index);
+
+
+
+
+
+
 
     this.state = { 
       value: props.values[name],
-      error: props.errors[nameIndex],
+      error: props.errors[this.nameIndex],
       isInternal: false,
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
     
   }
+
   
   componentDidMount() {
 
@@ -263,10 +363,13 @@ export class DateTimeField extends React.Component {
     if (this.props.autoFocus &&  this.nameInput)
       this.nameInput.focus();
 
+
+
   }
 
   handleChange = event => {
     //console.log("handleChange");
+
 
     var text = "";
     if (event) {
@@ -296,17 +399,37 @@ export class DateTimeField extends React.Component {
 
     if (this.props.setFieldValue)
       this.props.setFieldValue(name, text);
+
+
+
   
     if(this.props.errors.hasOwnProperty(name))
       this.setState({});
   };
+
+
+
+
+
+
+
+
+
 
   shouldComponentUpdate(nextProps, nextState) {
     
     var shouldUpdate = false;
     var name = nextProps.name;
     var index = nextProps.index;
-    var nameIndex = getFieldIndex(name,index); 
+    this.nameIndex = getFieldIndex(name,index); 
+
+
+
+
+
+
+
+
 
 
     //internal update
@@ -314,6 +437,8 @@ export class DateTimeField extends React.Component {
       shouldUpdate = true;
       this.isInternal = false;
     }
+
+
     
     //props update
     else if (this.state.value != nextProps.values[name]){ 
@@ -323,14 +448,19 @@ export class DateTimeField extends React.Component {
     
     
     //validation update
-    else if (nextProps.errors.hasOwnProperty(nameIndex) 
-    && (this.state.error != nextProps.errors[nameIndex] 
+    else if (nextProps.errors.hasOwnProperty(this.nameIndex) 
+    && (this.state.error != nextProps.errors[this.nameIndex] 
       || this.props.isSubmitted != nextProps.isSubmitted)){
       shouldUpdate = true; 
     }
-    nextState.error = nextProps.errors[nameIndex];
+    else if(this.state.disabled != nextProps.disableds[this.nameIndex] ){
+      shouldUpdate = true; 
+      this.state.disabled = nextProps.disableds[this.nameIndex];
+    }
+    nextState.error = nextProps.errors[this.nameIndex];
     return shouldUpdate;
   }
+
 
   renderInput = props => {
     return (
@@ -338,7 +468,8 @@ export class DateTimeField extends React.Component {
         <input ref={(input) => {
           this.nameInput = input;
 
-        }}  {...props} />
+
+        }}  {...props} disabled={this.props.disableds[this.nameIndex]} />
       </div>
     );
   }
@@ -347,7 +478,12 @@ export class DateTimeField extends React.Component {
 
     //console.log(`render ${this.props.name} ${this.state.value}`);
 
-    const { setFieldValue, setFieldTouched, closeOnTab, autoFocus, onChange, onBlur, isGetFormData, values, errors, validateFieldValue, isSubmitted,formComponents,  ...props } = this.props
+    const { setFieldValue, setFieldTouched, closeOnTab, autoFocus, onChange, onBlur, isGetFormData, values, errors, validateFieldValue, isSubmitted,formComponents,  ...restProps } = this.props
+
+
+
+
+
 
     var value; 
 
@@ -363,6 +499,41 @@ export class DateTimeField extends React.Component {
 
     return (
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
       <div className={error && "is-invalid"}>
 
         <div className="input-group">
@@ -370,12 +541,10 @@ export class DateTimeField extends React.Component {
           <DateTime input={true} closeOnTab={closeOnTab || true} dateFormat={this.format} timeFormat={this.timeFormat}
 
             renderInput={this.renderInput}
-            value={value} 
+            value={value} disabled={this.props.disableds[this.nameIndex]} 
             onChange={this.handleChange}
             onBlur={this.handleBlur} 
-            inputProps={{
-              ...props
-            }}
+            inputProps={restProps}
 
           />
 
@@ -404,16 +573,29 @@ export class DateField extends React.Component {
     this.format = "DD/MM/YYYY"; 
 
 
+
+
+
+
+
+
+
+
+
     var name = props.name;
     var index = props.index;
-    var nameIndex = getFieldIndex(name,index);
+    this.nameIndex = getFieldIndex(name,index);
+
+
+
 
     this.state = { 
       value: props.values[name],
-      error: props.errors[nameIndex],
+      error: props.errors[this.nameIndex],
       isInternal: false,
     }
   }
+
  
   componentDidMount() {
 
@@ -425,6 +607,7 @@ export class DateField extends React.Component {
     if (this.props.autoFocus)
       this.nameInput.focus();
   }
+
 
   handleChange = event => { 
     //console.log("handleChange");
@@ -459,17 +642,38 @@ export class DateField extends React.Component {
     if (this.props.setFieldValue)
       this.props.setFieldValue(name, text);
 
+
+
+
+
  
     if(this.props.errors.hasOwnProperty(name))
       this.setState({});
   };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   shouldComponentUpdate(nextProps, nextState) {
     
     var shouldUpdate = false;
     var name = nextProps.name;
     var index = nextProps.index;
-    var nameIndex = getFieldIndex(name,index); 
+    this.nameIndex = getFieldIndex(name,index); 
+
+
+
+
 
 
     //internal update
@@ -486,33 +690,41 @@ export class DateField extends React.Component {
     
     
     //validation update
-    else if (nextProps.errors.hasOwnProperty(nameIndex) 
-    && (this.state.error != nextProps.errors[nameIndex] 
+    else if (nextProps.errors.hasOwnProperty(this.nameIndex) 
+    && (this.state.error != nextProps.errors[this.nameIndex] 
       || this.props.isSubmitted != nextProps.isSubmitted)){
       shouldUpdate = true; 
     }
-    nextState.error = nextProps.errors[nameIndex];
+    else if(this.state.disabled != nextProps.disableds[this.nameIndex] ){
+      shouldUpdate = true; 
+      this.state.disabled = nextProps.disableds[this.nameIndex];
+    }
+    nextState.error = nextProps.errors[this.nameIndex];
     return shouldUpdate;
     
   }
+
 
   renderInput = props => {
     return (
       <div>
         <input ref={(input) => {
           this.nameInput = input;
-
-        }}  {...props} />
+            
+        }} {...props} disabled={this.props.disableds[this.nameIndex]} />
       </div>
     );
   }
+
 
   render() {
 
 
     //console.log(`render ${this.props.name} ${this.state.value}`);
 
-    const { setFieldValue, setFieldTouched, closeOnTab, closeOnSelect, autoFocus, onChange, onBlur, isGetFormData, values, errors, validateFieldValue, isSubmitted,formComponents,  ...props } = this.props
+    const { setFieldValue, setFieldTouched, closeOnTab, closeOnSelect, autoFocus, onChange, onBlur, isGetFormData, values, errors, validateFieldValue, isSubmitted,formComponents,  ...restProps } = this.props
+
+
 
     var name = this.props.name; 
     var tmpCloseOnSelect = true;
@@ -520,6 +732,10 @@ export class DateField extends React.Component {
       tmpCloseOnSelect = false;
     }
     
+
+
+
+
     var value; 
 
     if (this.state.value 
@@ -541,13 +757,12 @@ export class DateField extends React.Component {
          
           <DateTime input={true} closeOnTab={true} closeOnSelect={tmpCloseOnSelect} dateFormat={this.format} timeFormat={false}
 
+
             renderInput={this.renderInput}
-            value={value}
+            value={value} 
             onChange={this.handleChange}
             onBlur={this.handleBlur}
-            inputProps={{
-              ...props
-            }}
+            inputProps={restProps}
           />
 
           <div className="input-group-append">
@@ -569,16 +784,20 @@ export class DateField extends React.Component {
 
 export class TextField extends React.Component {
 
+
+
   constructor(props) {
     super(props);
 
+    console.log(props);
+
     var name = props.name;
     var index = props.index;
-    var nameIndex = getFieldIndex(name,index);
+    this.nameIndex = getFieldIndex(name,index);
 
     this.state = { 
       value: props.values[name],
-      error: props.errors[nameIndex],
+      error: props.errors[this.nameIndex],
     }
   }
  
@@ -589,6 +808,25 @@ export class TextField extends React.Component {
     });
 
   };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   handleBlur = event => {
     var name = this.props.name;
@@ -601,14 +839,22 @@ export class TextField extends React.Component {
       this.setState({});
   };
 
+
+
+
   shouldComponentUpdate(nextProps, nextState) {
     
     //console.log(`Text field shouldComponentUpdate  ${this.props.name}`);
 
+
+
     var shouldUpdate = false;
     var name = nextProps.name;
     var index = nextProps.index;
-    var nameIndex = getFieldIndex(name,index); 
+    this.nameIndex = getFieldIndex(name,index); 
+
+
+
 
     //internal update
     if(nextState.value != this.state.value)
@@ -619,15 +865,20 @@ export class TextField extends React.Component {
       shouldUpdate = true;
       nextState.value = nextProps.values[name];
     }
-    
-    
+ 
     //validation update
-    else if (nextProps.errors.hasOwnProperty(nameIndex) 
-    && (this.state.error != nextProps.errors[nameIndex] 
+    else if (nextProps.errors.hasOwnProperty(this.nameIndex) 
+    && (this.state.error != nextProps.errors[this.nameIndex] 
       || this.props.isSubmitted != nextProps.isSubmitted)){
       shouldUpdate = true; 
+    }  
+     
+    else if(this.state.disabled != nextProps.disableds[this.nameIndex] ){
+      shouldUpdate = true; 
+      this.state.disabled = nextProps.disableds[this.nameIndex];
     }
-    nextState.error = nextProps.errors[nameIndex];
+
+    nextState.error = nextProps.errors[this.nameIndex];
     return shouldUpdate;
   }
 
@@ -654,7 +905,9 @@ export class TextField extends React.Component {
 
     //console.log(`render TextField ${this.props.name} ${this.state.value} ${this.state.error}`);
 
-    const { setFieldValue, setFieldTouched, autoFocus, onChange, onBlur, isGetFormData, values, errors, validateFieldValue, isSubmitted, formComponents, ...props } = this.props
+    const { setFieldValue, setFieldTouched, autoFocus, onChange, onBlur, isGetFormData, values, errors, validateFieldValue, isSubmitted, formComponents, ...restProps } = this.props
+
+
 
     const value = this.state.value || '';
 
@@ -662,16 +915,20 @@ export class TextField extends React.Component {
 
     return (
 
+
+
+
       <div className={error && "is-invalid"}>
+
 
         <input className="form-control" type="text"
           ref={(input) => { this.nameInput = input; }}
 
-          {...props}
+          {...restProps}
 
           onChange={this.handleChange}
           onBlur={this.handleBlur}
-          value={value}
+          value={value} disabled={this.props.disableds[this.nameIndex]}
         />
 
         {!!error &&
@@ -691,18 +948,21 @@ export class NumberField extends React.Component {
   constructor(props) {
     super(props);
 
+
     var name = props.name;
     var index = props.index;
-    var nameIndex = getFieldIndex(name,index);
+    this.nameIndex = getFieldIndex(name,index);
 
     this.state = { 
+
       value: props.values[name],
-      error: props.errors[nameIndex],
+      error: props.errors[this.nameIndex],
     }
   }
 
   handleChange = event => {
     var text = event.currentTarget.value;
+
 
     if(text && !/^([1-9][0-9]+|[0-9])(\.[0-9]*)?$/.test(text)) return;
 
@@ -715,26 +975,45 @@ export class NumberField extends React.Component {
   handleBlur = event => {
     var name = this.props.name;
     var text = event.currentTarget.value.replace(/\.$/g,'');
+
+
+
+
+
+
+
  
     if (this.props.setFieldValue)
       this.props.setFieldValue(name, text);
 
 
+
+
     if(text != event.currentTarget.value
       || this.props.errors.hasOwnProperty(name))
     this.setState({});
+
  
   };
+
+
+
+
+
+
+
 
   shouldComponentUpdate(nextProps, nextState) {
     
     var shouldUpdate = false;
     var name = nextProps.name;
     var index = nextProps.index;
-    var nameIndex = getFieldIndex(name,index); 
+    this.nameIndex = getFieldIndex(name,index); 
 
     //internal update
     if(nextState.value != this.state.value)
+
+
       shouldUpdate = true;
     
     //props update
@@ -745,14 +1024,22 @@ export class NumberField extends React.Component {
     
     
     //validation update
-    else if (nextProps.errors.hasOwnProperty(nameIndex) 
-    && (this.state.error != nextProps.errors[nameIndex] 
+    else if (nextProps.errors.hasOwnProperty(this.nameIndex) 
+    && (this.state.error != nextProps.errors[this.nameIndex] 
       || this.props.isSubmitted != nextProps.isSubmitted)){
       shouldUpdate = true; 
     }
-    nextState.error = nextProps.errors[nameIndex];
+    else if(this.state.disabled != nextProps.disableds[this.nameIndex] ){
+      shouldUpdate = true; 
+      this.state.disabled = nextProps.disableds[this.nameIndex];
+    }
+    nextState.error = nextProps.errors[this.nameIndex];
     return shouldUpdate;
   }
+
+
+
+
 
 
   componentDidMount() {
@@ -769,7 +1056,7 @@ export class NumberField extends React.Component {
   
     //console.log(`render NumberField ${this.state.value}`);
     
-    const { setFieldValue, setFieldTouched, autoFocus, onChange, onBlur, isGetFormData, values, errors, validateFieldValue, isSubmitted,formComponents,  ...props } = this.props
+    const { setFieldValue, setFieldTouched, autoFocus, onChange, onBlur, isGetFormData, values, errors, validateFieldValue, isSubmitted,formComponents,  ...restProps } = this.props
 
     const value = (this.state.value || this.state.value == 0) ? this.state.value: ''; 
 
@@ -782,11 +1069,11 @@ export class NumberField extends React.Component {
         <input className="form-control text-right" type="text"
           ref={(input) => { this.nameInput = input; }}
 
-          {...props}
+          {...restProps}
 
           onChange={this.handleChange}
           onBlur={this.handleBlur}
-          value={value}
+          value={value} disabled={this.props.disableds[this.nameIndex]}
         />
 
         {!!error &&
@@ -816,6 +1103,20 @@ export class DisplayJson extends React.Component {
     return (
     
       <div className="mt-1" style={{maxHeight: `${this.state.height}px`, overflow:'hidden'}} onClick={()=>{
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         
         if(this.state.height == 10000)
           this.setState({height:35});

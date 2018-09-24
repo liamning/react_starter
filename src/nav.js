@@ -24,6 +24,10 @@ export default {
                     url: '/UserProfile',    
                 },
                 {
+                    name: 'PR Application',
+                    url: '/PRApplication',    
+                },
+                {
                     name: 'Change Password',
                     url: '/ChangePassword',
                 },

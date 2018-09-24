@@ -12,6 +12,7 @@ const WithFormEvent = function (TargetForm, eventHanlders) {
         isSubmitted: false,
         values: { ...eventHanlders.defaultValues },
         errors: {},
+        disableds: { ...eventHanlders.disableds },
       };
 
       this.validatePattern = eventHanlders.validatePattern || {};
@@ -91,7 +92,7 @@ const WithFormEvent = function (TargetForm, eventHanlders) {
       return this.state.afterSave;
     }
 
-    onSubmit = () => {
+    onSubmit = (callback) => {
 
       for (var pro in this.validatePattern) {
         this.validateFieldValue(pro, this.state.values[pro]);
@@ -114,6 +115,9 @@ const WithFormEvent = function (TargetForm, eventHanlders) {
 
 
         this.state.isSubmitted = false;
+ 
+        if(callback)
+          callback();
 
         //update the flag to force the asyn select control to clear the cache
         this.setState({
@@ -122,6 +126,7 @@ const WithFormEvent = function (TargetForm, eventHanlders) {
 
         //reset the flag
         this.state.afterSave = false;
+
 
       });
 
@@ -153,6 +158,7 @@ const WithFormEvent = function (TargetForm, eventHanlders) {
       const standardProps = {
         values: this.state.values,
         errors: this.state.errors,
+        disableds: this.state.disableds,
         isGetFormData: this.state.isGetFormData,
         setFieldValue: this.setFieldValue,
         isSubmitted: this.state.isSubmitted,

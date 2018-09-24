@@ -31,6 +31,7 @@ export default class ClientMaster extends React.Component {
   render() {
 
     const { standardProps, isAfterSave, onSubmit, getFormData,  ...restProps } = this.props;    
+    const { values, errors, isSubmitted } = standardProps;
     //console.log(standardProps);
 
     return (
@@ -83,7 +84,7 @@ export default class ClientMaster extends React.Component {
                             name="CategoryDesc"
                             placeholder="CategoryDesc"
                             {...standardProps}
-                            disabled={standardProps.values.IsLocked}
+                            disabled={values.IsLocked}
                           />
                         </Col>
                       </Row>
@@ -92,21 +93,21 @@ export default class ClientMaster extends React.Component {
                   </Row>
 
                   <BodyTable 
-                  data={standardProps.values.BodyList} 
-                  values={standardProps.values}
-                  errors={standardProps.errors}
-                  isSubmitted={standardProps.isSubmitted}
+                  data={values.BodyList} 
+                  values={values}
+                  errors={errors}
+                  isSubmitted={isSubmitted}
                   bodyEvent={this.props.bodyEvent}
                   ></BodyTable>
 
                   <div className="text-right">
-                    <Button disabled={standardProps.values.IsLocked} color="success" onClick={onSubmit} type="button" ><i className="fa fa-save"></i>  Submit</Button>
+                    <Button disabled={values.IsLocked} color="success" onClick={onSubmit} type="button" ><i className="fa fa-save"></i>  Submit</Button>
                   </div>
 
                   <br />
-                  <DisplayJson {...standardProps.errors}></DisplayJson>
+                  <DisplayJson {...errors}></DisplayJson>
                   <br />
-                  <DisplayJson {...standardProps.values}></DisplayJson>
+                  <DisplayJson {...values}></DisplayJson>
 
 
                 </form>

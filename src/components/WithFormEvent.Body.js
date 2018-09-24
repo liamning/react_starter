@@ -12,6 +12,10 @@ const WithFormEventBody = function (TargetBodyForm, eventHanlders) {
       this.formComponents = {};
       this.props.bodyEvent["validate"] = this.validateAllFields;
 
+      this.state = {
+        disableds: { ...eventHanlders.disableds },
+      };
+
     }
 
     validateAllFields = () => {
@@ -91,6 +95,7 @@ const WithFormEventBody = function (TargetBodyForm, eventHanlders) {
         data: this.props.data,
         values: this.props.values,
         errors: this.props.errors,
+        disableds: this.state.disableds,
         isSubmitted: this.props.isSubmitted,
         setFieldValue: this.setFieldValue,
         formComponents: this.formComponents

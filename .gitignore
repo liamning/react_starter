@@ -10,6 +10,15 @@ coverage
 # production
 build
 
+# views
+**/containers/
+**/views/
+src/global.js
+src/nav.js
+src/routes.js
+src/components/Sidebar/Sidebar.js
+
+
 # misc
 .DS_Store
 Thumbs.db
@@ -17,3 +26,4 @@ Thumbs.db
 .idea
 npm-debug.log
 compilation-stats.json
+

@@ -88,7 +88,7 @@ export class InlineNumberField extends React.Component {
     }
 
 
-    if (this.state.readonly)
+    if (this.state.readonly || this.props.disableds[name])
       return (
         <div className="form-control text-right" onClick={() => this.setState({ readonly: false })}>
           {value}
@@ -99,7 +99,7 @@ export class InlineNumberField extends React.Component {
         ref={(input) => { this.nameInput = input; }}
         values={data[index]}
         index={index}
-        errors={errors}
+        errors={errors} disableds={{}}
         name={name}
         autoFocus={true}
         isSubmitted={isSubmitted}
@@ -204,7 +204,7 @@ export class InlineTextField extends React.Component {
       this.state.readonly = false;
     }
 
-    if (this.state.readonly) {
+    if (this.state.readonly || this.props.disableds[name]) {
 
       return (
         <div className="form-control" onClick={() => this.setState({ readonly: false })}>
@@ -218,7 +218,7 @@ export class InlineTextField extends React.Component {
         ref={(input) => { this.nameInput = input; }}
         values={data[index]}
         index={index}
-        errors={errors}
+        errors={errors} disableds={{}}
         name={name}
         autoFocus={true}
         isSubmitted={isSubmitted}
@@ -324,7 +324,7 @@ export class InlineDateTimeField extends React.Component {
       this.state.readonly = false;
     }
 
-    if (this.state.readonly) {
+    if (this.state.readonly || this.props.disableds[name]) {
 
       var tmpVal = "";
       if (value)
@@ -358,7 +358,7 @@ export class InlineDateTimeField extends React.Component {
         ref={(input) => { this.nameInput = input; }}
         values={data[index]}
         index={index}
-        errors={errors}
+        errors={errors} disableds={{}}
         name={name}
         autoFocus={true}
         isSubmitted={isSubmitted}
@@ -465,7 +465,7 @@ export class InlineDateField extends React.Component {
       this.state.readonly = false;
     }
 
-    if (this.state.readonly) {
+    if (this.state.readonly || this.props.disableds[name]) {
 
       var tmpVal = "";
       if (value)
@@ -500,7 +500,7 @@ export class InlineDateField extends React.Component {
         values={data[index]}
         closeOnTab={false}
         index={index}
-        errors={errors}
+        errors={errors} disableds={{}}
         name={name}
         autoFocus={true}
         isSubmitted={isSubmitted}
@@ -614,7 +614,7 @@ export class InlineAsyncSelectField extends React.Component {
       this.state.readonly = false;
     }
 
-    if (this.state.readonly)
+    if (this.state.readonly || this.props.disableds[name])
       return (
         <div className="form-control" onClick={() => this.setState({ readonly: false })}>
           {valueLabel.label}
@@ -632,7 +632,7 @@ export class InlineAsyncSelectField extends React.Component {
         ref={(input) => { this.nameInput = input; }}
         values={data[index]}
         index={index}
-        errors={errors}
+        errors={errors} disableds={{}} 
         name={name}
         autoFocus={true}
         isSubmitted={isSubmitted}
