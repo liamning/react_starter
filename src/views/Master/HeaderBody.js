@@ -29,10 +29,10 @@ import BodyTable from "./HeaderBody.Body";
 export default class ClientMaster extends React.Component {
 
   render() {
-
-
-    const { isAfterSave, isSubmitted, onSubmit, getFormData, isGetFormData, setFieldValue, values, errors, validateFieldValue, formComponents, ...controller } = this.props;
-    const standardProps = { values, errors, isGetFormData, setFieldValue, validateFieldValue, isSubmitted, formComponents };
+ 
+    
+    const { standardProps, isAfterSave, onSubmit, getFormData,  ...restProps } = this.props;   
+    const{ values } = standardProps;
     
     values.BodyList = values.BodyList || [];
 

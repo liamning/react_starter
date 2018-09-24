@@ -26,10 +26,10 @@ export default class ClientMaster extends React.Component {
 
   render() {
 
-
-    const { isAfterSave, isSubmitted, onSubmit, getFormData, isGetFormData, setFieldValue, values, errors, validateFieldValue, formComponents, ...controller } = this.props;
-    const standardProps = { values, errors, isGetFormData, setFieldValue, validateFieldValue, isSubmitted, formComponents };
-
+ 
+    const { standardProps, isAfterSave, onSubmit, getFormData,  ...restProps } = this.props;   
+    const{ values } = standardProps;
+ 
     return (
 
       <div>
@@ -49,7 +49,7 @@ export default class ClientMaster extends React.Component {
 
                       <Row className="form-group">
                         <Col xs="12" md="4" className="col-form-label">
-                          Email
+                        Code
                       </Col>
                         <Col xs="12" md="8">
                           <AsyncSelectField

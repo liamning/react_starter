@@ -22,12 +22,17 @@ import {
   InputGroupText
 } from 'reactstrap';
 
+
+import BodyTable from '../../containers/Master/UserProfile.Body'; 
+
 export default class ClientMaster extends React.Component {
 
   render() {
+ 
+    const { standardProps, isAfterSave, onSubmit, getFormData,  ...restProps } = this.props;   
+    const { values } = standardProps;
+ 
 
-    const { isAfterSave, isSubmitted, onSubmit, getFormData, isGetFormData, setFieldValue, values, errors, validateFieldValue, formComponents, ...controller } = this.props;
-    const standardProps = { values, errors, isGetFormData, setFieldValue, validateFieldValue, isSubmitted, formComponents };
 
     return (
 
@@ -202,6 +207,16 @@ export default class ClientMaster extends React.Component {
 
                     </Col>
                   </Row>
+
+                  <BodyTable
+                  
+                  data={standardProps.values.UserList || []} 
+                  values={standardProps.values}
+                  errors={standardProps.errors}
+                  isSubmitted={standardProps.isSubmitted}
+                  bodyEvent={this.props.bodyEvent}
+
+                  ></BodyTable>
 
 
 

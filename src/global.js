@@ -2,12 +2,46 @@
 import { createHashHistory } from 'history'
 import { func } from 'prop-types';
 
-export const history = createHashHistory();
-
 const param = require('jquery-param');
 
 export const loginInfo = {
 };
+
+export const history = createHashHistory({
+    basename: '',             // The base URL of the app (see below)
+    hashType: 'slash',        // The hash type to use (see below)
+    // A function to use to confirm navigation with the user (see below)
+    // getUserConfirmation(message, callback) {
+    //     // Show some custom dialog to the user and call
+    //     // callback(true) to continue the transiton, or
+    //     // callback(false) to abort it.
+        
+    //     //callback(confirm("sure?"));
+    //     console.log(history.location);
+    //     console.log(loginInfo);
+
+    //     if(loginInfo.UserID || history.location.pathname == "/login"){
+    //         callback(true);
+    //     } else {
+    //         callback(false); 
+    //     }
+    //   }
+  })
+
+
+// const unblock = history.block('Are you sure you want to leave this page?')
+ 
+// Or use a function that returns the message when it's needed.
+// history.block((location, action) => {
+//   // The location and action arguments indicate the location
+//   // we're transitioning to and how we're getting there.
+ 
+//   // A common use case is to prevent the user from leaving the
+//   // page if there's a form they haven't submitted yet.
+//   //if (input.value !== '')
+//     return 'Are you sure you want to leave this page?'
+// })
+
 
 if (typeof (sessionStorage) !== "undefined") {
 
@@ -20,6 +54,7 @@ if (typeof (sessionStorage) !== "undefined") {
     }
     loginInfo.clear = function () {
         sessionStorage["loginInfo"] = JSON.stringify({});
+        delete loginInfo.UserID;
     }
 
 } else {
@@ -40,7 +75,7 @@ export const ajaxPost = function (url, data) {
             //console.log(response);
             if (response.status != 200) {
                 delete loginInfo.UserID;
-                history.push('/login');
+                history.replace('/login');
                 return false;
             }
             return response.json();
@@ -58,7 +93,7 @@ export const ajaxGet = function (url, data) {
     }).then(response => {
         if (response.status != 200) {
             delete loginInfo.UserID;
-            history.push('/login');
+            history.replace('/login');
             return false;
 
         }
@@ -68,8 +103,9 @@ export const ajaxGet = function (url, data) {
 }
 
 export const logout = function () {
-    loginInfo.clear();
-    history.push("/login");
+    loginInfo.clear(); 
+    history.replace("/login");
+    
 }
 
 export const getFieldIndex = function (field, index) {

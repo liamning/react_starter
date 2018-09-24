@@ -15,7 +15,7 @@ class Login extends Component {
 
 
     const { standardProps, isAfterSave, onSubmit, getFormData, ...restProps } = this.props;
-    
+
 
     return (
       <div className="app flex-row align-items-center">
@@ -27,20 +27,27 @@ class Login extends Component {
                   <CardBody>
                     <h1>Login</h1>
                     <p className="text-muted">Sign In to your account</p>
-                    <InputGroup className="mb-3">
-                      <InputGroupAddon addonType="prepend">
-                        <InputGroupText>
-                          <i className="icon-user"></i>
-                        </InputGroupText>
-                      </InputGroupAddon>
 
-                      <TextField
-                        name="UserID"
-                        placeholder="User Name"
-                        {...standardProps}
-                      />
 
-                    </InputGroup>
+                    <Row className="form-group">
+                      <Col xs="12" md="12">
+
+                        <div className="input-group mb-3">
+
+
+                          
+
+                          <TextField
+                            name="UserID"
+                            placeholder="User Name"
+                            {...standardProps}
+                          />
+                        </div>
+                      </Col>
+                    </Row>
+
+
+
                     <InputGroup className="mb-4">
                       <InputGroupAddon addonType="prepend">
                         <InputGroupText>
