@@ -10,7 +10,7 @@ export default WithFormEventBody(GeneralMasterBody, {
         },
         EngDesc:{
             required:"",
-            requiredError:"123123 123123123123 123123123123 123123123123 123123123123 123123",
+            requiredError:"customized error message",
         },
         ChiDesc:{
             required:"",
@@ -25,12 +25,9 @@ export default WithFormEventBody(GeneralMasterBody, {
 
         },
         
-        // ChiDesc: function (data, field, index, updateFieldComponent, setFieldValue) {
-
-        //     setFieldValue('Code', index, data[index][field]);
-        //     updateFieldComponent('Code', index);
-
-        // }
+    },
+    disableds:{
+        // ChiDesc: true,
     }
 
 })

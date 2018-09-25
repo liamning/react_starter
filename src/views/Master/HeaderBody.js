@@ -23,16 +23,17 @@ import {
 } from 'reactstrap';
 
 
-// Import React Table
-import BodyTable from "./HeaderBody.Body"; 
+// Import React Table 
+
+import BodyTable from '../../containers/Master/HeaderBody.Body'; 
 
 export default class ClientMaster extends React.Component {
 
   render() {
  
     
-    const { standardProps, isAfterSave, onSubmit, getFormData,  ...restProps } = this.props;   
-    const{ values } = standardProps;
+    const { standardProps, isAfterSave, onSubmit, getFormData,  ...restProps } = this.props;    
+    const { values, errors, isSubmitted } = standardProps;
     
     values.BodyList = values.BodyList || [];
 
@@ -163,7 +164,13 @@ export default class ClientMaster extends React.Component {
 
                   </Row>
 
-                  <BodyTable {...this.props}></BodyTable>
+                  <BodyTable 
+                  data={values.BodyList} 
+                  values={values}
+                  errors={errors}
+                  isSubmitted={isSubmitted}
+                  bodyEvent={this.props.bodyEvent}
+                  ></BodyTable>
 
                   <div className="text-right">
                     <Button  color="success" onClick={onSubmit} type="button" ><i className="fa fa-save"></i>  Submit</Button>

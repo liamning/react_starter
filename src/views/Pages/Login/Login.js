@@ -32,38 +32,41 @@ class Login extends Component {
                     <Row className="form-group">
                       <Col xs="12" md="12">
 
-                        <div className="input-group mb-3">
+                        <TextField
+                          name="UserID"
+                          placeholder="User Name"
+                          {...standardProps}
+                          Prefix={() => (
+                            <div className="input-group-prepend">
+                              <span className="input-group-text">
+                                <i className="icon-user"></i></span>
+                            </div>
+                          )}
+                        />
 
-
-                          
-
-                          <TextField
-                            name="UserID"
-                            placeholder="User Name"
-                            {...standardProps}
-                          />
-                        </div>
                       </Col>
                     </Row>
 
-
-
-                    <InputGroup className="mb-4">
-                      <InputGroupAddon addonType="prepend">
-                        <InputGroupText>
-                          <i className="icon-lock"></i>
-                        </InputGroupText>
-                      </InputGroupAddon>
+                    <Row className="form-group">
+                      <Col xs="12" md="12">
 
                       <TextField
                         name="Password"
                         type="password"
                         placeholder="Password"
                         {...standardProps}
+                          Prefix={() => (
+                            <div className="input-group-prepend">
+                              <span className="input-group-text">
+                                <i className="icon-lock"></i></span>
+                            </div>
+                          )}
                       />
 
-
-                    </InputGroup>
+                      </Col>
+                    </Row>
+ 
+              
                     <Row>
                       <Col xs="6">
                         <Button color="primary" className="px-4" onClick={onSubmit}>Login</Button>

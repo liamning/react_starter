@@ -15,7 +15,7 @@ export const history = createHashHistory({
     //     // Show some custom dialog to the user and call
     //     // callback(true) to continue the transiton, or
     //     // callback(false) to abort it.
-        
+
     //     //callback(confirm("sure?"));
     //     console.log(history.location);
     //     console.log(loginInfo);
@@ -26,58 +26,45 @@ export const history = createHashHistory({
     //         callback(false); 
     //     }
     //   }
-  })
+})
 
 
 // const unblock = history.block('Are you sure you want to leave this page?')
- 
+
 // Or use a function that returns the message when it's needed.
 // history.block((location, action) => {
 //   // The location and action arguments indicate the location
 //   // we're transitioning to and how we're getting there.
- 
+
 //   // A common use case is to prevent the user from leaving the
 //   // page if there's a form they haven't submitted yet.
 //   //if (input.value !== '')
 //     return 'Are you sure you want to leave this page?'
 // })
-
-
-if (typeof (sessionStorage) !== "undefined") {
-
-    //console.log(sessionStorage);
-    if (sessionStorage["loginInfo"]) {
-        Object.assign(loginInfo, JSON.parse(sessionStorage["loginInfo"]));
-    }
-    loginInfo.save = function () {
-        sessionStorage["loginInfo"] = JSON.stringify(loginInfo);
-    }
-    loginInfo.clear = function () {
-        sessionStorage["loginInfo"] = JSON.stringify({});
-        delete loginInfo.UserID;
-    }
-
-} else {
-    // Sorry! No Web Storage support..
-    //console.log("Sorry! No Web Storage support..");
-}
-
+window.ajaxCount = 0;
 export const ajaxPost = function (url, data) {
+    // if (loginInfo.Session)
+    //     data.session = loginInfo.Session;
+
+    window.ajaxCount++;
     return fetch(`${window.host}/${url}`, {
         method: 'POST',
         credentials: 'include',
+        // body: JSON.stringify(data),
         body: param(data),
         headers: new Headers({
             'Content-Type': 'application/x-www-form-urlencoded'
         })
-    })
-        .then(response => {
+    }).then(response => {
+        window.ajaxCount--;
+        console.log(`ajaxCount = ${ajaxCount}`);
             //console.log(response);
             if (response.status != 200) {
                 delete loginInfo.UserID;
                 history.replace('/login');
                 return false;
             }
+
             return response.json();
         });
 }
@@ -102,10 +89,47 @@ export const ajaxGet = function (url, data) {
     });
 }
 
+
+loginInfo.save = function () {
+    sessionStorage["loginInfo"] = JSON.stringify(loginInfo);
+    localStorage["session"] = loginInfo.Session;
+
+}
+loginInfo.clear = function () {
+    sessionStorage.clear();
+    localStorage.clear();
+    delete loginInfo.UserID;
+}
+
+
+if (typeof (sessionStorage) !== "undefined") {
+
+    if (sessionStorage["loginInfo"] && localStorage["session"]) {
+        Object.assign(loginInfo, JSON.parse(sessionStorage["loginInfo"]));
+
+    } else if (localStorage["session"]) {
+        let url = 'Logout';
+        let data = { session: localStorage["session"] };
+        loginInfo.clear();
+        ajaxPost(url, data).then(response => {
+
+            console.log(response);
+
+        });
+    } else {
+        loginInfo.clear();
+    }
+
+
+} else {
+    // Sorry! No Web Storage support..
+    console.log("Sorry! No Web Storage support..");
+
+}
 export const logout = function () {
-    loginInfo.clear(); 
+    loginInfo.clear();
     history.replace("/login");
-    
+
 }
 
 export const getFieldIndex = function (field, index) {

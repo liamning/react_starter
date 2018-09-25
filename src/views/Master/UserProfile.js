@@ -107,7 +107,7 @@ export default class ClientMaster extends React.Component {
                             multi={false}
                             createAble={false}
                             tableName="Role"
-                            label="Role"
+                            //label="Role"
 
                           />
 
@@ -152,7 +152,7 @@ export default class ClientMaster extends React.Component {
                             multi={false}
                             createAble={false}
                             tableName="Gender"
-                            label="Gender"
+                            //label="Gender"
 
                           />
 

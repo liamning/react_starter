@@ -7,6 +7,7 @@ export default WithFormEvent(HeaderBody, {
 
   onSubmit: function (values, callback) {
 
+    console.log("onSubmit");
     var url = 'HttpHandler/AjaxHandler.ashx';
     var data = { action: 'saveHeader', HeaderInfo: JSON.stringify(values) };
     ajaxPost(url, data).then(response => {
@@ -60,8 +61,21 @@ export default WithFormEvent(HeaderBody, {
   fieldChange: {
     Description: function(values, updateFieldComponent){
       
-      values.Combo1 = "Value1";
-      updateFieldComponent('Combo1');
+
+      var url = 'HttpHandler/AjaxHandler.ashx';
+      var data = { action: 'getGeneralMaster', Category: 'Combo1' };
+      ajaxPost(url, data).then(response => {
+  
+        if (response && response[0]) {
+                    
+          values.Combo1 = response[0].CategoryDesc;
+          updateFieldComponent('Combo1');
+          console.log("updateFieldComponent");
+        } 
+  
+      });
+      
+      console.log("updateFieldComponent 2");
       
     }
   }

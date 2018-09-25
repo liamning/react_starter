@@ -48,9 +48,11 @@ export default WithFormEvent(GeneralMaster, {
     });
 
   },
+  
   defaultValues: {
     BodyList: []
   },
+
   validatePattern: {
     CategoryDesc: {
       required: "",

@@ -14,11 +14,10 @@ export default class BodyTable extends React.Component {
   render() {
 
     
-    const { isAfterSave, isSubmitted, onSubmit, getFormData, isGetFormData, setFieldValue, values, errors, validateFieldValue, formComponents, ...controller } = this.props;
-    const standardProps = { values, errors, isGetFormData, setFieldValue, validateFieldValue, isSubmitted, formComponents };
-    
-    data = values.BodyList || [];
-    
+    const { standardProps, ...restProps } = this.props; 
+    const { values, data, errors, isSubmitted } = standardProps;
+
+        
     return (
 
       <div className="inlineEdit my-3">
@@ -46,11 +45,9 @@ export default class BodyTable extends React.Component {
             accessor: "BodyDateTime",
             Cell: cellInfo => {
               return <InlineDateTimeField 
-                value={cellInfo.value}
-                onBlur={value => {
-                  data[cellInfo.index][cellInfo.column.id] = value;
-
-                }} />
+              name="BodyDateTime"
+              index={cellInfo.index}
+              {...standardProps} />
             }
           },
           {
@@ -59,14 +56,11 @@ export default class BodyTable extends React.Component {
             resizable: false,
             Cell: cellInfo => {
               return <InlineAsyncSelectField 
-              value={cellInfo.value}
-              label={data[cellInfo.index]["Combo1Desc"]}
+              label="Combo1Desc"
               tableName="Gender"
-              onBlur= { value => {
-                data[cellInfo.index][cellInfo.column.id] = value.value;
-                data[cellInfo.index]["Combo1Desc"] = value.label;
-      
-              }} />
+              name="Combo1"
+              index={cellInfo.index}
+              {...standardProps} />
             }
           },
           {

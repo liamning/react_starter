@@ -12,6 +12,7 @@ const WithFormEvent = function (TargetForm, eventHanlders) {
         isSubmitted: false,
         values: { ...eventHanlders.defaultValues },
         errors: {},
+        disableds: { ...eventHanlders.disableds },
       };
 
       this.validatePattern = eventHanlders.validatePattern || {};
@@ -91,7 +92,12 @@ const WithFormEvent = function (TargetForm, eventHanlders) {
       return this.state.afterSave;
     }
 
-    onSubmit = () => {
+    onSubmit = (callback) => {
+
+      if(window.ajaxCount !== 0) {
+        alert('The last request is being processed. Please try again');
+        return;
+      }
 
       for (var pro in this.validatePattern) {
         this.validateFieldValue(pro, this.state.values[pro]);
@@ -114,6 +120,9 @@ const WithFormEvent = function (TargetForm, eventHanlders) {
 
 
         this.state.isSubmitted = false;
+ 
+        // if(callback)
+        //   callback();
 
         //update the flag to force the asyn select control to clear the cache
         this.setState({
@@ -123,27 +132,28 @@ const WithFormEvent = function (TargetForm, eventHanlders) {
         //reset the flag
         this.state.afterSave = false;
 
+
       });
 
 
     }
 
     componentDidMount() {
-      // //console.log('componentDidMount'); 
+      //console.log('componentDidMount'); 
 
-      // sessionStorage["currentURL"] = window.location.href;
+      sessionStorage["currentURL"] = window.location.href;
 
-      // if(sessionStorage[window.location.href]){
-      //   this.state.values = JSON.parse(sessionStorage[window.location.href]);
-      //   this.setState({});
-      // } 
-      // //console.log(this.state.values);
+      if(sessionStorage[window.location.href]){
+        this.state.values = JSON.parse(sessionStorage[window.location.href]);
+        this.setState({});
+      } 
+      //console.log(this.state.values);
 
     }
 
     componentWillUnmount() {
-      // //console.log('componentWillUnmount'); 
-      // sessionStorage[sessionStorage["currentURL"]] = JSON.stringify(this.state.values);
+      //console.log('componentWillUnmount'); 
+      sessionStorage[sessionStorage["currentURL"]] = JSON.stringify(this.state.values);
     }
 
     render() {
@@ -153,6 +163,7 @@ const WithFormEvent = function (TargetForm, eventHanlders) {
       const standardProps = {
         values: this.state.values,
         errors: this.state.errors,
+        disableds: this.state.disableds,
         isGetFormData: this.state.isGetFormData,
         setFieldValue: this.setFieldValue,
         isSubmitted: this.state.isSubmitted,
