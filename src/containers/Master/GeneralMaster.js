@@ -44,7 +44,9 @@ export default WithFormEvent(GeneralMaster, {
       }
 
       if (callback)
-        callback(response);
+        callback({
+          values: response
+        });
     });
 
   },

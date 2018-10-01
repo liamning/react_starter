@@ -16,7 +16,7 @@ const AuthenRoute = ({ component: Component, ...rest }) =>
       // //console.log(paths);(loginInfo);
       // //console.log(props);
 
-      if (loginInfo.UserID){
+      if (loginInfo.UserID && Component){
         return (<Component {...props} />);
       }
         

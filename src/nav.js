@@ -17,19 +17,20 @@ export default {
         }, 
         {
             name: 'System',
+            url: '/System', 
             icon: 'fa fa-cog',
             children: [
                 {
                     name: 'User Profile',
-                    url: '/UserProfile',    
+                    url: '/System/UserProfile',    
                 },
                 {
                     name: 'Change Password',
-                    url: '/ChangePassword',
+                    url: '/System/ChangePassword',
                 },
                 {
                     name: 'General Master',
-                    url: '/GeneralMaster', 
+                    url: '/System/GeneralMaster', 
                 }, 
             ]
         },

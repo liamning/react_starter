@@ -28,19 +28,21 @@ export default WithFormEvent(ClientMaster, {
       };
 
       if (callback)
-        callback(response);
+        callback({
+          values: response
+        });
     });
 
   },
-  validatePattern:{
-    RegistrationDate:{
-      required:"", 
+  validatePattern: {
+    RegistrationDate: {
+      required: "",
     },
-    Address:{
-      required:"",
+    Address: {
+      required: "",
     },
-    Phone:{
-      required:"",
+    Phone: {
+      required: "",
     }
   }
 

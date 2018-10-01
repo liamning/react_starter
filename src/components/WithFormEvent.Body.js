@@ -31,7 +31,7 @@ const WithFormEventBody = function (TargetBodyForm, eventHanlders) {
     updateFieldComponent = (field, index) => {
       var fieldKey = `${field}${index}`;
 
-      //console.log(`updateFieldComponent ${fieldKey}`);
+      ////console.log(`updateFieldComponent ${fieldKey}`);
 
 
       setTimeout(() => {
@@ -43,7 +43,7 @@ const WithFormEventBody = function (TargetBodyForm, eventHanlders) {
     validateFieldValue = (field, index, value) => {
       var pattern = this.validatePattern[field];
       let fieldIndex = getFieldIndex(field, index);
-      //console.log(pattern);
+      ////console.log(pattern);
       if (pattern) {
         for (var pro in pattern) {
           switch (pro) {
@@ -54,7 +54,7 @@ const WithFormEventBody = function (TargetBodyForm, eventHanlders) {
 
             case "pattern":
               if (!value) break;
-              //console.log(pattern["pattern"]);
+              ////console.log(pattern["pattern"]);
               const regex = RegExp(pattern["pattern"]);
               if (!regex.test(value)) this.props.errors[fieldIndex] = pattern[`${pro}Error`] || `${field} invalid`;
               else this.props.errors[fieldIndex] = undefined;
@@ -71,12 +71,12 @@ const WithFormEventBody = function (TargetBodyForm, eventHanlders) {
           if (this.props.errors[fieldIndex]) break;
         }
       }
-      // //console.log(field);
-      // //console.log(value);
-      // //console.log(this.props.errors);
+      // ////console.log(field);
+      // ////console.log(value);
+      // ////console.log(this.props.errors);
     }
 
-    setFieldValue = (field, index, value) => {
+    setFieldValue = (field, value, index) => {
 
       this.props.data[index][field] = value;
 
@@ -88,7 +88,7 @@ const WithFormEventBody = function (TargetBodyForm, eventHanlders) {
 
     render() {
 
-      //console.log('render');
+      ////console.log('render');
       const { ...passEventHanlders } = eventHanlders;
       const { isSubmitted, data, errors, ...restProps } = this.props;
       const standardProps = {

@@ -86,7 +86,7 @@ export class AsyncSelectField extends React.Component {
       this.props.getFormData({ Code: value.value });
     } else {
       if (this.props.setFieldValue) {
-        this.props.setFieldValue(this.props.name, value.value, value.label); 
+        this.props.setFieldValue(this.props.name, value.value, this.props.index, value.label); 
       }
         
       this.setState(value);
@@ -179,7 +179,7 @@ export class AsyncSelectField extends React.Component {
     let name = this.props.name;
     let index = this.props.index;
     let fieldIndex = getFieldIndex(name, index);
-    if(this.props.formComponents && !this.props.formComponents[fieldIndex]) this.props.formComponents[fieldIndex] = this;
+    if(this.props.formComponents) this.props.formComponents[fieldIndex] = this;
 
     if (this.props.autoFocus)
       this.nameInput.focus();
@@ -312,7 +312,7 @@ export class DateTimeField extends React.Component {
     let name = this.props.name;
     let index = this.props.index;
     let fieldIndex = getFieldIndex(name, index);
-    if(this.props.formComponents && !this.props.formComponents[fieldIndex]) this.props.formComponents[fieldIndex] = this;
+    if(this.props.formComponents ) this.props.formComponents[fieldIndex] = this;
 
     if (this.props.autoFocus &&  this.nameInput)
       this.nameInput.focus();
@@ -352,7 +352,7 @@ export class DateTimeField extends React.Component {
     }
 
     if (this.props.setFieldValue)
-      this.props.setFieldValue(name, text);
+      this.props.setFieldValue(name, text, this.props.index);
 
 
 
@@ -556,7 +556,7 @@ export class DateField extends React.Component {
     let name = this.props.name;
     let index = this.props.index;
     let fieldIndex = getFieldIndex(name, index);
-    if(this.props.formComponents && !this.props.formComponents[fieldIndex]) this.props.formComponents[fieldIndex] = this;
+    if(this.props.formComponents ) this.props.formComponents[fieldIndex] = this;
 
     if (this.props.autoFocus)
       this.nameInput.focus();
@@ -594,7 +594,7 @@ export class DateField extends React.Component {
     }
 
     if (this.props.setFieldValue)
-      this.props.setFieldValue(name, text);
+      this.props.setFieldValue(name, text, this.props.index);
 
 
 
@@ -762,38 +762,21 @@ export class TextField extends React.Component {
 
   };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   handleBlur = event => {
     var name = this.props.name;
     var text = event.currentTarget.value;
  
     if (this.props.setFieldValue)
-      this.props.setFieldValue(name, text);
+      this.props.setFieldValue(name, text, this.props.index);
 
     if(this.props.errors.hasOwnProperty(name))
       this.setState({});
   };
 
-
-
+  focus(){
+    console.log(this);
+    this.nameInput.focus();
+  }
 
   shouldComponentUpdate(nextProps, nextState) {
     
@@ -839,7 +822,7 @@ export class TextField extends React.Component {
     let name = this.props.name;
     let index = this.props.index;
     let fieldIndex = getFieldIndex(name, index);
-    if(this.props.formComponents && !this.props.formComponents[fieldIndex]) this.props.formComponents[fieldIndex] = this;
+    if(this.props.formComponents ) this.props.formComponents[fieldIndex] = this;
 
     if (this.props.autoFocus)
       this.nameInput.focus();
@@ -850,7 +833,7 @@ export class TextField extends React.Component {
     // let name = this.props.name;
     // let index = this.props.index;
     // let fieldIndex = getFieldIndex(name, index);
-    // if(this.props.formComponents && !this.props.formComponents[fieldIndex]) delete this.props.formComponents[fieldIndex];
+    // if(this.props.formComponents ) delete this.props.formComponents[fieldIndex];
     
   }
 
@@ -858,7 +841,7 @@ export class TextField extends React.Component {
 
     //console.log(`render TextField ${this.props.name} ${this.state.value} ${this.state.error}`);
 
-    const { Prefix,Suffix, setFieldValue, setFieldTouched, autoFocus, onChange, onBlur, isGetFormData, values, errors, validateFieldValue, isSubmitted, formComponents, ...restProps } = this.props
+    const { Prefix,Suffix,multipleLine, setFieldValue, setFieldTouched, autoFocus, onChange, onBlur, isGetFormData, values, errors, validateFieldValue, isSubmitted, formComponents, ...restProps } = this.props
 
 
 
@@ -881,15 +864,25 @@ export class TextField extends React.Component {
             <Prefix></Prefix>
           )}
 
-          <input className="form-control" type="text"
-            ref={(input) => { this.nameInput = input; }}
+          {!multipleLine
+            ? <input className="form-control" type="text"
+              ref={(input) => { this.nameInput = input; }}
 
-            {...restProps}
+              {...restProps}
 
-            onChange={this.handleChange}
-            onBlur={this.handleBlur}
-            value={value} disabled={this.props.disableds[this.nameIndex]}
-          /> 
+              onChange={this.handleChange}
+              onBlur={this.handleBlur}
+              value={value} disabled={this.props.disableds[this.nameIndex]}
+            />
+            : <textarea className="form-control" type="text"
+              ref={(input) => { this.nameInput = input; }}
+
+              {...restProps}
+
+              onChange={this.handleChange}
+              onBlur={this.handleBlur}
+              value={value} disabled={this.props.disableds[this.nameIndex]}
+            />}
           
           {Suffix &&
           (
@@ -951,7 +944,7 @@ export class NumberField extends React.Component {
 
  
     if (this.props.setFieldValue)
-      this.props.setFieldValue(name, text);
+      this.props.setFieldValue(name, text, this.props.index);
 
 
 
@@ -1014,7 +1007,7 @@ export class NumberField extends React.Component {
     let name = this.props.name;
     let index = this.props.index;
     let fieldIndex = getFieldIndex(name, index);
-    if(this.props.formComponents && !this.props.formComponents[fieldIndex]) this.props.formComponents[fieldIndex] = this;
+    if(this.props.formComponents ) this.props.formComponents[fieldIndex] = this;
 
     if (this.props.autoFocus)
       this.nameInput.focus();
@@ -1034,6 +1027,7 @@ export class NumberField extends React.Component {
       <div className={error && "is-invalid"}>
 
         <input className="form-control text-right" type="text"
+        
           ref={(input) => { this.nameInput = input; }}
 
           {...restProps}
@@ -1070,21 +1064,7 @@ export class DisplayJson extends React.Component {
     return (
     
       <div className="mt-1" style={{maxHeight: `${this.state.height}px`, overflow:'hidden'}} onClick={()=>{
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
+        return;
         if(this.state.height == 10000)
           this.setState({height:35});
         else

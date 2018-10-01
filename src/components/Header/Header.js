@@ -9,6 +9,11 @@ import { loginInfo } from '../../global';
 
 class Header extends Component {
 
+  
+  shouldComponentUpdate(){
+    return false;
+  }
+  
   sidebarToggle(e) {
     e.preventDefault();
     document.body.classList.toggle('sidebar-hidden');

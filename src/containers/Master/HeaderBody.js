@@ -29,54 +29,56 @@ export default WithFormEvent(HeaderBody, {
       };
 
       if (callback)
-        callback(response);
+        callback({
+          values: response
+        });
     });
 
   },
-  validatePattern:{
-    Code:{
-      required:"", 
-      requiredError:"test", 
+  validatePattern: {
+    Code: {
+      required: "",
+      requiredError: "test",
     },
-    Description:{
-      required:"",
-      requiredError:"Description is required", 
+    Description: {
+      required: "",
+      requiredError: "Description is required",
       pattern: /^[a-zA-Z\s]+$/,
-      customValidate: function(value){
-        if(value && value.length > 10){
+      customValidate: function (value) {
+        if (value && value.length > 10) {
           return "Maximum length of Description is 10"
         }
       }
     },
-    HeaderDate:{
-      required:"",
+    HeaderDate: {
+      required: "",
     },
-    HeaderDateTime:{
-      required:"",
+    HeaderDateTime: {
+      required: "",
     },
-    Combo1:{
-      required:"",
-    }, 
+    Combo1: {
+      required: "",
+    },
   },
   fieldChange: {
-    Description: function(values, updateFieldComponent){
-      
+    Description: function (values, updateFieldComponent) {
+
 
       var url = 'HttpHandler/AjaxHandler.ashx';
       var data = { action: 'getGeneralMaster', Category: 'Combo1' };
       ajaxPost(url, data).then(response => {
-  
+
         if (response && response[0]) {
-                    
+
           values.Combo1 = response[0].CategoryDesc;
           updateFieldComponent('Combo1');
           console.log("updateFieldComponent");
-        } 
-  
+        }
+
       });
-      
+
       console.log("updateFieldComponent 2");
-      
+
     }
   }
 

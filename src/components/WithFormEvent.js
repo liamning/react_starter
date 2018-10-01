@@ -20,7 +20,7 @@ const WithFormEvent = function (TargetForm, eventHanlders) {
       this.formComponents = {};
       this.bodyEvent = {};
 
-      //console.log(this.fieldChange);
+      ////console.log(this.fieldChange);
 
     }
 
@@ -30,7 +30,7 @@ const WithFormEvent = function (TargetForm, eventHanlders) {
 
     validateFieldValue = (field, value) => {
       var pattern = this.validatePattern[field];
-      //console.log(pattern);
+      ////console.log(pattern);
       if (pattern) {
         for (var pro in pattern) {
           switch (pro) {
@@ -41,7 +41,7 @@ const WithFormEvent = function (TargetForm, eventHanlders) {
 
             case "pattern":
               if (!value) break;
-              //console.log(pattern["pattern"]);
+              ////console.log(pattern["pattern"]);
               const regex = RegExp(pattern["pattern"]);
               if (!regex.test(value)) this.state.errors[field] = pattern[`${pro}Error`] || `${field} invalid`;
               else this.state.errors[field] = undefined;
@@ -58,9 +58,9 @@ const WithFormEvent = function (TargetForm, eventHanlders) {
           if (this.state.errors[field]) break;
         }
       }
-      // //console.log(field);
-      // //console.log(value);
-      // //console.log(this.state.errors);
+      // ////console.log(field);
+      // ////console.log(value);
+      // ////console.log(this.state.errors);
     }
 
     setFieldValue = (field, value) => {
@@ -72,16 +72,21 @@ const WithFormEvent = function (TargetForm, eventHanlders) {
     }
 
     getFormData = (params) => {
-      //console.log("getFormData");
+      ////console.log("getFormData");
       this.state.isSubmitted = false;
       eventHanlders.getFormData(params, data => {
+
+        let { values, disableds } = data;
 
         for (var pro in this.state.errors) {
           delete this.state.errors[pro];
         }
 
+        if(disableds){
+          this.state.disableds = disableds;
+        }
         this.setState({
-          values: data
+          values: values
         });
 
       });
@@ -105,13 +110,14 @@ const WithFormEvent = function (TargetForm, eventHanlders) {
       if (this.bodyEvent["validate"]) this.bodyEvent["validate"]();
 
 
-      //console.log(this.state.values);
+      ////console.log(this.state.values);
       this.state.isSubmitted = true;
-      //console.log(this.state.errors);
+      ////console.log(this.state.errors);
 
       for (var pro in this.state.errors) {
         if (pro && this.state.errors[pro]) {
-          this.setState({});
+          this.setState({}); 
+          this.formComponents[pro].focus();
           return;
         }
       }
@@ -139,26 +145,26 @@ const WithFormEvent = function (TargetForm, eventHanlders) {
     }
 
     componentDidMount() {
-      //console.log('componentDidMount'); 
+      ////console.log('componentDidMount'); 
 
-      sessionStorage["currentURL"] = window.location.href;
+      // sessionStorage["currentURL"] = window.location.href;
 
-      if(sessionStorage[window.location.href]){
-        this.state.values = JSON.parse(sessionStorage[window.location.href]);
-        this.setState({});
-      } 
-      //console.log(this.state.values);
+      // if(sessionStorage[window.location.href]){
+      //   this.state.values = JSON.parse(sessionStorage[window.location.href]);
+      //   this.setState({});
+      // } 
+      ////console.log(this.state.values);
 
     }
 
     componentWillUnmount() {
-      //console.log('componentWillUnmount'); 
-      sessionStorage[sessionStorage["currentURL"]] = JSON.stringify(this.state.values);
+      ////console.log('componentWillUnmount'); 
+      // sessionStorage[sessionStorage["currentURL"]] = JSON.stringify(this.state.values);
     }
 
     render() {
 
-      //console.log('render');
+      ////console.log('render');
       const { values, onSubmit, getFormData, validatePattern, ...passEventHanlders } = eventHanlders; 
       const standardProps = {
         values: this.state.values,

@@ -11,25 +11,32 @@ export const history = createHashHistory({
     basename: '',             // The base URL of the app (see below)
     hashType: 'slash',        // The hash type to use (see below)
     // A function to use to confirm navigation with the user (see below)
-    // getUserConfirmation(message, callback) {
-    //     // Show some custom dialog to the user and call
-    //     // callback(true) to continue the transiton, or
-    //     // callback(false) to abort it.
+    getUserConfirmation(message, callback) {
+        // Show some custom dialog to the user and call
+        // callback(true) to continue the transiton, or
+        // callback(false) to abort it.
 
-    //     //callback(confirm("sure?"));
-    //     console.log(history.location);
-    //     console.log(loginInfo);
+        //callback(confirm("sure?"));
+        
+        // console.log("getUserConfirmation");
+         console.log(`=========================`);
+        console.log(history.location.pathname);
+        console.log(window.location.hash);
 
-    //     if(loginInfo.UserID || history.location.pathname == "/login"){
-    //         callback(true);
-    //     } else {
-    //         callback(false); 
-    //     }
-    //   }
+
+    window.lastURL = history.location.pathname;
+    console.log("getUserConfirmation", window.lastURL);
+        callback(true);
+        // if(loginInfo.UserID || history.location.pathname == "/login"){
+        //     callback(true);
+        // } else {
+        //     callback(false); 
+        // }
+      }
 })
 
 
-// const unblock = history.block('Are you sure you want to leave this page?')
+ const unblock = history.block('Are you sure you want to leave this page?')
 
 // Or use a function that returns the message when it's needed.
 // history.block((location, action) => {
@@ -57,8 +64,8 @@ export const ajaxPost = function (url, data) {
         })
     }).then(response => {
         window.ajaxCount--;
-        console.log(`ajaxCount = ${ajaxCount}`);
-            //console.log(response);
+        //console.log(`ajaxCount = ${ajaxCount}`);
+            ////console.log(response);
             if (response.status != 200) {
                 delete loginInfo.UserID;
                 history.replace('/login');
@@ -107,23 +114,25 @@ if (typeof (sessionStorage) !== "undefined") {
     if (sessionStorage["loginInfo"] && localStorage["session"]) {
         Object.assign(loginInfo, JSON.parse(sessionStorage["loginInfo"]));
 
-    } else if (localStorage["session"]) {
-        let url = 'Logout';
-        let data = { session: localStorage["session"] };
-        loginInfo.clear();
-        ajaxPost(url, data).then(response => {
+    } 
+    // else if (localStorage["session"]) {
+    //     let url = 'Logout';
+    //     let data = { session: localStorage["session"] };
+    //     loginInfo.clear();
+    //     ajaxPost(url, data).then(response => {
 
-            console.log(response);
+    //         //console.log(response);
 
-        });
-    } else {
+    //     });
+    // } 
+    else {
         loginInfo.clear();
     }
 
 
 } else {
     // Sorry! No Web Storage support..
-    console.log("Sorry! No Web Storage support..");
+    //console.log("Sorry! No Web Storage support..");
 
 }
 export const logout = function () {

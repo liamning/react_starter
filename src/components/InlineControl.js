@@ -105,7 +105,7 @@ export class InlineNumberField extends React.Component {
         isSubmitted={isSubmitted}
         setFieldValue={(name, value) => {
 
-          this.props.setFieldValue(name, index, value);
+          this.props.setFieldValue(name, value, index);
           this.state.value = value;
 
           if (errors[fieldKey] && isSubmitted) {
@@ -224,7 +224,7 @@ export class InlineTextField extends React.Component {
         isSubmitted={isSubmitted}
         setFieldValue={(name, value) => {
 
-          this.props.setFieldValue(name, index, value);
+          this.props.setFieldValue(name, value, index);
           this.state.value = value;
 
           if (errors[fieldKey] && isSubmitted) {
@@ -364,7 +364,7 @@ export class InlineDateTimeField extends React.Component {
         isSubmitted={isSubmitted}
         setFieldValue={(name, value) => {
 
-          this.props.setFieldValue(name, index, value);
+          this.props.setFieldValue(name, value, index);
           this.state.value = value;
 
           if (errors[fieldKey] && isSubmitted) {
@@ -506,7 +506,7 @@ export class InlineDateField extends React.Component {
         isSubmitted={isSubmitted}
         setFieldValue={(name, value) => {
 
-          this.props.setFieldValue(name, index, value);
+          this.props.setFieldValue(name, value, index);
           this.state.value = value;
 
           if (errors[fieldKey] && isSubmitted) {
@@ -616,7 +616,7 @@ export class InlineAsyncSelectField extends React.Component {
 
     if (this.state.readonly || this.props.disableds[name])
       return (
-        <div className="form-control" onClick={() => this.setState({ readonly: false })}>
+        <div tabIndex="1" className="form-control" onClick={() => this.setState({ readonly: false })}>
           {valueLabel.label}
         </div>
       );
@@ -624,7 +624,7 @@ export class InlineAsyncSelectField extends React.Component {
 
 
       return (<AsyncSelectField
-
+        tabIndex="1" 
         createAble={true}
         tableName={tableName}
         label={label}
@@ -636,9 +636,9 @@ export class InlineAsyncSelectField extends React.Component {
         name={name}
         autoFocus={true}
         isSubmitted={isSubmitted}
-        setFieldValue={(name, value, label) => {
+        setFieldValue={(name, value, index, label) => {
 
-          this.props.setFieldValue(name, index, value);
+          this.props.setFieldValue(name, value, index);
           this.state.value = value;
           this.state.label = label;
 
