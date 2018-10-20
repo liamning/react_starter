@@ -7,7 +7,7 @@ export default {
         },
         {
             name: 'Client Master',
-            url: '/Home/masterClient',
+            url: '/masterClient',
             icon: 'icon-puzzle'
         },
         {

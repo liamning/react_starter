@@ -26,6 +26,10 @@ import {
 // Import React Table
 import BodyTable from '../../containers/Master/GeneralMaster.Body'; 
 
+import TestForm from '../../containers/Master/ClientMaster'; 
+
+import Draggable from 'react-draggable';
+
 export default class ClientMaster extends React.Component {
 
   render() {
@@ -104,11 +108,15 @@ export default class ClientMaster extends React.Component {
                     <Button disabled={values.IsLocked} color="success" onClick={onSubmit} type="button" ><i className="fa fa-save"></i>  Submit</Button>
                   </div>
 
-                  <br />
+                  {/* <br />
                   <DisplayJson {...errors}></DisplayJson>
                   <br />
-                  <DisplayJson {...values}></DisplayJson>
+                  <DisplayJson {...values}></DisplayJson> */}
 
+
+
+
+        {/* <TestForm {...this.props}></TestForm> */}
 
                 </form>
 
@@ -116,6 +124,25 @@ export default class ClientMaster extends React.Component {
             </Card>
           </Col>
         </Row>
+
+      <Draggable
+        // axis="x"
+        
+        handle=".handle"
+        defaultPosition={{x: 0, y: 0}}
+        position={null}
+        // grid={[25, 25]}
+        onStart={this.handleStart}
+        onDrag={this.handleDrag}
+        onStop={this.handleStop}>
+        <div style={{background:'yellow'}}> 
+        <div className="handle">Drag from here</div>
+        <TestForm {...this.props}></TestForm>
+        </div>
+ 
+      </Draggable>
+
+
       </div>
 
     )

@@ -2,6 +2,14 @@
 import { createHashHistory } from 'history'
 import { func } from 'prop-types';
 
+
+window.addEventListener("close", function( event ) {
+    // make the close button ineffective
+    alert('test');
+    event.preventDefault();
+  }, false);
+
+
 const param = require('jquery-param');
 
 export const loginInfo = {

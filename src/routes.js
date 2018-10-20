@@ -8,7 +8,7 @@ import GeneralMasterCtrl from './containers/Master/GeneralMaster';
  
 export const routes = [ 
   { path: '/Home', name: 'Home', component: Home, exact: true }, 
-  { path: '/Home/masterClient', name: 'Client Master', component: ClientMasterCtrl }, 
+  { path: '/masterClient', name: 'Client Master', component: ClientMasterCtrl }, 
   { path: '/HeaderBody', name: 'Header Body', component: HeaderBodyCtrl, exact: true },
   { path: '/System', name: 'System', exact: true }, 
   { path: '/System/UserProfile', name: 'User Profile', component: UserProfileCtrl, }, 

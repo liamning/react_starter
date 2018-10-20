@@ -155,7 +155,8 @@ export class AsyncSelectField extends React.Component {
     console.log("start updateLabel");
     var tableName = this.props.tableName;
     var value = this.state.value;
-    if (!value || this.state.label == selectDict[tableName][value].label) return;
+    if (!value 
+      || (selectDict[tableName][value] && this.state.label == selectDict[tableName][value].label)) return;
     this.shouldUpdate = true;
     this.setState({});
     console.log("updateLabel end");
@@ -163,8 +164,11 @@ export class AsyncSelectField extends React.Component {
   getLabel = (value) => {
     var label = "Please select";
     var tableName = this.props.tableName;
-    if (value && this.props.name == this.props.label) { 
-      label = value;
+    // if (value && this.props.name == this.props.label) { 
+    //   label = value;
+    // }
+    if (value && this.props.label) { 
+      label = this.props.values[this.props.label];
     }
     else if (value
       && selectDict[tableName]

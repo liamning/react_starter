@@ -145,21 +145,21 @@ const WithFormEvent = function (TargetForm, eventHanlders) {
     }
 
     componentDidMount() {
-      ////console.log('componentDidMount'); 
+      //console.log('componentDidMount'); 
 
-      // sessionStorage["currentURL"] = window.location.href;
+      sessionStorage["currentURL"] = window.location.href;
 
-      // if(sessionStorage[window.location.href]){
-      //   this.state.values = JSON.parse(sessionStorage[window.location.href]);
-      //   this.setState({});
-      // } 
-      ////console.log(this.state.values);
+      if(sessionStorage[window.location.href]){
+        this.state.values = JSON.parse(sessionStorage[window.location.href]);
+        this.setState({});
+      } 
+      //console.log(this.state.values);
 
     }
 
     componentWillUnmount() {
-      ////console.log('componentWillUnmount'); 
-      // sessionStorage[sessionStorage["currentURL"]] = JSON.stringify(this.state.values);
+      //console.log('componentWillUnmount'); 
+      sessionStorage[sessionStorage["currentURL"]] = JSON.stringify(this.state.values);
     }
 
     render() {
