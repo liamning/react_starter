@@ -1052,6 +1052,194 @@ export class NumberField extends React.Component {
   }
 }
 
+export class FileField extends React.Component {
+
+
+  constructor(props) {
+    super(props);
+ 
+    var name = props.name;
+    var index = props.index;
+    this.nameIndex = getFieldIndex(name,index);
+    this.fileInput = React.createRef();
+    this.state = { 
+      value: props.values[name],
+      error: props.errors[this.nameIndex],
+    }
+    this.fileObj = {};
+  }
+ 
+  handleChange = event => {
+    console.log("handleChange", this.fileInput.current.files);
+    console.log("handleChange", this.fileInput.current.files[0].name);
+    
+
+
+    if (this.fileInput.current.files.length >= 1) {
+
+      var reader = new FileReader();
+      reader.onload = (loadEvent) => {
+
+        // console.log("this.fileInput.current.files[0]", this.fileInput.current.files[0]);
+        // console.log("loadEvent.target", loadEvent.target);
+        // console.log("loadEvent.target.result", loadEvent.target.result);
+        // return;
+
+        // this.fileObj.filereadOrigin = loadEvent.target.result;
+        // this.fileObj.fileread1 = loadEvent.target.result.split("base64,")[0];
+        this.fileObj.mime = loadEvent.target.result.split("base64,")[0];
+        this.fileObj.data = loadEvent.target.result.split("base64,")[1];
+        this.fileObj.ext = this.fileInput.current.files[0].name.substr(this.fileInput.current.files[0].name.lastIndexOf('.'));
+
+         
+      this.props.values[this.props.name] = this.fileObj.data;
+      this.setState({
+        filename: this.fileInput.current.files[0].name,
+      });
+      }
+
+       reader.readAsDataURL(this.fileInput.current.files[0]);
+      // reader.readAsArrayBuffer(this.fileInput.current.files[0]);
+     // reader.readAsText(this.fileInput.current.files[0]);
+
+    }
+
+
+  };
+
+  // handleBlur = event => {
+  //   var name = this.props.name;
+  //   var text = event.currentTarget.value;
+ 
+  //   if (this.props.setFieldValue)
+  //     this.props.setFieldValue(name, text, this.props.index);
+
+  //   if(this.props.errors.hasOwnProperty(name))
+  //     this.setState({});
+  // };
+
+  focus(){
+    console.log(this);
+    this.fileInput.focus();
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    
+    //console.log(`Text field shouldComponentUpdate  ${this.props.name}`);
+
+    var shouldUpdate = false;
+    var name = nextProps.name;
+    var index = nextProps.index;
+    this.nameIndex = getFieldIndex(name,index); 
+
+    //internal update
+    if(nextState.value != this.state.value
+      || nextState.filename != this.state.filename)
+      shouldUpdate = true;
+    
+    //props update
+    else if (this.state.value != nextProps.values[name]){ 
+      shouldUpdate = true;
+      nextState.value = nextProps.values[name];
+    }
+ 
+    //validation update
+    else if (nextProps.errors.hasOwnProperty(this.nameIndex) 
+    && (this.state.error != nextProps.errors[this.nameIndex] 
+      || this.props.isSubmitted != nextProps.isSubmitted)){
+      shouldUpdate = true; 
+    }  
+     
+    else if(this.state.disabled != nextProps.disableds[this.nameIndex] ){
+      shouldUpdate = true; 
+      this.state.disabled = nextProps.disableds[this.nameIndex];
+    }
+
+    nextState.error = nextProps.errors[this.nameIndex];
+    return shouldUpdate;
+  }
+
+  componentDidMount() {
+    let name = this.props.name;
+    let index = this.props.index;
+    let fieldIndex = getFieldIndex(name, index);
+    if(this.props.formComponents ) this.props.formComponents[fieldIndex] = this;
+
+    if (this.props.autoFocus)
+      this.nameInput.focus();
+  }
+  
+  componentWillUnmount() {
+    
+    // let name = this.props.name;
+    // let index = this.props.index;
+    // let fieldIndex = getFieldIndex(name, index);
+    // if(this.props.formComponents ) delete this.props.formComponents[fieldIndex];
+    
+  }
+
+  render() {
+
+    //console.log(`render TextField ${this.props.name} ${this.state.value} ${this.state.error}`);
+
+    const { Prefix,Suffix,multipleLine, setFieldValue, setFieldTouched, autoFocus, onChange, onBlur, isGetFormData, values, errors, validateFieldValue, isSubmitted, formComponents, ...restProps } = this.props
+
+
+
+    const value = this.state.value || '';
+
+    const error = isSubmitted ? this.state.error : '';
+
+    return (
+
+
+
+
+      <div className={error && "is-invalid"}>
+
+
+        <div className="input-group">
+
+          <input 
+          className="form-control" 
+          type="file"
+          ref={this.fileInput}
+          style={{display: this.state.filename ? "none" : 'block' }}
+
+            {...restProps}
+
+            onChange={this.handleChange}
+            // onBlur={this.handleBlur}
+            // value={value} 
+            // disabled={this.props.disableds[this.nameIndex]}
+          />
+          {this.state.filename && <div
+          className="form-control"  
+          >{this.state.filename}
+          
+          <i className="fa fa-close pull-right"
+          onClick={()=>{
+            this.setState({
+              filename: ""
+            });
+            
+            this.fileInput.current.value = null;
+          }}
+          style={{lineHeight:1.5}}></i></div>}
+
+        </div>
+
+        {error &&
+          (
+            <div className="message">
+              {error}
+            </div>
+          )}
+      </div>
+    );
+  }
+}
+
 export class DisplayJson extends React.Component {
 
   constructor(props) {

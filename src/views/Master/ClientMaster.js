@@ -1,5 +1,5 @@
 import React from "react";
-import { AsyncSelectField, DateTimeField, DateField, TextField, NumberField, DisplayJson } from "../../components/FormControl";
+import { AsyncSelectField, DateTimeField, DateField, FileField,  TextField, NumberField, DisplayJson } from "../../components/FormControl";
 import {
   Row,
   Col,
@@ -87,6 +87,24 @@ export default class ClientMaster extends React.Component {
                       </Row>
 
                     </Col>
+
+                    <Col xs="12" md="6">
+
+                      <Row className="form-group">
+                        <Col xs="12" md="4" className="col-form-label">
+                          File
+                      </Col>
+                        <Col xs="12" md="8">
+                          <FileField
+                            name="Attachment"
+                            placeholder="Attachment"
+                            {...standardProps}
+                          />
+                        </Col>
+                      </Row>
+
+                    </Col>
+
                     <Col xs="12" md="6">
 
                       <Row className="form-group">
@@ -212,6 +230,10 @@ export default class ClientMaster extends React.Component {
 
                   <div className="text-right clearfix">
                   <Button color="success" className="pull-right" onClick={onSubmit} type="button" ><i className="fa fa-save"></i>  Submit</Button>
+
+                  <Button color="warning" className="pull-right" onClick={()=>{
+                    this.setState({});
+                  }} type="button" ><i className="fa fa-save"></i>  Refresh</Button>
                   </div>
 
                   <br />
