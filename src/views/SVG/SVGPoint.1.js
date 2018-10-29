@@ -7,23 +7,22 @@ class SVGPoint extends Component {
         x1: 0,
         y1: 0,
         x2: 0,
-        y2: 0,
+        y2: 0, 
 
         matrix: [1, 0, 0, 1, 0, 0],
         x: 0,
         y: 0,
-        dragging: false,
+        dragging: false,  
     }
 
 
     state = {
     }
 
-    onDragStart = (e) => {
-        this.props.setConnectState(true);
+    onDragStart = (e) => { 
         const startX = Math.round(e.clientX / 10) * 10;
         const startY = Math.round(e.clientY / 10) * 10;
-
+ 
         const state = {
             dragging: true,
             startX,
@@ -34,12 +33,12 @@ class SVGPoint extends Component {
             y2: this.props.cy,
         };
 
-
+        
 
         this.setState(state);
     }
     onDragMove = (e) => {
-
+        
         if (!this.state.dragging) {
             return;
         }
@@ -53,7 +52,7 @@ class SVGPoint extends Component {
         const dx = x - this.state.startX;
         const dy = y - this.state.startY;
 
-
+        
         this.state.startX += x;
         this.state.startY += y;
 
@@ -67,7 +66,7 @@ class SVGPoint extends Component {
 
         // Update the new startX and startY position
         // because a drag is likely a continuous movement
-
+ 
     }
 
 
@@ -75,7 +74,7 @@ class SVGPoint extends Component {
         this.state.x += dx;
         this.state.y += dy;
 
-
+        
         this.state.x2 += dx;
         this.state.y2 += dy;
 
@@ -88,57 +87,41 @@ class SVGPoint extends Component {
             this.state.x = 0;
         if (this.state.y < 0)
             this.state.y = 0;
-        this.props.setConnectState(false);
+
         this.setState({ dragging: false });
     }
 
-
-    componentDidUpdate(props, state) {
+    
+    componentDidUpdate (props, state) {
         if (this.state.dragging && !state.dragging) {
-            document.addEventListener('mousemove', this.onDragMove)
-            document.addEventListener('mouseup', this.onDragEnd)
+          document.addEventListener('mousemove', this.onDragMove)
+          document.addEventListener('mouseup', this.onDragEnd)
         } else if (!this.state.dragging && state.dragging) {
-            document.removeEventListener('mousemove', this.onDragMove)
-            document.removeEventListener('mouseup', this.onDragEnd)
+          document.removeEventListener('mousemove', this.onDragMove)
+          document.removeEventListener('mouseup', this.onDragEnd)
         }
-    }
+      }
 
 
     render() {
 
-        const { setConnectState, getConnectState, ...rest} = this.props;
+
         return (
             <React.Fragment>
-                <circle {...rest}
-
-                    // onClick={e => {
-                    //     console.log(e);
-                    //     this.setState({
-                    //         x: this.props.cx,
-                    //         y: this.props.cy,
-                    //     });
-
-                    // }}
-
-                    style={{ cursor: 'default' }}
-                    onMouseDown={this.onDragStart}
-
-                    onMouseMove={() => {
-                        console.log("this.onDragMove");
-                        if (getConnectState()) {
-                            // alert("Connected");
-                            
-                        console.log("Connected");
-                        }
-                    }}
-
-                // cx={this.state.x}
-                // cy={this.state.y}
-
-                ></circle>
+                <circle {...this.props} 
+                
+                onClick={e => {
+                    console.log(e);
+                    this.setState({
+                        x: this.props.cx,
+                        y: this.props.cy,
+                    });
 
 
-                {/* {  (this.state.dragging || !this.state.x) && <circle {...this.props} 
+                }}></circle>
+
+                
+               { this.state.x && <circle {...this.props} 
 
 draggable="true"
 
@@ -148,7 +131,7 @@ cx={this.state.x}
 cy={this.state.y}
 fill="#00FF00"
 r="6"
-                ></circle>} */}
+                ></circle>}
 
                 {this.state.x1 &&
                     <line x1={this.state.x1} y1={this.state.y1} x2={this.state.x2} y2={this.state.y2} style={{ stroke: 'rgb(255,0,0)', strokeWidth: 2 }} />
