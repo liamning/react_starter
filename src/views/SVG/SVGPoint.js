@@ -35,6 +35,10 @@ class SVGPoint extends Component {
         };
 
 
+        
+        this.props.drawElement("line", {
+            x1: 1, y1: 1, x2: 100, y2: 100, style: { stroke: 'rgb(0,0,0)', strokeWidth: 1 }
+        });
 
         this.setState(state);
     }
@@ -67,6 +71,7 @@ class SVGPoint extends Component {
 
         // Update the new startX and startY position
         // because a drag is likely a continuous movement
+
 
     }
 
@@ -106,7 +111,7 @@ class SVGPoint extends Component {
 
     render() {
 
-        const { setConnectState, getConnectState, ...rest} = this.props;
+        const { setConnectState, getConnectState, drawElement, ...rest} = this.props;
         return (
             <React.Fragment>
                 <circle {...rest}
@@ -150,9 +155,14 @@ fill="#00FF00"
 r="6"
                 ></circle>} */}
 
-                {this.state.x1 &&
-                    <line x1={this.state.x1} y1={this.state.y1} x2={this.state.x2} y2={this.state.y2} style={{ stroke: 'rgb(255,0,0)', strokeWidth: 2 }} />
-                }
+                {/* {this.state.x1 &&
+                    <line onKeyDown={e=>{
+
+                        console.log(e.keyCode);
+                    }} x1={this.state.x1} y1={this.state.y1} x2={this.state.x2} y2={this.state.y2} style={{ stroke: 'rgb(0,0,0)', strokeWidth: 1 }} />
+                    
+                } */}
+                {/* <path d="M 1866 854 L 2024.63 854" fill="none" stroke="#000000" stroke-miterlimit="10"></path> */}
 
             </React.Fragment>
         );
