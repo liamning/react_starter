@@ -20,7 +20,7 @@ class SVGPoint extends Component {
     }
 
     onDragStart = (e) => {
-        this.props.setConnectState(true);
+        //this.props.setSelectedElement(true);
         const startX = Math.round(e.clientX / 10) * 10;
         const startY = Math.round(e.clientY / 10) * 10;
 
@@ -35,10 +35,11 @@ class SVGPoint extends Component {
         };
 
 
-        
-        this.props.drawElement("line", {
-            x1: 1, y1: 1, x2: 100, y2: 100, style: { stroke: 'rgb(0,0,0)', strokeWidth: 1 }
-        });
+
+        this.props.parentProps.drawElement("line", {
+            x1: this.props.cx, y1: this.props.cy, x2: this.props.cx + 50, y2: this.props.cy, style: { stroke: 'rgb(0,0,0)', strokeWidth: 2 }
+        })
+
 
         this.setState(state);
     }
@@ -93,7 +94,7 @@ class SVGPoint extends Component {
             this.state.x = 0;
         if (this.state.y < 0)
             this.state.y = 0;
-        this.props.setConnectState(false);
+        //this.props.setSelectedElement(false);
         this.setState({ dragging: false });
     }
 
@@ -111,58 +112,28 @@ class SVGPoint extends Component {
 
     render() {
 
-        const { setConnectState, getConnectState, drawElement, ...rest} = this.props;
+        const { setSelectedElement, getSelectedElement, parentProps, connectedElements, ...rest } = this.props;
         return (
             <React.Fragment>
                 <circle {...rest}
-
-                    // onClick={e => {
-                    //     console.log(e);
-                    //     this.setState({
-                    //         x: this.props.cx,
-                    //         y: this.props.cy,
-                    //     });
-
-                    // }}
 
                     style={{ cursor: 'default' }}
                     onMouseDown={this.onDragStart}
 
                     onMouseMove={() => {
-                        console.log("this.onDragMove");
-                        if (getConnectState()) {
+                        //console.log("this.onDragMove");
+                        if (getSelectedElement()) {
                             // alert("Connected");
-                            
-                        console.log("Connected");
+
+                            //console.log("Connected");
                         }
                     }}
-
-                // cx={this.state.x}
-                // cy={this.state.y}
+                    onClick={(e) => { 
+                        e.stopPropagation()
+                        e.preventDefault()
+                    }} 
 
                 ></circle>
-
-
-                {/* {  (this.state.dragging || !this.state.x) && <circle {...this.props} 
-
-draggable="true"
-
-style={{ cursor: 'default' }}
-onMouseDown={this.onDragStart}  
-cx={this.state.x}
-cy={this.state.y}
-fill="#00FF00"
-r="6"
-                ></circle>} */}
-
-                {/* {this.state.x1 &&
-                    <line onKeyDown={e=>{
-
-                        console.log(e.keyCode);
-                    }} x1={this.state.x1} y1={this.state.y1} x2={this.state.x2} y2={this.state.y2} style={{ stroke: 'rgb(0,0,0)', strokeWidth: 1 }} />
-                    
-                } */}
-                {/* <path d="M 1866 854 L 2024.63 854" fill="none" stroke="#000000" stroke-miterlimit="10"></path> */}
 
             </React.Fragment>
         );

@@ -373,3 +373,18 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
     background-position: -6px -6px;
 
 }
+
+.toolbar{
+    margin: 0px;
+    padding: 0px;
+}
+.toolbar li{
+    list-style: none; 
+    padding: 10px;
+    float: left;
+    
+}
+.toolbar li i{
+font-size: 20px;
+    
+}
