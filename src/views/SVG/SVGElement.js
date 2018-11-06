@@ -15,10 +15,11 @@ class SVGElement extends Component {
         ratio: 1,
 
         matrix: [1, 0, 0, 1, 0, 0],
-        x: 60,
-        y: 60,
+        x: this.props.x || 10,
+        y: this.props.y || 10,
         dragging: false,
         toggle: false,
+        opacity: 0,
     }
 
     test = (element) => {
@@ -29,6 +30,9 @@ class SVGElement extends Component {
     }
 
     onDragStart = (e) => {
+        
+        this.props.setSelectedElement(this);
+
         const startX = Math.round(e.clientX / 10) * 10;
         const startY = Math.round(e.clientY / 10) * 10;
 
@@ -104,19 +108,27 @@ class SVGElement extends Component {
 
     checkConnectionPoint = () => {
         var targetIndex = -1;
+        this.setState({
+            opacity: 0
+        });
         this.connectedElements.forEach((element, index) => {
             console.log(element[0].state);
             console.log(this.state);
             if (
-                0 > element[0].state[`x${element[1]}`] - this.state.x
-                || 60 < element[0].state[`x${element[1]}`] - this.state.x
-                || 0 > element[0].state[`y${element[1]}`] - this.state.y
-                || 60 < element[0].state[`y${element[1]}`] - this.state.y
+                10 > element[0].state[`x${element[1]}`] - this.state.x
+                || 80 < element[0].state[`x${element[1]}`] - this.state.x
+                || 10 > element[0].state[`y${element[1]}`] - this.state.y
+                || 80 < element[0].state[`y${element[1]}`] - this.state.y
             ) {
                 targetIndex = index;
+
+                // console.log(element[0].state);
+                // console.log(this.state);
+                console.log("NNNNNNNNNNNNNNNNNNNNNNNNNN");
             }
         });
         if (targetIndex != -1) {
+
             this.connectedElements.splice(targetIndex, 1);
             return false;
         }
@@ -150,8 +162,15 @@ class SVGElement extends Component {
             <React.Fragment>
                 <g style={{ cursor: 'move' }}
 
+                    onClick={(e) => {
+
+                        e.stopPropagation()
+                        e.preventDefault()
+                    }}
+
+                    onMouseDown={this.onDragStart}
                     onMouseMove={() => {
-                        console.log("this.onDragMove");
+                        //console.log("this.onDragMove");
                         var eleDetails = this.props.parentProps.getDragElement();
                         if (eleDetails[0]) {
                             let existing = false;
@@ -165,44 +184,45 @@ class SVGElement extends Component {
                             if (!existing) {
                                 this.connectedElements.push(eleDetails);
                                 eleDetails[0].connectedElements.push([this, eleDetails[1]]);
+                                console.log("YYYYYYYYYYYYYYYYYYY");
+                            } else {
+                                console.log("existing existing existing existing");
                             }
-                            console.log(eleDetails[0].connectedElements);
+                            this.setState({
+                                opacity: 0.3
+                            });
+                            //console.log(eleDetails[0].connectedElements);
 
                         }
                     }}
                 >
+                    <rect
 
+
+                        x={this.state.x} y={this.state.y}
+                        width={this.state.ratio * 80}
+                        height={this.state.ratio * 80}
+                        style={{ fillOpacity: this.state.opacity, strokeOpacity: "0.0", fill: 'rgb(0,0,0)', strokeDasharray: "4 2", strokeWidth: 1, stroke: '#20a8d8' }} />
                     <g
-                        onClick={(e) => {
-                            //console.log("this.onClick");
-                            //console.log("this.state.toggle", this.state.toggle);
-                            // this.setState({
-                            //     toggle: true
-                            // });
-                            setSelectedElement(this);
-
-                            e.stopPropagation()
-                            e.preventDefault()
-                        }}  >
-                        <svg x={this.state.x} y={this.state.y} xmlns="http://www.w3.org/2000/svg" width={this.state.ratio * 60} height={this.state.ratio * 60} viewBox="0 0 24 24"><path d="M20.822 18.096c-3.439-.794-6.641-1.49-5.09-4.418 4.719-8.912 1.251-13.678-3.732-13.678-5.081 0-8.464 4.949-3.732 13.678 1.597 2.945-1.725 3.641-5.09 4.418-2.979.688-3.178 2.143-3.178 4.663l.005 1.241h10.483l.704-3h1.615l.704 3h10.483l.005-1.241c.001-2.52-.198-3.975-3.177-4.663zm-8.231 1.904h-1.164l-.91-2h2.994l-.92 2z" /></svg>
+                        // onClick={(e) => {
+                        //     e.stopPropagation()
+                        //     e.preventDefault()
+                        // }} 
+                         >
+                        <svg x={this.state.x + 10} y={this.state.y + 10} xmlns="http://www.w3.org/2000/svg" width={this.state.ratio * 60} height={this.state.ratio * 60} viewBox="0 0 24 24"><path d="M20.822 18.096c-3.439-.794-6.641-1.49-5.09-4.418 4.719-8.912 1.251-13.678-3.732-13.678-5.081 0-8.464 4.949-3.732 13.678 1.597 2.945-1.725 3.641-5.09 4.418-2.979.688-3.178 2.143-3.178 4.663l.005 1.241h10.483l.704-3h1.615l.704 3h10.483l.005-1.241c.001-2.52-.198-3.975-3.177-4.663zm-8.231 1.904h-1.164l-.91-2h2.994l-.92 2z" /></svg>
                     </g>
-                    <text style={{ pointerEvents: 'none' }} x={this.state.x} y={this.state.y + 80} >Approval Step</text>
+
+
+                    {/* <text style={{ pointerEvents: 'none' }} x={this.state.x} y={this.state.y + 90} >Approval Step</text> */}
                     {this.state.toggle && <g>
                         <rect
-                        onClick={(e) => { 
 
-                            e.stopPropagation()
-                            e.preventDefault()
-                        }} 
+                            x={this.state.x + 10} y={this.state.y + 10} width={this.state.ratio * 60} height={this.state.ratio * 60} style={{ fillOpacity: "0.0", strokeOpacity: "0.5", fill: 'rgb(0,0,0)', strokeDasharray: "4 2", strokeWidth: 2, stroke: '#20a8d8' }} />
 
-                            onMouseDown={this.onDragStart}
-
-                            x={this.state.x} y={this.state.y} width={this.state.ratio * 60} height={this.state.ratio * 60} style={{ fillOpacity: "0.0", strokeOpacity: "0.5", fill: 'rgb(0,0,0)', strokeDasharray: "4 2", strokeWidth: 2, stroke: '#20a8d8' }} />
-
-                        <SVGPoint  {...connectObj} style={{ cursor: 'pointer' }} cx={this.state.x + this.state.ratio * 30} cy={this.state.y} r="5" fill="#20a8d8"></SVGPoint>
-                        <SVGPoint {...connectObj} style={{ cursor: 'pointer' }} cx={this.state.x + this.state.ratio * 60} cy={this.state.y + this.state.ratio * 30} r="5" fill="#20a8d8"></SVGPoint>
-                        <SVGPoint {...connectObj} style={{ cursor: 'pointer' }} cx={this.state.x + this.state.ratio * 30} cy={this.state.y + this.state.ratio * 60} r="5" fill="#20a8d8"></SVGPoint>
-                        <SVGPoint {...connectObj} style={{ cursor: 'pointer' }} cx={this.state.x} cy={this.state.y + this.state.ratio * 30} r="5" fill="#20a8d8"></SVGPoint>
+                        <SVGPoint  {...connectObj} style={{ cursor: 'pointer' }} cx={this.state.x + this.state.ratio * 30 + 10} cy={this.state.y + 10} r="5" fill="#20a8d8"></SVGPoint>
+                        <SVGPoint {...connectObj} style={{ cursor: 'pointer' }} cx={this.state.x + this.state.ratio * 60 + 10} cy={this.state.y + this.state.ratio * 30 + 10} r="5" fill="#20a8d8"></SVGPoint>
+                        <SVGPoint {...connectObj} style={{ cursor: 'pointer' }} cx={this.state.x + this.state.ratio * 30 + 10} cy={this.state.y + this.state.ratio * 60 + 10} r="5" fill="#20a8d8"></SVGPoint>
+                        <SVGPoint {...connectObj} style={{ cursor: 'pointer' }} cx={this.state.x + 10} cy={this.state.y + this.state.ratio * 30 + 10} r="5" fill="#20a8d8"></SVGPoint>
                     </g>}
 
                 </g>

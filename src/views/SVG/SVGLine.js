@@ -121,7 +121,10 @@ class SVGLine extends Component {
 
     render() {
 
-        const { setConnectState, getConnectState, parentProps, ...rest } = this.props;
+        // const { setConnectState, getConnectState, parentProps, ...rest } = this.props;
+        
+        const { setSelectedElement, getSelectedElement, parentProps, ...rest } = this.props;
+        const connectObj = { setSelectedElement, getSelectedElement, parentProps, connectedElements: this.connectedElements };
         return (
             <React.Fragment>
                 <line {...rest}

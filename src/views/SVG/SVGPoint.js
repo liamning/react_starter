@@ -20,28 +20,28 @@ class SVGPoint extends Component {
     }
 
     onDragStart = (e) => {
-        //this.props.setSelectedElement(true);
-        const startX = Math.round(e.clientX / 10) * 10;
-        const startY = Math.round(e.clientY / 10) * 10;
+        // //this.props.setSelectedElement(true);
+        // const startX = Math.round(e.clientX / 10) * 10;
+        // const startY = Math.round(e.clientY / 10) * 10;
 
-        const state = {
-            dragging: true,
-            startX,
-            startY,
-            x1: this.props.cx,
-            y1: this.props.cy,
-            x2: this.props.cx,
-            y2: this.props.cy,
-        };
-
-
-
-        this.props.parentProps.drawElement("line", {
-            x1: this.props.cx, y1: this.props.cy, x2: this.props.cx + 50, y2: this.props.cy, style: { stroke: 'rgb(0,0,0)', strokeWidth: 2 }
-        })
+        // const state = {
+        //     dragging: true,
+        //     startX,
+        //     startY,
+        //     x1: this.props.cx,
+        //     y1: this.props.cy,
+        //     x2: this.props.cx,
+        //     y2: this.props.cy,
+        // };
 
 
-        this.setState(state);
+
+        // this.props.parentProps.drawElement("line", {
+        //     x1: this.props.cx, y1: this.props.cy, x2: this.props.cx + 50, y2: this.props.cy, style: { stroke: 'rgb(0,0,0)', strokeWidth: 2 }
+        // })
+
+
+        // this.setState(state);
     }
     onDragMove = (e) => {
 
