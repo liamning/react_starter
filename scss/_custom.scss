@@ -351,8 +351,8 @@ body{
 }
 
 .main{
-    height: calc(100vh - 150px);
-    overflow: hidden;
+    // height: calc(100vh - 150px);
+    // overflow: hidden;
 }
 
 .svgBackground {
@@ -387,4 +387,9 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
 .toolbar li i{
 font-size: 20px;
     
+}
+
+div.Select-menu-outer
+{
+    z-index: 1000;
 }

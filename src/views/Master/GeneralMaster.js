@@ -42,7 +42,7 @@ export default class ClientMaster extends React.Component {
 
       <div>
         <Row>
-          <Col xs="12" sm="12" md="12" lg="10">
+          <Col xs="12" sm="12" md="12" lg="12">
             <Card>
               <CardHeader>
               General Master
@@ -125,7 +125,7 @@ export default class ClientMaster extends React.Component {
           </Col>
         </Row>
 
-      <Draggable
+      {/* <Draggable
         // axis="x"
         
         handle=".handle"
@@ -140,7 +140,7 @@ export default class ClientMaster extends React.Component {
         <TestForm {...this.props}></TestForm>
         </div>
  
-      </Draggable>
+      </Draggable> */}
 
 
       </div>

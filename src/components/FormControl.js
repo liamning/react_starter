@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from 'react';
 
 import DateTime from 'react-datetime'
 import moment from 'moment';
@@ -10,6 +10,21 @@ import 'react-select/dist/react-select.css';
 
 var debounce = require('debounce-promise')
 import { loginInfo, getFieldIndex } from '../global';
+
+
+
+// Require Editor JS files.
+import 'froala-editor/js/froala_editor.pkgd.min.js';
+
+// Require Editor CSS files.
+// import 'froala-editor/css/froala_style.min.css';
+// import 'froala-editor/css/froala_editor.pkgd.min.css';
+
+// // Require Font Awesome.
+// import 'font-awesome/css/font-awesome.css';
+
+import FroalaEditor from 'react-froala-wysiwyg';
+
 //import { FastField } from "../../node_modules/formik";
  
 
@@ -1240,6 +1255,179 @@ export class FileField extends React.Component {
   }
 }
 
+
+export class HTMLEditField extends React.Component {
+
+
+
+  constructor(props) {
+    super(props);
+ 
+
+    var name = props.name;
+    var index = props.index;
+    this.nameIndex = getFieldIndex(name,index);
+
+    this.state = { 
+      value: props.values[name],
+      error: props.errors[this.nameIndex],
+    }
+  }
+ 
+  handleChange = event => {
+    // var text = event.currentTarget.value;
+    // this.setState({
+    //   value: text
+    // });
+
+    var text = event;
+    var name = this.props.name;
+    if (this.props.setFieldValue)
+      this.props.setFieldValue(name, text, this.props.index);
+
+      console.log(text);
+  };
+
+  config = {
+    // toolbarInline: true,
+    charCounterCount: false,
+    placeholderText: 'Share what\'s on your mind...',  
+    heightMin: 500,
+    // heightMax: 800,
+    width: '100%',
+  }
+
+  handleBlur = event => {
+    var name = this.props.name;
+    var text = event.currentTarget.value;
+ 
+    if (this.props.setFieldValue)
+      this.props.setFieldValue(name, text, this.props.index);
+
+    if(this.props.errors.hasOwnProperty(name))
+      this.setState({});
+  };
+
+  focus(){
+    console.log(this);
+    this.nameInput.focus();
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    
+    //console.log(`Text field shouldComponentUpdate  ${this.props.name}`);
+
+
+
+    var shouldUpdate = false;
+    var name = nextProps.name;
+    var index = nextProps.index;
+    this.nameIndex = getFieldIndex(name,index); 
+
+
+
+
+    //internal update
+    if(nextState.value != this.state.value)
+      shouldUpdate = true;
+    
+    //props update
+    else if (this.state.value != nextProps.values[name]){ 
+      shouldUpdate = true;
+      nextState.value = nextProps.values[name];
+    }
+ 
+    //validation update
+    else if (nextProps.errors.hasOwnProperty(this.nameIndex) 
+    && (this.state.error != nextProps.errors[this.nameIndex] 
+      || this.props.isSubmitted != nextProps.isSubmitted)){
+      shouldUpdate = true; 
+    }  
+     
+    else if(this.state.disabled != nextProps.disableds[this.nameIndex] ){
+      shouldUpdate = true; 
+      this.state.disabled = nextProps.disableds[this.nameIndex];
+    }
+
+    nextState.error = nextProps.errors[this.nameIndex];
+    return shouldUpdate;
+  }
+
+  componentDidMount() {
+    let name = this.props.name;
+    let index = this.props.index;
+    let fieldIndex = getFieldIndex(name, index);
+    if(this.props.formComponents ) this.props.formComponents[fieldIndex] = this;
+
+    if (this.props.autoFocus)
+      this.nameInput.focus();
+  }
+  
+  componentWillUnmount() {
+    
+    // let name = this.props.name;
+    // let index = this.props.index;
+    // let fieldIndex = getFieldIndex(name, index);
+    // if(this.props.formComponents ) delete this.props.formComponents[fieldIndex];
+    
+  }
+
+  render() {
+
+    //console.log(`render TextField ${this.props.name} ${this.state.value} ${this.state.error}`);
+
+    const { Prefix,Suffix,multipleLine, setFieldValue, setFieldTouched, autoFocus, onChange, onBlur, isGetFormData, values, errors, validateFieldValue, isSubmitted, formComponents, ...restProps } = this.props
+
+
+
+    const value = this.state.value || '';
+
+    const error = isSubmitted ? this.state.error : '';
+
+    return (
+
+      <div className={error && "is-invalid"}>
+
+        <div className="input-group">
+ 
+          {Prefix &&
+          (
+            <Prefix></Prefix>
+          )}
+
+            <FroalaEditor 
+              ref={(input) => { this.nameInput = input; }}
+
+              {...restProps}
+              config={this.config}
+              model={value}
+              onModelChange={this.handleChange}
+
+              // onChange={this.handleChange}
+              // onBlur={this.handleBlur}
+              // value={value} disabled={this.props.disableds[this.nameIndex]}
+              tag='textarea'
+            />
+          
+          {Suffix &&
+          (
+            <Suffix></Suffix>
+          )}
+          
+        </div>
+
+        {error &&
+          (
+            <div className="message">
+              {error}
+            </div>
+          )}
+      </div>
+    );
+  }
+}
+
+
 export class DisplayJson extends React.Component {
 
   constructor(props) {
@@ -1253,6 +1441,7 @@ export class DisplayJson extends React.Component {
   render(){
 
     var props = this.props;
+    return "";
     return (
     
       <div className="mt-1" style={{maxHeight: `${this.state.height}px`, overflow:'hidden'}} onClick={()=>{

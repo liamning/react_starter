@@ -1,5 +1,7 @@
 import React from "react";
-import { AsyncSelectField, DateTimeField, DateField, FileField,  TextField, NumberField, DisplayJson } from "../../components/FormControl";
+
+
+import { AsyncSelectField, DateTimeField, DateField, FileField,  TextField, HTMLEditField, DisplayJson } from "../../components/FormControl";
 import {
   Row,
   Col,
@@ -34,10 +36,10 @@ export default class ClientMaster extends React.Component {
 
       <div>
         <Row>
-          <Col xs="12" sm="12" md="12" lg="10">
+          <Col xs="12" sm="12" md="12" lg="12">
             <Card>
               <CardHeader>
-                Client
+                News Maintenance
               </CardHeader>
               <CardBody>
                 <form autoComplete="off">
@@ -71,7 +73,7 @@ export default class ClientMaster extends React.Component {
 
 
                   <Row>
-                    <Col xs="12" md="6">
+                    {/* <Col xs="12" md="6">
 
                       <Row className="form-group">
                         <Col xs="12" md="4" className="col-form-label">
@@ -86,7 +88,7 @@ export default class ClientMaster extends React.Component {
                         </Col>
                       </Row>
 
-                    </Col>
+                    </Col> */}
 
                     <Col xs="12" md="6">
 
@@ -131,15 +133,18 @@ export default class ClientMaster extends React.Component {
 
 
                   <Row> */}
-                    <Col xs="12" md="6">
+                  </Row> 
+                  <Row> 
+                    <Col xs="12" md="12">
 
                       <Row className="form-group">
-                        <Col xs="12" md="4" className="col-form-label">
-                          Address
+                        <Col xs="12" md="2" className="col-form-label">
+                          Content
                       </Col>
-                        <Col xs="12" md="8">
-
-                          <TextField
+                        <Col xs="12" md="10">
+ 
+                          <HTMLEditField
+                            style={{width: '100%'}}
                             name="Address"
                             placeholder="Address"
                             {...standardProps}
@@ -148,7 +153,7 @@ export default class ClientMaster extends React.Component {
                       </Row>
 
                     </Col>
-                    <Col xs="12" md="6">
+                    {/* <Col xs="12" md="6">
 
                       <Row className="form-group">
 
@@ -171,12 +176,13 @@ export default class ClientMaster extends React.Component {
                         </Col>
                       </Row>
 
-                    </Col>
+                    </Col> */}
                   {/* </Row>
 
 
                   <Row> */}
-                    <Col xs="12" md="6">
+                  </Row>
+                    {/* <Col xs="12" md="6">
 
 
                       <Row className="form-group">
@@ -194,8 +200,8 @@ export default class ClientMaster extends React.Component {
 
 
 
-                    </Col>
-                    <Col xs="12" md="6">
+                    </Col> */}
+                    {/* <Col xs="12" md="6">
 
 
                       <Row className="form-group">
@@ -203,37 +209,27 @@ export default class ClientMaster extends React.Component {
                         <Col xs="12" md="4" className="col-form-label">
                           Registration Date
     
-                    </Col>
+                      </Col>
                         <Col xs="12" md="8"><DateField  
                               name="RegistrationDate"
                               placeholder="RegistrationDate"
                               {...standardProps}
                             />
-
-                          {/* <InputGroup>
-                            
-                            <InputGroupAddon addonType="append">
-                              <InputGroupText><i className="fa fa-calendar"></i></InputGroupText>
-                            </InputGroupAddon>
-                          </InputGroup> */}
+ 
 
                         </Col>
                       </Row>
 
 
 
-                    </Col>
-                  </Row>
-
-
-
-
+                    </Col> */}
                   <div className="text-right clearfix">
-                  <Button color="success" className="pull-right" onClick={onSubmit} type="button" ><i className="fa fa-save"></i>  Submit</Button>
+                  <Button color="primary" className="mr-1" onClick={onSubmit} type="button" ><i className="fa fa-save"></i>  Save</Button>
+                  {/* <Button color="success"   onClick={onSubmit} type="button" ><i className="fa fa-paper-plane"></i>  Publish</Button> */}
 
-                  <Button color="warning" className="pull-right" onClick={()=>{
+                  {/* <Button color="warning" className="pull-right" onClick={()=>{
                     this.setState({});
-                  }} type="button" ><i className="fa fa-save"></i>  Refresh</Button>
+                  }} type="button" ><i className="fa fa-save"></i>  Refresh</Button> */}
                   </div>
 
                   <br />

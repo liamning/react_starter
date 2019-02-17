@@ -23,12 +23,24 @@ export default WithFormEvent(UserProfile, {
     var data = { action: 'getUser', StaffNo: params.Code };
     ajaxPost(url, data).then(response => {
 
-      if (!response) response = { 
-        StaffNo: params.Code
+      // if (!response) response = { 
+      //   StaffNo: params.Code
+      // };
+
+      // if (callback)
+      //   callback(response);
+
+      
+      if (!response) response = {
+        ...params
       };
 
       if (callback)
-        callback(response);
+        callback({
+          values: response
+        });
+
+        
     });
 
   },

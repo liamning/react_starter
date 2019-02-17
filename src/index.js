@@ -4,6 +4,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { HashRouter, Route, Switch } from 'react-router-dom';
 
+var $ = require('jquery');
+window.jQuery = $;
+window.$ = $;
 
 // Styles
 // Import Flag Icons Set
@@ -31,6 +34,8 @@ import LoginCtrl from './containers/Master/Login'
 import Register from './views/Pages/Register/'
 import { loginInfo } from './global';
 
+import Editor from './editor'
+
 //get the config from index.html file
 loginInfo.host = window.host;
 for (var pro in window.loginInfo) {
@@ -39,6 +44,17 @@ for (var pro in window.loginInfo) {
 
 //console.log(loginInfo);
 
+console.log($);
+// console.log(jquery);
+console.log(jQuery);
+console.log($(window));
+ 
+
+$(window).keydown(function (e) { 
+  console.log(e.keyCode);
+  // if (e.keyCode == 32) debugger; 
+
+});
 
 ReactDOM.render((
   <HashRouter>
@@ -48,4 +64,5 @@ ReactDOM.render((
       <Route path="/" name="Home" component={Full} />
     </Switch>
   </HashRouter>
+// <Editor></Editor> 
 ), document.getElementById('root'));

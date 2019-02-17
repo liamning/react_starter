@@ -127,11 +127,16 @@ class SVGLine extends Component {
         const connectObj = { setSelectedElement, getSelectedElement, parentProps, connectedElements: this.connectedElements };
         return (
             <React.Fragment>
-                <line {...rest}
+                {/* <line {...rest}
                     x1={this.state.x1} y1={this.state.y1}
                     x2={this.state.x2} y2={this.state.y2}
                     markerEnd="url(#arrow)"
-                ></line>
+                ></line> */}
+
+                <polyline points={`${this.state.x1},${this.state.y1} ${this.state.x2},${this.state.y2}`}
+            fill="none" stroke="black" />
+
+            
                 <circle cx={this.state.x1} cy={this.state.y1}
                     r="5" fill="#0f0"
 

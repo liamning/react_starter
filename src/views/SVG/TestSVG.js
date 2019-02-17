@@ -14,6 +14,7 @@ class SVGTest extends Component {
         ratio: 1,
         isConnecting: false,
         Element: [],
+        nodes: [],
         ChildrenComponent: []
     }
 
@@ -40,6 +41,7 @@ class SVGTest extends Component {
     setSelectedElement = (ele) => {
         if (this.selectElement)
             this.selectElement.setState({ toggle: false });
+            
         this.selectElement = ele;
         if (ele)
             this.selectElement.setState({ toggle: true });
@@ -103,6 +105,7 @@ class SVGTest extends Component {
             setDragElement: this.setDragElement,
             getDragElement: this.getDragElement,
         };
+        this.state.nodes.push({tag: tag, ...props});
         switch (tag) {
             case "line":
                 this.state.Element.push(
@@ -178,10 +181,15 @@ class SVGTest extends Component {
 
                         {this.state.Element}
 
-
+{/* <polyline points="100,100 150,25 150,75 200,0"
+            fill="none" stroke="black" /> */}
                     </svg>
 
                 </div>
+
+                <ul style={{position: 'absolute', marginLeft: "1000px"}}>
+                    {this.state.nodes.map(ele=><li>{JSON.stringify(ele)}</li>)}
+                </ul>
             </React.Fragment>
         );
     }

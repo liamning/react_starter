@@ -46,7 +46,7 @@ class Header extends Component {
           <i className="fa fa-bars"></i>
         </NavbarToggler>
         {/* <NavbarBrand href="#"></NavbarBrand> */}
-        <h5 className="mr-auto mb-0 font-weight-bold">Web Template</h5>
+        <h5 className="mr-auto mb-0 font-weight-bold">Content Management System</h5>
         <div className="ml-auto mr-2"  ><i className="fa fa-user-circle fa-2x"></i></div>
         <div className="mr-3" style={{ 'lineHeight': '29px' }}><span>{loginInfo.UserID}</span></div>
         {/* <NavbarToggler className="d-md-down-none" onClick={this.asideToggle}>

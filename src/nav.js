@@ -6,7 +6,7 @@ export default {
             icon: 'icon-home',
         },
         {
-            name: 'Client Master',
+            name: 'News Maintenance',
             url: '/masterClient',
             icon: 'icon-puzzle'
         },

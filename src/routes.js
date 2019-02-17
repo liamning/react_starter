@@ -6,10 +6,11 @@ import UserProfileCtrl from './containers/Master/UserProfile';
 import ChangePasswordCtrl from './containers/Master/ChangePassword'; 
 import GeneralMasterCtrl from './containers/Master/GeneralMaster'; 
 import TestSVG from './views/SVG/TestSVG'; 
+import LineChart from './views/Chart/LineChart'; 
  
 export const routes = [ 
-  { path: '/Home', name: 'Home', component: Home, exact: true }, 
-  { path: '/masterClient', name: 'Client Master', component: ClientMasterCtrl }, 
+  { path: '/Home', name: 'Home', component: LineChart, exact: true }, 
+  { path: '/masterClient', name: 'News Maintenance', component: ClientMasterCtrl }, 
   { path: '/HeaderBody', name: 'Header Body', component: HeaderBodyCtrl, exact: true },
   { path: '/System', name: 'System', exact: true }, 
   { path: '/System/UserProfile', name: 'User Profile', component: UserProfileCtrl, }, 

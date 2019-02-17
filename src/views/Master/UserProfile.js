@@ -38,7 +38,7 @@ export default class ClientMaster extends React.Component {
 
       <div>
         <Row>
-          <Col xs="12" sm="12" md="12" lg="10">
+          <Col xs="12" sm="12" md="12" lg="12">
             <Card>
               <CardHeader>
               User Profile
@@ -208,7 +208,7 @@ export default class ClientMaster extends React.Component {
                     </Col>
                   </Row>
 
-                  <BodyTable
+                  {/* <BodyTable
                   
                   data={standardProps.values.UserList || []} 
                   values={standardProps.values}
@@ -216,7 +216,7 @@ export default class ClientMaster extends React.Component {
                   isSubmitted={standardProps.isSubmitted}
                   bodyEvent={this.props.bodyEvent}
 
-                  ></BodyTable>
+                  ></BodyTable> */}
 
 
 

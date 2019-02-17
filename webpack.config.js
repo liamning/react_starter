@@ -34,6 +34,17 @@ module.exports = (env = {}) => {
     module: {
       
       rules: [
+        
+        {
+          test: /\.jsx$/,
+          use: {
+            loader: 'babel-loader',
+            options: {
+              cacheDirectory: true,
+              presets: ['react','es2015', 'stage-2']
+            }
+          }
+        },
         {
           test: /\.(js|jsx)$/,
           exclude: /node_modules/,
@@ -92,6 +103,9 @@ module.exports = (env = {}) => {
           }
         }]
     },
+    resolve: {
+      modules: ['node_modules']
+    },
     plugins: [
       new webpack.HotModuleReplacementPlugin(),
       new webpack.optimize.UglifyJsPlugin({sourceMap: true}),
@@ -108,7 +122,7 @@ module.exports = (env = {}) => {
           {from: './public/img', to: 'img'}
         ],
         {copyUnmodified: false}
-      )
+      ), 
     ]
   }
 };
