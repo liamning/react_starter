@@ -14,7 +14,7 @@ import { loginInfo, getFieldIndex } from '../global';
 
 
 // Require Editor JS files.
-import 'froala-editor/js/froala_editor.pkgd.min.js';
+// import 'froala-editor/js/froala_editor.pkgd.min.js';
 
 // Require Editor CSS files.
 // import 'froala-editor/css/froala_style.min.css';
@@ -23,7 +23,7 @@ import 'froala-editor/js/froala_editor.pkgd.min.js';
 // // Require Font Awesome.
 // import 'font-awesome/css/font-awesome.css';
 
-import FroalaEditor from 'react-froala-wysiwyg';
+// import FroalaEditor from 'react-froala-wysiwyg';
 
 //import { FastField } from "../../node_modules/formik";
  
@@ -1256,176 +1256,176 @@ export class FileField extends React.Component {
 }
 
 
-export class HTMLEditField extends React.Component {
+// export class HTMLEditField extends React.Component {
 
 
 
-  constructor(props) {
-    super(props);
+//   constructor(props) {
+//     super(props);
  
 
-    var name = props.name;
-    var index = props.index;
-    this.nameIndex = getFieldIndex(name,index);
+//     var name = props.name;
+//     var index = props.index;
+//     this.nameIndex = getFieldIndex(name,index);
 
-    this.state = { 
-      value: props.values[name],
-      error: props.errors[this.nameIndex],
-    }
-  }
+//     this.state = { 
+//       value: props.values[name],
+//       error: props.errors[this.nameIndex],
+//     }
+//   }
  
-  handleChange = event => {
-    // var text = event.currentTarget.value;
-    // this.setState({
-    //   value: text
-    // });
+//   handleChange = event => {
+//     // var text = event.currentTarget.value;
+//     // this.setState({
+//     //   value: text
+//     // });
 
-    var text = event;
-    var name = this.props.name;
-    if (this.props.setFieldValue)
-      this.props.setFieldValue(name, text, this.props.index);
+//     var text = event;
+//     var name = this.props.name;
+//     if (this.props.setFieldValue)
+//       this.props.setFieldValue(name, text, this.props.index);
 
-      console.log(text);
-  };
+//       console.log(text);
+//   };
 
-  config = {
-    // toolbarInline: true,
-    charCounterCount: false,
-    placeholderText: 'Share what\'s on your mind...',  
-    heightMin: 500,
-    // heightMax: 800,
-    width: '100%',
-  }
+//   config = {
+//     // toolbarInline: true,
+//     charCounterCount: false,
+//     placeholderText: 'Share what\'s on your mind...',  
+//     heightMin: 500,
+//     // heightMax: 800,
+//     width: '100%',
+//   }
 
-  handleBlur = event => {
-    var name = this.props.name;
-    var text = event.currentTarget.value;
+//   handleBlur = event => {
+//     var name = this.props.name;
+//     var text = event.currentTarget.value;
  
-    if (this.props.setFieldValue)
-      this.props.setFieldValue(name, text, this.props.index);
+//     if (this.props.setFieldValue)
+//       this.props.setFieldValue(name, text, this.props.index);
 
-    if(this.props.errors.hasOwnProperty(name))
-      this.setState({});
-  };
+//     if(this.props.errors.hasOwnProperty(name))
+//       this.setState({});
+//   };
 
-  focus(){
-    console.log(this);
-    this.nameInput.focus();
-  }
+//   focus(){
+//     console.log(this);
+//     this.nameInput.focus();
+//   }
 
-  shouldComponentUpdate(nextProps, nextState) {
+//   shouldComponentUpdate(nextProps, nextState) {
     
-    //console.log(`Text field shouldComponentUpdate  ${this.props.name}`);
+//     //console.log(`Text field shouldComponentUpdate  ${this.props.name}`);
 
 
 
-    var shouldUpdate = false;
-    var name = nextProps.name;
-    var index = nextProps.index;
-    this.nameIndex = getFieldIndex(name,index); 
+//     var shouldUpdate = false;
+//     var name = nextProps.name;
+//     var index = nextProps.index;
+//     this.nameIndex = getFieldIndex(name,index); 
 
 
 
 
-    //internal update
-    if(nextState.value != this.state.value)
-      shouldUpdate = true;
+//     //internal update
+//     if(nextState.value != this.state.value)
+//       shouldUpdate = true;
     
-    //props update
-    else if (this.state.value != nextProps.values[name]){ 
-      shouldUpdate = true;
-      nextState.value = nextProps.values[name];
-    }
+//     //props update
+//     else if (this.state.value != nextProps.values[name]){ 
+//       shouldUpdate = true;
+//       nextState.value = nextProps.values[name];
+//     }
  
-    //validation update
-    else if (nextProps.errors.hasOwnProperty(this.nameIndex) 
-    && (this.state.error != nextProps.errors[this.nameIndex] 
-      || this.props.isSubmitted != nextProps.isSubmitted)){
-      shouldUpdate = true; 
-    }  
+//     //validation update
+//     else if (nextProps.errors.hasOwnProperty(this.nameIndex) 
+//     && (this.state.error != nextProps.errors[this.nameIndex] 
+//       || this.props.isSubmitted != nextProps.isSubmitted)){
+//       shouldUpdate = true; 
+//     }  
      
-    else if(this.state.disabled != nextProps.disableds[this.nameIndex] ){
-      shouldUpdate = true; 
-      this.state.disabled = nextProps.disableds[this.nameIndex];
-    }
+//     else if(this.state.disabled != nextProps.disableds[this.nameIndex] ){
+//       shouldUpdate = true; 
+//       this.state.disabled = nextProps.disableds[this.nameIndex];
+//     }
 
-    nextState.error = nextProps.errors[this.nameIndex];
-    return shouldUpdate;
-  }
+//     nextState.error = nextProps.errors[this.nameIndex];
+//     return shouldUpdate;
+//   }
 
-  componentDidMount() {
-    let name = this.props.name;
-    let index = this.props.index;
-    let fieldIndex = getFieldIndex(name, index);
-    if(this.props.formComponents ) this.props.formComponents[fieldIndex] = this;
+//   componentDidMount() {
+//     let name = this.props.name;
+//     let index = this.props.index;
+//     let fieldIndex = getFieldIndex(name, index);
+//     if(this.props.formComponents ) this.props.formComponents[fieldIndex] = this;
 
-    if (this.props.autoFocus)
-      this.nameInput.focus();
-  }
+//     if (this.props.autoFocus)
+//       this.nameInput.focus();
+//   }
   
-  componentWillUnmount() {
+//   componentWillUnmount() {
     
-    // let name = this.props.name;
-    // let index = this.props.index;
-    // let fieldIndex = getFieldIndex(name, index);
-    // if(this.props.formComponents ) delete this.props.formComponents[fieldIndex];
+//     // let name = this.props.name;
+//     // let index = this.props.index;
+//     // let fieldIndex = getFieldIndex(name, index);
+//     // if(this.props.formComponents ) delete this.props.formComponents[fieldIndex];
     
-  }
+//   }
 
-  render() {
+//   render() {
 
-    //console.log(`render TextField ${this.props.name} ${this.state.value} ${this.state.error}`);
+//     //console.log(`render TextField ${this.props.name} ${this.state.value} ${this.state.error}`);
 
-    const { Prefix,Suffix,multipleLine, setFieldValue, setFieldTouched, autoFocus, onChange, onBlur, isGetFormData, values, errors, validateFieldValue, isSubmitted, formComponents, ...restProps } = this.props
+//     const { Prefix,Suffix,multipleLine, setFieldValue, setFieldTouched, autoFocus, onChange, onBlur, isGetFormData, values, errors, validateFieldValue, isSubmitted, formComponents, ...restProps } = this.props
 
 
 
-    const value = this.state.value || '';
+//     const value = this.state.value || '';
 
-    const error = isSubmitted ? this.state.error : '';
+//     const error = isSubmitted ? this.state.error : '';
 
-    return (
+//     return (
 
-      <div className={error && "is-invalid"}>
+//       <div className={error && "is-invalid"}>
 
-        <div className="input-group">
+//         <div className="input-group">
  
-          {Prefix &&
-          (
-            <Prefix></Prefix>
-          )}
+//           {Prefix &&
+//           (
+//             <Prefix></Prefix>
+//           )}
 
-            <FroalaEditor 
-              ref={(input) => { this.nameInput = input; }}
+//             <FroalaEditor 
+//               ref={(input) => { this.nameInput = input; }}
 
-              {...restProps}
-              config={this.config}
-              model={value}
-              onModelChange={this.handleChange}
+//               {...restProps}
+//               config={this.config}
+//               model={value}
+//               onModelChange={this.handleChange}
 
-              // onChange={this.handleChange}
-              // onBlur={this.handleBlur}
-              // value={value} disabled={this.props.disableds[this.nameIndex]}
-              tag='textarea'
-            />
+//               // onChange={this.handleChange}
+//               // onBlur={this.handleBlur}
+//               // value={value} disabled={this.props.disableds[this.nameIndex]}
+//               tag='textarea'
+//             />
           
-          {Suffix &&
-          (
-            <Suffix></Suffix>
-          )}
+//           {Suffix &&
+//           (
+//             <Suffix></Suffix>
+//           )}
           
-        </div>
+//         </div>
 
-        {error &&
-          (
-            <div className="message">
-              {error}
-            </div>
-          )}
-      </div>
-    );
-  }
-}
+//         {error &&
+//           (
+//             <div className="message">
+//               {error}
+//             </div>
+//           )}
+//       </div>
+//     );
+//   }
+// }
 
 
 export class DisplayJson extends React.Component {

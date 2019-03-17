@@ -3,6 +3,7 @@ const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+var CompressionPlugin = require('compression-webpack-plugin');
 
 const extractCSS = new ExtractTextPlugin('[name].fonts.css');
 const extractSCSS = new ExtractTextPlugin('[name].styles.css');
@@ -35,17 +36,17 @@ module.exports = (env = {}) => {
       
       rules: [
         
-        {
-          test: /\.jsx$/,
-          use: {
-            loader: 'babel-loader',
-            options: {
-              cacheDirectory: true,
-              presets: ['react','es2015', 'stage-2']
-            }
-          }
-        },
-        {
+        // {
+        //   test: /\.jsx$/,
+        //   use: {
+        //     loader: 'babel-loader',
+        //     options: {
+        //       cacheDirectory: true,
+        //       presets: ['react','es2015', 'stage-2']
+        //     }
+        //   }
+        // },
+         {
           test: /\.(js|jsx)$/,
           exclude: /node_modules/,
           use: {
@@ -54,6 +55,15 @@ module.exports = (env = {}) => {
               cacheDirectory: true,
               presets: ['react', 'env'],
               plugins: ["babel-plugin-transform-class-properties","es6-promise"]
+
+              // "presets": [["es2015", { "modules": false }], "stage-2", "react"],
+              // "env": {
+              //   "production": {
+              //     "plugins": ["transform-react-remove-prop-types"]
+              //   }
+              // }
+
+
             }
           }
         },
@@ -106,9 +116,37 @@ module.exports = (env = {}) => {
     resolve: {
       modules: ['node_modules']
     },
-    plugins: [
+    plugins:  env.prod ?
+    [
+      new webpack.DefinePlugin({
+        "process.env": {
+          NODE_ENV: JSON.stringify("production"),
+        },
+      }),
+      new webpack.optimize.UglifyJsPlugin({
+        sourceMap: true,
+      }), 
+      new CompressionPlugin({ 
+        algorithm: 'gzip'
+      }),
+     
+      extractCSS,
+      extractSCSS,
+      new HtmlWebpackPlugin(
+        {
+          inject: true,
+          template: './public/index.html'
+        }
+      ),
+      new CopyWebpackPlugin([
+          {from: './public/img', to: 'img'}
+        ],
+        {copyUnmodified: false}
+      ), 
+    ]
+    :
+    [
       new webpack.HotModuleReplacementPlugin(),
-      new webpack.optimize.UglifyJsPlugin({sourceMap: true}),
       new webpack.NamedModulesPlugin(),
       extractCSS,
       extractSCSS,

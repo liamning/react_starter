@@ -33,7 +33,7 @@ export default class BodyTable extends React.Component {
             Header: "#",
             accessor: "col1",
             width: 40,
-            resizable: false,
+            // resizable: false,
             Cell: cellInfo => {
               return <div className='form-control'>
               {cellInfo.index + 1}
@@ -53,7 +53,7 @@ export default class BodyTable extends React.Component {
           {
             Header: "Combo1",
             accessor: "Combo1",
-            resizable: false,
+            // resizable: false,
             Cell: cellInfo => {
               return <InlineAsyncSelectField 
               label="Combo1Desc"
@@ -66,7 +66,7 @@ export default class BodyTable extends React.Component {
           {
             width: 40,
             accessor: "col2",
-            resizable: false,
+            // resizable: false,
             Cell: cellInfo => {
               return (
                 <div className="text-center text-danger lineButton" role="button" onClick={e=>{

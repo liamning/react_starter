@@ -25,3 +25,21 @@
 .fadeIn {
   animation-name: fadeIn;
 }
+ 
+@keyframes slideDown{
+  from {
+    // transform: translateY(-100%);
+    // opacity: 0;
+    transform:scaleY(0);
+  }
+  to {
+    // transform: translateY(0);
+    transform:scaleY(1);
+    // opacity: 1;
+
+    
+  }
+}
+.slideDown {
+  animation-name: slideDown;
+}

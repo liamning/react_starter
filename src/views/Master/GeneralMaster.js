@@ -27,9 +27,7 @@ import {
 import BodyTable from '../../containers/Master/GeneralMaster.Body'; 
 
 import TestForm from '../../containers/Master/ClientMaster'; 
-
-import Draggable from 'react-draggable';
-
+  
 export default class ClientMaster extends React.Component {
 
   render() {

@@ -1,12 +1,12 @@
-import 'babel-polyfill';
-import "isomorphic-fetch"
+// import 'babel-polyfill';
+// import "isomorphic-fetch"
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { HashRouter, Route, Switch } from 'react-router-dom';
 
-var $ = require('jquery');
-window.jQuery = $;
-window.$ = $;
+// var $ = require('jquery');
+// window.jQuery = $;
+// window.$ = $;
 
 // Styles
 // Import Flag Icons Set
@@ -21,12 +21,12 @@ import '../scss/style.scss'
 import '../scss/core/_dropdown-menu-right.scss'
 
 //import fonts
-import WebFont from 'webfontloader';
-WebFont.load({
-  google: {
-    families: ['Open+Sans:300,400,600,700', 'sans-serif']
-  }
-});
+// import WebFont from 'webfontloader';
+// WebFont.load({
+//   google: {
+//     families: ['Open+Sans:300,400,600,700', 'sans-serif']
+//   }
+// });
 
 // Containers
 import Full from './containers/Full/'
@@ -34,27 +34,25 @@ import LoginCtrl from './containers/Master/Login'
 import Register from './views/Pages/Register/'
 import { loginInfo } from './global';
 
-import Editor from './editor'
+// import Editor from './editor'
 
 //get the config from index.html file
 loginInfo.host = window.host;
-for (var pro in window.loginInfo) {
-  loginInfo[pro] = window.loginInfo[pro];
-}
+Object.assign(loginInfo, window.loginInfo);
 
 //console.log(loginInfo);
 
-console.log($);
-// console.log(jquery);
-console.log(jQuery);
-console.log($(window));
+// console.log($);
+// // console.log(jquery);
+// console.log(jQuery);
+// console.log($(window));
  
 
-$(window).keydown(function (e) { 
-  console.log(e.keyCode);
-  // if (e.keyCode == 32) debugger; 
+// $(window).keydown(function (e) { 
+//   console.log(e.keyCode);
+//   // if (e.keyCode == 32) debugger; 
 
-});
+// });
 
 ReactDOM.render((
   <HashRouter>
