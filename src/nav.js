@@ -5,9 +5,14 @@ export default {
             url: '/Home',
             icon: 'icon-home',
         },
+        // {
+        //     name: 'News Maintenance',
+        //     url: '/masterClient',
+        //     icon: 'icon-puzzle'
+        // },
         {
-            name: 'News Maintenance',
-            url: '/masterClient',
+            name: 'DynamicForm',
+            url: '/DynamicForm',
             icon: 'icon-puzzle'
         },
         {

@@ -1441,7 +1441,7 @@ export class DisplayJson extends React.Component {
   render(){
 
     var props = this.props;
-    return "";
+    // return "";
     return (
     
       <div className="mt-1" style={{maxHeight: `${this.state.height}px`, overflow:'hidden'}} onClick={()=>{

@@ -21,12 +21,12 @@ import '../scss/style.scss'
 import '../scss/core/_dropdown-menu-right.scss'
 
 //import fonts
-// import WebFont from 'webfontloader';
-// WebFont.load({
-//   google: {
-//     families: ['Open+Sans:300,400,600,700', 'sans-serif']
-//   }
-// });
+import WebFont from 'webfontloader';
+WebFont.load({
+  google: {
+    families: ['Open+Sans:300,400,600,700', 'sans-serif']
+  }
+});
 
 // Containers
 import Full from './containers/Full/'

@@ -17,6 +17,8 @@ export default class BodyTable extends React.Component {
     const { standardProps, ...restProps } = this.props; 
     const { values, data, errors, isSubmitted } = standardProps;
 
+    
+    console.log("standardProps",standardProps);
         
     return (
 

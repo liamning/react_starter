@@ -6,18 +6,48 @@ import {
 // Import React Table
 import ReactTable from "react-table";
 import "react-table/react-table.css";
-import { InlineAsyncSelectField, InlineDateTimeField, InlineTextField, InlineNumberField, InlineDateField } from "../../components/InlineControl";
+import * as InlineControl from "../../components/InlineControl";
 
-export default class BodyTable extends React.Component {
+export default class extends React.Component {
 
+  componentDidMount() {
+     
+    // const { standardProps, ...restProps } = this.props; 
+    // const { values, data, errors, isSubmitted } = standardProps;
+
+
+    // this.setState({});
+
+  }
   render() {
-
     const { standardProps, ...restProps } = this.props; 
     const { values, data, errors, isSubmitted } = standardProps;
 
+    if(!data.length) return '';
+ 
+    console.log(standardProps);
+
+    this.fields =  this.props.fields;
+
+    this.columns = [];
+    this.fields.forEach(field=>{
+      this.columns.push({
+        Header: field.label,
+        accessor: field.name,
+        Cell: cellInfo => {
+          var Comp = InlineControl[`Inline${field.control}`]
+          return <Comp
+            name={field.name}
+            index={cellInfo.index} 
+            {...field.controlProps}
+            {...standardProps} />
+        }
+      });
+    }); 
+
 
     return (
-
+ 
       <div className="inlineEdit my-3">
 
         <ReactTable
@@ -39,41 +69,7 @@ export default class BodyTable extends React.Component {
                 </div>
               }
             },
-            {
-              Header: "Code",
-              accessor: "Code",
-              Cell: cellInfo => {
-                return <InlineTextField
-                  name="Code"
-                  index={cellInfo.index}
-                  {...standardProps} />
-              }
-            },
-            {
-              Header: "English Desc",
-              accessor: "EngDesc",
-              Cell: cellInfo => {
-                return <InlineTextField
-                  name="EngDesc"
-                  index={cellInfo.index}
-                  {...standardProps}
-                />
-              }
-            },
-            {
-              Header: "Chinese Desc",
-              resizable: false,
-              accessor: "ChiDesc",
-              Cell: cellInfo => {
-                return <InlineAsyncSelectField
-                name="ChiDesc"
-                label="ChiDesc"
-                tableName="Gender"
-                  index={cellInfo.index}
-                  {...standardProps}
-                />
-              }
-            },
+             ...this.columns,
             {
               width: 40,
               resizable: false,
@@ -104,6 +100,7 @@ export default class BodyTable extends React.Component {
         }}><i className="fa fa-plus"></i></Button>
 
       </div>
+
 
     )
   }
