@@ -1,7 +1,8 @@
 const webpack = require('webpack');
 const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin'); 
+var HtmlStringReplace = require('html-string-replace-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 var CompressionPlugin = require('compression-webpack-plugin');
 
@@ -138,6 +139,17 @@ module.exports = (env = {}) => {
           template: './public/index.html'
         }
       ),
+        new HtmlStringReplace({
+          enable: true,
+          patterns: [
+              {
+                  match: /@@domain/g,
+                  replacement: function (match) {
+                      return '';
+                  }
+              },
+          ]
+      }),
       new CopyWebpackPlugin([
           {from: './public/img', to: 'img'}
         ],
@@ -156,6 +168,17 @@ module.exports = (env = {}) => {
           template: './public/index.html'
         }
       ),
+          new HtmlStringReplace({
+            enable: true,
+            patterns: [
+                {
+                    match: /@@domain/g,
+                    replacement: function (match) {
+                        return 'http://localhost:806';
+                    }
+                },
+            ]
+        }),
       new CopyWebpackPlugin([
           {from: './public/img', to: 'img'}
         ],
