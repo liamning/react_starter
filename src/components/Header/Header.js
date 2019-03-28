@@ -7,16 +7,48 @@ import {
 } from 'reactstrap';
 import { loginInfo } from '../../global';
 
+
+function whichTransitionEvent() {
+  var t;
+  var el = document.createElement('fakeelement');
+  var transitions = {
+    'transition': 'transitionend',
+    'OTransition': 'oTransitionEnd',
+    'MozTransition': 'transitionend',
+    'WebkitTransition': 'webkitTransitionEnd'
+  }
+
+  for (t in transitions) {
+    if (el.style[t] !== undefined) {
+      return transitions[t];
+    }
+  }
+}
+
 class Header extends Component {
 
-  
-  shouldComponentUpdate(){
+  componentDidMount() {
+
+    var e = document.getElementsByClassName('main')[0];
+
+
+    var transitionEvent = whichTransitionEvent();
+    transitionEvent && e.addEventListener(transitionEvent, function () {
+      console.log('Transition complete!  This is the callback, no library needed!');
+      window.dispatchEvent(new Event('resize'));
+    });
+  }
+
+  shouldComponentUpdate() {
     return false;
   }
-  
+
   sidebarToggle(e) {
     e.preventDefault();
     document.body.classList.toggle('sidebar-hidden');
+    
+
+
   }
 
   sidebarMinimize(e) {

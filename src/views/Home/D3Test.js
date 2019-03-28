@@ -94,11 +94,14 @@ class BarChart extends Component {
       .call(this.x_axis)
 
 
-    d3.select(window).on('resize', this.resize);
+    // d3.select(window).on('resize', this.resize);
+    window.addEventListener("resize", this.resize);
 
   }
   resize = () => {
+
      var w = document.getElementById(this.props.id).clientWidth; 
+     console.log(`SVG resize ${w}`);
     const h = w / 2; 
     var width = w;
     var height = h;

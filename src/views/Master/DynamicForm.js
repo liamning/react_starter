@@ -89,20 +89,20 @@ export default class extends React.Component {
     }
 
     this.childTables = [ 
-    // {
-    //   fields: [
-    //     {
-    //       md: { size: 6, },
-    //       label: 'Combo1',
-    //       name: 'Combo1',
-    //       control: "AsyncSelectField",
-    //       controlProps: {
-    //         tableName: "Gender",
-    //         label: "Combo1Desc", 
-    //       }, 
-    //     },  
-    //   ],
-    // }
+    {
+      fields: [
+        {
+          md: { size: 6, },
+          label: 'Combo1',
+          name: 'Combo1',
+          control: "AsyncSelectField",
+          controlProps: {
+            tableName: "Gender",
+            label: "Combo1Desc", 
+          }, 
+        },  
+      ],
+    }
   ];
 
     this.setState({});
